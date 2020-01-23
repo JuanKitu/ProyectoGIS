@@ -32,11 +32,11 @@ const Ensayo = sequelize.define('Ensayo', {
 });
 
 //Cardinality with Datos
-Ensayo.hasMany(Datos, { foreingKey: 'idEnsayo', sourceKey: 'idEnsayo' });
-Datos.belongsTo(Ensayo, { foreingKey: 'idEnsayo', sourceKey: 'idEnsayo' });
+Ensayo.hasMany(Datos, { foreignKey: 'idEnsayo', sourceKey: 'idEnsayo' });
+Datos.belongsTo(Ensayo, { foreignKey: 'idEnsayo', sourceKey: 'idEnsayo' });
 
 //Cardinality with Probeta
-Ensayo.hasMany(Probeta, { foreingKey: 'idEnsayo', sourceKey: 'idEnsayo' });
-Probeta.belongsTo(Ensayo, { foreingKey: 'idEnsayo', sourceKey: 'idEnsayo' });
+Ensayo.hasMany(Probeta, { foreignKey: 'idEnsayo', sourceKey: 'idEnsayo' });
+Probeta.belongsTo(Ensayo, { foreignKey: 'idEnsayo', sourceKey: 'idEnsayo' });
 
 module.exports = Ensayo;

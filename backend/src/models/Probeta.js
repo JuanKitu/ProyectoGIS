@@ -9,7 +9,7 @@ const Probeta = sequelize.define('Probeta', {
         allowNull: false
     },
     dureza: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING(30),
         allowNull: false
     },
     idEnsayo: {

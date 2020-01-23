@@ -37,11 +37,11 @@ const Datos = sequelize.define('Datos', {
 });
 
 //Cardinality with Ambiente
-Datos.hasMany(Ambiente, { foreingKey: 'idDato', sourceKey: 'idDato' });
-Ambiente.belongsTo(Datos, { foreingKey: 'idDato', sourceKey: 'idDato' });
+Datos.hasMany(Ambiente, { foreignKey: 'idDato', sourceKey: 'idDato' });
+Ambiente.belongsTo(Datos, { foreignKey: 'idDato', sourceKey: 'idDato' });
 
 //Cardinality with Parametros
-Datos.hasMany(Parametros, { foreingKey: 'idDato', sourceKey: 'idDato' });
-Parametros.belongsTo(Datos, { foreingKey: 'idDato', sourceKey: 'idDato' });
+Datos.hasMany(Parametros, { foreignKey: 'idDato', sourceKey: 'idDato' });
+Parametros.belongsTo(Datos, { foreignKey: 'idDato', sourceKey: 'idDato' });
 
 module.exports = Datos;
