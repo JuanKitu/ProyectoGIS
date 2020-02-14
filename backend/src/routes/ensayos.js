@@ -1,0 +1,13 @@
+const {Router} = require('express');
+const router = Router();
+const controller = require('../controllers/ensayo.controllers');
+router.get('/',controller.getAll);
+router.get('/:idEnsayo',controller.getById);
+router.post('/',controller.new);
+router.delete('/:idEnsayo',controller.delete);
+router.put('/:idEnsayo',controller.change);
+router.get('/:idEnsayo/datos',controller.getAllDato);
+router.get('/:idEnsayo/datos/:idDato',controller.getADato);
+router.get('/:idEnsayo/probetas',controller.getAllProbeta);
+router.get('/:idEnsayo/probetas/:idProbeta',controller.getAProbeta);
+module.exports = router;
