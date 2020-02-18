@@ -27,76 +27,82 @@ void loop()
     parseCommand();
     newData = false;
   }
-
   switch (state)
   {
   case CONN:
+    consumeCommand();
     Serial.println("Conectado");
     isConnected = 1;
     state = WAIT;
     break;
 
   case STAR:
-    static bool isRunning = 1;
-    if (vueltas >= vueltasTarget)
-    {
-      ref = 0; //Freno el motor
-      while ((int)rpm > 0)
-      {
-        calculoVueltasYVelocidad();
-        controlador();
-      }
-      state = STOP;
-      break;
-    }
+  {
     if (!isRunning)
     {
       resetVars(); //Reinicializa las variables del experimento cuando se empieza un nuevo
+      isRunning = 1;
     }
+    if (vueltas >= vueltasTarget)
+    {
+      Serial.println(vueltas);
+      Serial.println(vueltasTarget);
+      analogWrite(ENB, 0);
+      consumeCommand();
+      state = STOP;
+      break;
+    }
+
     if (strcmp(cmd, "PAUS") == 0)
     {
       Serial.println("Experimento pausado");
-      ref_aux = ref; //Guardo la velocidad del experimento
-      ref = 0;       //Freno el motor
+      analogWrite(ENB, 0);
+
       while ((int)rpm > 0)
       {
         calculoVueltasYVelocidad();
         controlador();
+        Serial.println(rpm);
       }
       state = PAUS;
       break;
     }
     else if (strcmp(cmd, "STOP") == 0)
     {
-      ref = 0; //Freno el motor
-      while ((int)rpm > 0)
-      {
-        calculoVueltasYVelocidad();
-        controlador();
-      }
+      analogWrite(ENB, 0); //Cast a unsigned char para salida de 0-255
+      //ref = 0; //Freno el motor
+      // while (rpm > 0.0)
+      // {
+      //   calculoVueltasYVelocidad();
+      //   controlador();
+      // }
       state = STOP;
       break;
     }
     else if (strcmp(cmd, "TMHM") == 0)
     {
       getTemperaturaYHumedad(); //Obtengo humedad y temperatura
+      consumeCommand();
     }
-    else if (strcmp(cmd,"SEND")) {
+    else if (strcmp(cmd, "SEND") == 0)
+    {
+      Serial.println(vueltas);
+      consumeCommand();
+    }
+    uint32_t now = millis();
+    if (now - lastTime >= SAMPLE_DELAY)
+    {
+      calculoVueltasYVelocidad(); //Calculo velocidad cada SAMPLE_DELAY milisegundos
+      controlador();              //Computo la salida cada vez que tenga una lectura nueva de la velocidad
+      lastTime = now;
       Serial.println(vueltas);
     }
-    if (millis() - lastTime >= SAMPLE_DELAY)
-    {
-      calculoVueltasYVelocidad();  //Calculo velocidad cada SAMPLE_DELAY milisegundos
-      controlador(); //Computo la salida cada vez que tenga una lectura nueva de la velocidad
-      lastTime = (unsigned int)millis();
-    }
     break;
-
+  }
   case PAUS:
     if (strcmp(cmd, "STAR") == 0)
     {
       state = STAR;
-      ref = ref_aux; //Recupero la velocidad del experimento
       Serial.println("Resumiendo experimento");
     }
     else if (strcmp(cmd, "STOP") == 0)
@@ -106,6 +112,7 @@ void loop()
     break;
 
   case STOP:
+    consumeCommand();
     Serial.println("Experimento detenido");
     isRunning = 0;
     state = WAIT;
@@ -157,17 +164,14 @@ void resetVars()
 {
   pulseCount = 0;
   lastTime = 0;
-  rpm = 0;
-  error = 0;
-  output = 0;
-  integrat = 0;
-  previntegrat = 0;
-  preverror = 0;
-  deriv = 0;
-  prevtime = 0;
-  vueltas = 0;
-  radius = 0;
-  vueltasTarget = 0;
+  rpm = 0.0;
+  error = 0.0;
+  output = 0.0;
+  integrat = 0.0;
+  previntegrat = 0.0;
+  preverror = 0.0;
+  deriv = 0.0;
+  vueltas = 0.0;
 }
 
 void calculoVueltasYVelocidad()
@@ -266,8 +270,8 @@ void parseCommand()
 
   strtokIndx = strtok(tempChars, ","); //Primera parte del mensaje, el comando
   strcpy(cmd, strtokIndx);             //Copio a cmd
-  
-  if (strcmp(strtokIndx, "STAR") != 0)    //Si no es STAR, no miro mas porque los otros comandos no tienen mas argumentos
+
+  if (strcmp(strtokIndx, "STAR") != 0) //Si no es STAR, no miro mas porque los otros comandos no tienen mas argumentos
   {
     return;
   }
@@ -277,4 +281,12 @@ void parseCommand()
 
   strtokIndx = strtok(NULL, ",");
   vueltasTarget = atoi(strtokIndx); //Convierto tercer numero en entero
+}
+
+void consumeCommand()
+{
+  for (int i = 0; i < 5; i++)
+  {
+    cmd[i] = 0;
+  }
 }

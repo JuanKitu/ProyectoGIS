@@ -31,14 +31,12 @@ const float Ki = 0.8;
 const float Kd = 3;
 const  uint8_t velocidades[] = {130, 140, 150}; //Chequear en la maquina cuales son las velocidades del ensayo
 uint8_t ref = 0;
-uint8_t ref_aux = 0;                 
 float error = 0;
 float output = 0;
 float integrat = 0;
 float previntegrat = 0;
 float preverror = 0;
 float deriv = 0;
-uint32_t prevtime = 0;
 float vueltas = 0;
 
 //Variables de comunicacion
@@ -46,10 +44,11 @@ enum State {CONN, STAR, PAUS, STOP, DCON, WAIT}; //Estados de la FSM
 const uint8_t numChars = 32; //Buffer de puerto serial
 char receivedChars[numChars];
 char tempChars[numChars]; //Array temporal para usar en parseData()     
-char cmd[numChars] = {0}; //Comando recibido (State) 
+char cmd[numChars]; //Comando recibido (State) 
 uint8_t radius = 0; //Radio del experimento
 uint16_t vueltasTarget = 0; //Vueltas del experimento
 bool newData = false; //Flag de llegada de comando
+bool isRunning = 0;
 
 
 void readEncoder();
@@ -59,4 +58,4 @@ void controlador();
 void getTemperaturaYHumedad();
 void recvWithStartEndMarkers();
 void parseCommand();
-
+void consumeCommand();
