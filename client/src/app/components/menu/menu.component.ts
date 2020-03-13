@@ -1,4 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { DataService } from '../../services/data.service';
+import { Observable } from 'rxjs';
+import { Componente } from 'src/app/interfaces/interfaces';
+
 
 @Component({
   selector: 'app-menu',
@@ -6,9 +10,20 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./menu.component.scss'],
 })
 export class MenuComponent implements OnInit {
+  appPages: Observable<Componente[]>;
+  darkMode:boolean = false;
+  constructor(private dataService:DataService ) {
+      
+     }
 
-  constructor() { }
+  ngOnInit() {
+    this.appPages = this.dataService.getMenuOpciones();
+  }
+  darkModeChange(){
+    this.darkMode = !this.darkMode;
+    console.log(this.darkMode);
 
-  ngOnInit() {}
+      document.body.classList.toggle('dark');
 
+  }
 }
