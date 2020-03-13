@@ -1,0 +1,47 @@
+<ion-app>
+
+    <ion-split-pane when="md" contentId="main-content">
+        <!--  our side menu  -->
+        <ion-menu side="start" menuId="first" contentId="main-content" type="overlay">
+            <ion-content>
+                <ion-list id="inbox-list">
+                    <ion-list-header>Inbox</ion-list-header>
+                    <ion-note>hi@ionicframework.com</ion-note>
+
+                    <ion-menu-toggle auto-hide="false" *ngFor="let p of appPages |async; let i = index">
+                        <ion-item (click)="selectedIndex = i" routerDirection="root" [routerLink]="[p.url]" lines="none" detail="false" [class.selected]="selectedIndex == i">
+                            <ion-icon slot="start" [ios]="p.icon + '-outline'" [md]="p.icon + '-sharp'"></ion-icon>
+                            <ion-label>{{ p.title }}</ion-label>
+                        </ion-item>
+                    </ion-menu-toggle>
+                </ion-list>
+
+                <ion-list id="labels-list">
+                    <ion-list-header>Opciones</ion-list-header>
+                    <ion-menu-toggle auto-hide="false">
+                        <ion-item href="#" lines="none">
+                            <ion-icon slot="start" ios="settings-outline" md="settings-outline"></ion-icon>
+                            <ion-label>Opciones</ion-label>
+                        </ion-item>
+                    </ion-menu-toggle>
+                    <ion-item href="#" lines="none">
+                        <ion-icon slot="start" ios="log-out-outline" md="log-out-outline"></ion-icon>
+                        <ion-label>Cerrar Sesion</ion-label>
+                    </ion-item>
+
+                </ion-list>
+            </ion-content>
+            <ion-item lines="none">
+                <ion-icon slot="start" name="moon"></ion-icon>
+                <ion-label>
+                    Tema Oscuro
+                </ion-label>
+                <ion-toggle [ngModel]="darkModel" (ionChange)="darkModeChange()"></ion-toggle>
+            </ion-item>
+        </ion-menu>
+
+        <!-- the main content -->
+        <ion-router-outlet id="main-content"></ion-router-outlet>
+    </ion-split-pane>
+
+</ion-app>

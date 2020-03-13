@@ -1,0 +1,21 @@
+[{
+        "title": "Nuevo Ensayo",
+        "url": "/ensayo",
+        "icon": "add-circle"
+    },
+    {
+        "title": "Lista de Ensayos",
+        "url": "/ensayo/lista",
+        "icon": "list"
+    },
+    {
+        "title": "Ensayos Archivados",
+        "url": "/ensayo/archivados",
+        "icon": "archive"
+    },
+    {
+        "title": "Usuarios",
+        "url": "/usuarios",
+        "icon": "people"
+    }
+]

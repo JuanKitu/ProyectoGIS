@@ -1,6 +1,7 @@
+#include <Arduino.h>
 #include "Globals.h"
 
-DHT dht(DHTPIN, DHTTYPE); //Instancia del objeto sensor de humedad
+DHT dht(DHTPIN, DHTTYPE); //Instancia del sensor de humedad
 
 void setup()
 {
@@ -18,85 +19,91 @@ void setup()
 void loop()
 {
   static State state = WAIT;
-  static byte isConnected = 0;
+  static uint8_t isConnected = 0;
   recvWithStartEndMarkers();
   if (newData == true)
   {
-    strcpy(tempChars, receivedChars); //Es necesario copiar temporalmente para proteger los datos originales porque strtok() en parseData() remplaza las comas con \0
-    parseData();
+    strcpy(tempChars, receivedChars); //Es necesario copiar temporalmente para proteger los datos originales porque strtok() en parseCommand() remplaza las comas con \0
+    parseCommand();
     newData = false;
   }
-
   switch (state)
   {
   case CONN:
-    Serial.println("Connected");
+    consumeCommand();
+    Serial.println("Conectado");
     isConnected = 1;
     state = WAIT;
     break;
 
   case STAR:
-    static boolean isRunning = 1;
-    if (vueltas >= vueltas_tgt)
-    {
-      ref = 0; //Freno el motor
-      while ((int)rpm > 0)
-      {
-        calculoVyV();
-        controlador();
-      }
-      state = STOP;
-      break;
-    }
+  {
     if (!isRunning)
     {
       resetVars(); //Reinicializa las variables del experimento cuando se empieza un nuevo
+      isRunning = 1;
     }
+    if (vueltas >= vueltasTarget)
+    {
+      Serial.println(vueltas);
+      Serial.println(vueltasTarget);
+      analogWrite(ENB, 0);
+      consumeCommand();
+      state = STOP;
+      break;
+    }
+
     if (strcmp(cmd, "PAUS") == 0)
     {
-      Serial.println("Experiment paused");
-      ref_aux = ref; //Guardo la velocidad del experimento
-      ref = 0;       //Freno el motor
+      Serial.println("Experimento pausado");
+      analogWrite(ENB, 0);
+
       while ((int)rpm > 0)
       {
-        calculoVyV();
+        calculoVueltasYVelocidad();
         controlador();
+        Serial.println(rpm);
       }
       state = PAUS;
       break;
     }
     else if (strcmp(cmd, "STOP") == 0)
     {
-      ref = 0; //Freno el motor
-      while ((int)rpm > 0)
-      {
-        calculoVyV();
-        controlador();
-      }
+      analogWrite(ENB, 0); //Cast a unsigned char para salida de 0-255
+      //ref = 0; //Freno el motor
+      // while (rpm > 0.0)
+      // {
+      //   calculoVueltasYVelocidad();
+      //   controlador();
+      // }
       state = STOP;
       break;
     }
     else if (strcmp(cmd, "TMHM") == 0)
     {
-      getTyH(); //Obtengo humedad y temperatura
+      getTemperaturaYHumedad(); //Obtengo humedad y temperatura
+      consumeCommand();
     }
-    else if (strcmp(cmd,"SEND")) {
+    else if (strcmp(cmd, "SEND") == 0)
+    {
+      Serial.println(vueltas);
+      consumeCommand();
+    }
+    uint32_t now = millis();
+    if (now - lastTime >= SAMPLE_DELAY)
+    {
+      calculoVueltasYVelocidad(); //Calculo velocidad cada SAMPLE_DELAY milisegundos
+      controlador();              //Computo la salida cada vez que tenga una lectura nueva de la velocidad
+      lastTime = now;
       Serial.println(vueltas);
     }
-    if ((unsigned int)millis() - lastTime >= SAMPLE_DELAY)
-    {
-      calculoVyV();  //Calculo velocidad cada SAMPLE_DELAY milisegundos
-      controlador(); //Computo la salida cada vez que tenga una lectura nueva de la velocidad
-      lastTime = (unsigned int)millis();
-    }
     break;
-
+  }
   case PAUS:
     if (strcmp(cmd, "STAR") == 0)
     {
       state = STAR;
-      ref = ref_aux; //Recupero la velocidad del experimento
-      Serial.println("Resuming experiment");
+      Serial.println("Resumiendo experimento");
     }
     else if (strcmp(cmd, "STOP") == 0)
     {
@@ -105,13 +112,14 @@ void loop()
     break;
 
   case STOP:
-    Serial.println("Experiment stopped");
+    consumeCommand();
+    Serial.println("Experimento detenido");
     isRunning = 0;
     state = WAIT;
     break;
 
   case DCON:
-    Serial.println("Disconnect");
+    Serial.println("Desconectado");
     isConnected = 0;
     resetVars();
     state = WAIT;
@@ -122,7 +130,7 @@ void loop()
     {
       state = CONN;
     }
-    else if (strcmp(cmd, "STAR") == 0 && isConnected == 1 && (radius == 5 || radius == 6 || radius == 7) && vueltas_tgt > 0)
+    else if (strcmp(cmd, "STAR") == 0 && isConnected == 1 && (radius == 5 || radius == 6 || radius == 7) && vueltasTarget > 0)
     {
       state = STAR;
       if (radius == 5)
@@ -137,7 +145,7 @@ void loop()
       {
         ref = velocidades[2];
       }
-      Serial.println("Experiment starting");
+      Serial.println("Comenzando experimento");
     }
     else if (strcmp(cmd, "DCON") == 0 && isConnected == 1)
     {
@@ -156,27 +164,24 @@ void resetVars()
 {
   pulseCount = 0;
   lastTime = 0;
-  rpm = 0;
-  error = 0;
-  output = 0;
-  integrat = 0;
-  previntegrat = 0;
-  preverror = 0;
-  deriv = 0;
-  prevtime = 0;
-  vueltas = 0;
-  radius = 0;
-  vueltas_tgt = 0;
+  rpm = 0.0;
+  error = 0.0;
+  output = 0.0;
+  integrat = 0.0;
+  previntegrat = 0.0;
+  preverror = 0.0;
+  deriv = 0.0;
+  vueltas = 0.0;
 }
 
-void calculoVyV()
+void calculoVueltasYVelocidad()
 {
-  unsigned int pulses;
-  noInterrupts();
+  uint16_t pulses;
+  cli();
   pulses = pulseCount;
   pulseCount = 0;
-  interrupts();
-  rpm = (pulses * (60000.f / ((unsigned int)millis() - lastTime))) / PULSES_PER_TURN; //Calculo velocidad
+  sei();
+  rpm = (pulses * (60000.f / (millis() - lastTime))) / PULSES_PER_TURN; //Calculo velocidad
   vueltas += (float)pulses / PULSES_PER_TURN;
 }
 
@@ -199,7 +204,7 @@ void controlador()
   analogWrite(ENB, (unsigned char)(output)); //Cast a unsigned char para salida de 0-255
 }
 
-void getTyH()
+void getTemperaturaYHumedad()
 {
   h = dht.readHumidity();
   t = dht.readTemperature();
@@ -221,17 +226,17 @@ void getTyH()
 
 void recvWithStartEndMarkers()
 {
-  static boolean recvInProgress = false;
-  static byte ndx = 0;
+  static bool recvInProgress = false;
+  static uint8_t ndx = 0;
   char startMarker = '<';
   char endMarker = '>';
   char rc;
 
-  while (Serial.available() > 0 && newData == false)
+  while (Serial.available() && !newData)
   {
     rc = Serial.read();
 
-    if (recvInProgress == true)
+    if (recvInProgress)
     {
       if (rc != endMarker)
       {
@@ -258,16 +263,16 @@ void recvWithStartEndMarkers()
   }
 }
 
-void parseData()
+void parseCommand()
 { //Esta funcion lee el comando
 
   char *strtokIndx; //Indice de strtok
 
   strtokIndx = strtok(tempChars, ","); //Primera parte del mensaje, el comando
   strcpy(cmd, strtokIndx);             //Copio a cmd
-  if (strcmp(strtokIndx, "STAR") != 0)
-  {
 
+  if (strcmp(strtokIndx, "STAR") != 0) //Si no es STAR, no miro mas porque los otros comandos no tienen mas argumentos
+  {
     return;
   }
 
@@ -275,5 +280,13 @@ void parseData()
   radius = atoi(strtokIndx);      //Convierto segundo numero en entero
 
   strtokIndx = strtok(NULL, ",");
-  vueltas_tgt = atoi(strtokIndx); //Convierto tercer numero en entero
+  vueltasTarget = atoi(strtokIndx); //Convierto tercer numero en entero
+}
+
+void consumeCommand()
+{
+  for (int i = 0; i < 5; i++)
+  {
+    cmd[i] = 0;
+  }
 }
