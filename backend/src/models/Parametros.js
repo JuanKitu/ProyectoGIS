@@ -2,8 +2,12 @@ const Sequelize = require('sequelize');
 const { sequelize } = require('../database/database.js');
 
 const Parametros = sequelize.define('Parametros', {
-    carga: {
-        type: Sequelize.INTEGER,
+    fuerzaRozamiento: {
+        type: Sequelize.REAL,
+        allowNull: false
+    },
+    coeficienteRozamiento: {
+        type: Sequelize.REAL,
         allowNull: false
     },
     vueltas: {

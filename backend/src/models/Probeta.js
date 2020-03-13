@@ -20,6 +20,10 @@ const Probeta = sequelize.define('Probeta', {
         type: Sequelize.STRING(50),
         allowNull: false
     },
+    materialProbeta: {
+        type: Sequelize.STRING(60),
+        allowNull: true
+    },
     codigoProbeta: {
         type: Sequelize.STRING(20),
         allowNull: false

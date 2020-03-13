@@ -4,11 +4,12 @@ const Ambiente = require('../models/Ambiente');
 const controller = {};
 
 //Create a Dato
-controller.new = async (req, res) => {
-    const { idEnsayo, radio, distanciaTotal, tiempoTotal, materialBola } = req.body;
+controller.new = async(req, res) => {
+    const { idEnsayo, carga, radio, distanciaTotal, tiempoTotal, materialBola } = req.body;
     try {
         const newDato = await Datos.create({
             idEnsayo,
+            carga,
             radio,
             distanciaTotal,
             tiempoTotal,
@@ -28,8 +29,8 @@ controller.new = async (req, res) => {
     }
 };
 
-//Query a Probeta
-controller.getAll = async (req, res) => {
+//Query a Dato
+controller.getAll = async(req, res) => {
     try {
         Dato = await Datos.findAll();
         return res.json({
@@ -44,9 +45,9 @@ controller.getAll = async (req, res) => {
 };
 
 //Edit a Dato
-controller.change = async (req, res) => {
+controller.change = async(req, res) => {
     const { idDato } = req.params;
-    const { idEnsayo, radio, distanciaTotal, tiempoTotal, materialBola } = req.body;
+    const { idEnsayo, carga, radio, distanciaTotal, tiempoTotal, materialBola } = req.body;
     try {
         await Datos.update({
             idEnsayo,
@@ -54,12 +55,11 @@ controller.change = async (req, res) => {
             distanciaTotal,
             tiempoTotal,
             materialBola
-        },
-            {
-                where: {
-                    idDato
-                },
-            });
+        }, {
+            where: {
+                idDato
+            },
+        });
         const dato = await Datos.findOne({
             where: {
                 idDato
@@ -77,7 +77,7 @@ controller.change = async (req, res) => {
     }
 };
 //Delete a Dato
-controller.delete = async (req, res) => {
+controller.delete = async(req, res) => {
     try {
         const { idDato } = req.params;
         const deleteRowCount = await Datos.destroy({
@@ -98,7 +98,7 @@ controller.delete = async (req, res) => {
     }
 };
 //Find a Dato
-controller.getById = async (req, res) => {
+controller.getById = async(req, res) => {
     const { idDato } = req.params;
     try {
         const dato = await Datos.findOne({
@@ -118,7 +118,7 @@ controller.getById = async (req, res) => {
 };
 
 //Find all dato's parametros
-controller.getAllParametros = async (req, res) => {
+controller.getAllParametros = async(req, res) => {
     const { idDato } = req.params;
     try {
         const parametro = await Parametros.findAll({
@@ -137,7 +137,7 @@ controller.getAllParametros = async (req, res) => {
     }
 };
 //Find a Dato's Parametro
-controller.getAParametro = async (req, res) => {
+controller.getAParametro = async(req, res) => {
     const { idParametro, idDato } = req.params;
     try {
         const parametro = await Parametros.findOne({
@@ -160,7 +160,7 @@ controller.getAParametro = async (req, res) => {
 };
 
 //Find all dato's ambiente
-controller.getAllAmbiente = async (req, res) => {
+controller.getAllAmbiente = async(req, res) => {
     const { idDato } = req.params;
     try {
         const ambiente = await Ambiente.findAll({
@@ -180,7 +180,7 @@ controller.getAllAmbiente = async (req, res) => {
 };
 
 //Find a Dato's ambiente
-controller.getAnAmbiente = async (req, res) => {
+controller.getAnAmbiente = async(req, res) => {
     const { idAmbiente, idDato } = req.params;
     try {
         const ambiente = await Ambiente.findOne({

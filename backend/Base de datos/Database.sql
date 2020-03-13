@@ -8,8 +8,9 @@ CREATE TABLE "Ensayo" (
 );
 
 CREATE TABLE "Datos" (
+    "carga" REAL NOT NULL,
     "radio" REAL NOT NULL,
-    "distciaTotal" REAL NOT NULL,
+    "distanciaTotal" REAL NOT NULL,
     "tiempoTotal" INT NOT NULL,
     "idDato" serial NOT NULL,
     "materialBola" VARCHAR(60) NOT NULL,
@@ -20,10 +21,10 @@ CREATE TABLE "Datos" (
 
 CREATE TABLE "Parametros" (
     "idParametro" serial NOT NULL,
-    "carga" INT NOT NULL,
-    "vueltas" INT NOT NULL,
-    "tiempoActual" INT NOT NULL,
-    "horaActual" TIME NOT NULL,
+    "fuerzaRozamiento" REAL NOT NULL,
+    "coeficienteRozamiento" REAL NOT NULL,
+    "vueltas" INT,
+    "tiempoActual" REAL NOT NULL,
     "idDato" INT NOT NULL,
     PRIMARY KEY ("idParametro","idDato"),
     FOREIGN KEY ("idDato") REFERENCES "Datos"
@@ -42,8 +43,9 @@ CREATE TABLE "Ambiente" (
 CREATE TABLE "Probeta" (
     "idProbeta" serial NOT NULL,
     "codigoProbeta" VARCHAR(20) NOT NULL,
-    "dureza" INT NOT NULL,
+    "dureza" VARCHAR(30) NOT NULL,
     "tratamiento" VARCHAR(40) NOT NULL,
+    "materialProbeta" VARCHAR(60),
     "idEnsayo" INT NOT NULL,
     PRIMARY KEY ("idEnsayo","idProbeta"),
     FOREIGN KEY ("idEnsayo") REFERENCES "Ensayo"

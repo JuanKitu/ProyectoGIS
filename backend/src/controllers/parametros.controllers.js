@@ -3,13 +3,14 @@ const controller = {};
 const moment = require('moment');
 
 //Create an Parametros
-controller.new = async (req, res) => {
-    const { idDato, carga, vueltas, tiempoActual, horaActual } = req.body;
+controller.new = async(req, res) => {
+    const { idDato, fuerzaRozamiento, coeficienteRozamiento, vueltas, tiempoActual, horaActual } = req.body;
     try {
         const horaActual = (moment().format('HH:mm:ss'));
         const newParametros = await Parametros.create({
             idDato,
-            carga,
+            fuerzaRozamiento,
+            coeficienteRozamiento,
             vueltas,
             tiempoActual,
             horaActual
@@ -29,7 +30,7 @@ controller.new = async (req, res) => {
 };
 
 //Query an Parametros
-controller.getAll = async (req, res) => {
+controller.getAll = async(req, res) => {
     try {
         parametros = await Parametros.findAll();
         return res.json({
@@ -44,22 +45,22 @@ controller.getAll = async (req, res) => {
 };
 
 //Edit an parametro
-controller.change = async (req, res) => {
+controller.change = async(req, res) => {
     const { idParametro } = req.params;
-    const { idDato, carga, vueltas, tiempoActual, horaActual } = req.body;
+    const { idDato, fuerzaRozamiento, coeficienteRozamiento, vueltas, tiempoActual, horaActual } = req.body;
     try {
         await Parametros.update({
             idDato,
-            carga,
+            fuerzaRozamiento,
+            coeficienteRozamiento,
             vueltas,
             tiempoActual,
             horaActual
-        },
-            {
-                where: {
-                    idParametro
-                },
-            });
+        }, {
+            where: {
+                idParametro
+            },
+        });
         const parametro = await Parametros.findOne({
             where: {
                 idParametro
@@ -77,7 +78,7 @@ controller.change = async (req, res) => {
     }
 };
 //Delete an parametro
-controller.delete = async (req, res) => {
+controller.delete = async(req, res) => {
     try {
         const { idParametro } = req.params;
         const deleteRowCount = await Parametros.destroy({
@@ -98,7 +99,7 @@ controller.delete = async (req, res) => {
     }
 };
 //Find an Parametros
-controller.getById = async (req, res) => {
+controller.getById = async(req, res) => {
     const { idParametro } = req.params;
     try {
         const parametro = await Parametros.findOne({

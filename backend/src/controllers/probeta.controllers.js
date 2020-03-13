@@ -2,13 +2,14 @@ const Probeta = require('../models/Probeta');
 const controller = {};
 
 //Create an Probeta
-controller.new = async (req, res) => {
-    const { idEnsayo, codigoProbeta, dureza, tratamiento } = req.body;
+controller.new = async(req, res) => {
+    const { idEnsayo, codigoProbeta, dureza, materialProbeta, tratamiento } = req.body;
     try {
         const newProbeta = await Probeta.create({
             idEnsayo,
             codigoProbeta,
             dureza,
+            materialProbeta,
             tratamiento
         });
         if (newProbeta) {
@@ -26,7 +27,7 @@ controller.new = async (req, res) => {
 };
 
 //Query a Probeta
-controller.getAll = async (req, res) => {
+controller.getAll = async(req, res) => {
     try {
         Probetas = await Probeta.findAll();
         return res.json({
@@ -41,21 +42,21 @@ controller.getAll = async (req, res) => {
 };
 
 //Edit an Probeta
-controller.change = async (req, res) => {
+controller.change = async(req, res) => {
     const { idProbeta } = req.params;
-    const { idEnsayo, codigoProbeta, dureza, tratamiento } = req.body;
+    const { idEnsayo, codigoProbeta, dureza, materialProbeta, tratamiento } = req.body;
     try {
         await Probeta.update({
             idEnsayo,
             codigoProbeta,
             dureza,
+            materialProbeta,
             tratamiento
-        },
-            {
-                where: {
-                    idProbeta
-                },
-            });
+        }, {
+            where: {
+                idProbeta
+            },
+        });
         const probeta = await Probeta.findOne({
             where: {
                 idProbeta
@@ -73,7 +74,7 @@ controller.change = async (req, res) => {
     }
 };
 //Delete an Probeta
-controller.delete = async (req, res) => {
+controller.delete = async(req, res) => {
     try {
         const { idProbeta } = req.params;
         const deleteRowCount = await Probeta.destroy({
@@ -94,7 +95,7 @@ controller.delete = async (req, res) => {
     }
 };
 //Find an Probeta
-controller.getById = async (req, res) => {
+controller.getById = async(req, res) => {
     const { idProbeta } = req.params;
     try {
         const probeta = await Probeta.findOne({

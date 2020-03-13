@@ -12,6 +12,10 @@ const Datos = sequelize.define('Datos', {
         type: Sequelize.REAL,
         allowNull: false
     },
+    carga: {
+        type: Sequelize.REAL,
+        allowNull: false
+    },
     tiempoTotal: {
         type: Sequelize.INTEGER,
         allowNull: false
