@@ -20,7 +20,7 @@ const Ambiente = sequelize.define('Ambiente', {
         autoIncrement: true,
         allowNull: false
     },
-    idDato: {
+    idEnsayo: {
         type: Sequelize.INTEGER,
         allowNull: false
     }

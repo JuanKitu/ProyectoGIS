@@ -3,12 +3,12 @@ const controller = {};
 const moment = require('moment');
 
 //Create an Ambiente
-controller.new = async (req, res) => {
-    const { idDato, temperatura, humedad, horaActual } = req.body;
+controller.new = async(req, res) => {
+    const { idEnsayo, temperatura, humedad, horaActual } = req.body;
     try {
         const horaActual = (moment().format('HH:mm:ss'));
         const newAmbiente = await Ambiente.create({
-            idDato,
+            idEnsayo,
             temperatura,
             humedad,
             horaActual
@@ -28,7 +28,7 @@ controller.new = async (req, res) => {
 };
 
 //Query a Ambiente
-controller.getAll = async (req, res) => {
+controller.getAll = async(req, res) => {
     try {
         Ambientes = await Ambiente.findAll();
         return res.json({
@@ -43,21 +43,20 @@ controller.getAll = async (req, res) => {
 };
 
 //Edit an Ambiente
-controller.change = async (req, res) => {
+controller.change = async(req, res) => {
     const { idAmbiente } = req.params;
-    const { idDato, temperatura, humedad, horaActual } = req.body;
+    const { idEnsayo, temperatura, humedad, horaActual } = req.body;
     try {
         await Ambiente.update({
-            idDato,
+            idEnsayo,
             temperatura,
             humedad,
             horaActual
-        },
-            {
-                where: {
-                    idAmbiente
-                },
-            });
+        }, {
+            where: {
+                idAmbiente
+            },
+        });
         const ambiente = await Ambiente.findOne({
             where: {
                 idAmbiente
@@ -75,7 +74,7 @@ controller.change = async (req, res) => {
     }
 };
 //Delete an Ambiente
-controller.delete = async (req, res) => {
+controller.delete = async(req, res) => {
     try {
         const { idAmbiente } = req.params;
         const deleteRowCount = await Ambiente.destroy({
@@ -96,7 +95,7 @@ controller.delete = async (req, res) => {
     }
 };
 //Find an Ambiente
-controller.getById = async (req, res) => {
+controller.getById = async(req, res) => {
     const { idAmbiente } = req.params;
     try {
         const ambiente = await Ambiente.findOne({

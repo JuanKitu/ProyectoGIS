@@ -4,16 +4,14 @@ const moment = require('moment');
 
 //Create an Parametros
 controller.new = async(req, res) => {
-    const { idDato, fuerzaRozamiento, coeficienteRozamiento, vueltas, tiempoActual, horaActual } = req.body;
+    const { idEnsayo, fuerzaRozamiento, coeficienteRozamiento, vueltas, tiempoActual } = req.body;
     try {
-        const horaActual = (moment().format('HH:mm:ss'));
         const newParametros = await Parametros.create({
-            idDato,
+            idEnsayo,
             fuerzaRozamiento,
             coeficienteRozamiento,
             vueltas,
             tiempoActual,
-            horaActual
         });
         if (newParametros) {
             return res.json({
@@ -47,15 +45,14 @@ controller.getAll = async(req, res) => {
 //Edit an parametro
 controller.change = async(req, res) => {
     const { idParametro } = req.params;
-    const { idDato, fuerzaRozamiento, coeficienteRozamiento, vueltas, tiempoActual, horaActual } = req.body;
+    const { idEnsayo, fuerzaRozamiento, coeficienteRozamiento, vueltas, tiempoActual } = req.body;
     try {
         await Parametros.update({
-            idDato,
+            idEnsayo,
             fuerzaRozamiento,
             coeficienteRozamiento,
             vueltas,
             tiempoActual,
-            horaActual
         }, {
             where: {
                 idParametro
