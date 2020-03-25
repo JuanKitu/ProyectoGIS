@@ -1,15 +1,22 @@
 const Ensayo = require('../models/Ensayo');
-const Datos = require('../models/Datos');
+const Parametros = require('../models/Parametros');
+const Ambiente = require('../models/Ambiente');
 const Probeta = require('../models/Probeta');
 const controller = {};
 
 //Create an Ensayo
-controller.new = async (req, res) => {
-    const { nroEnsayo, operador, observaciones } = req.body;
+controller.new = async(req, res) => {
+    const { carga, radioTrayectoria, diametroBola, distanciaTotal, tiempoTotal, materialBola, nroEnsayo, operador, observaciones } = req.body;
     try {
         const dateNow = new Date();
         const fecha = dateNow.toLocaleDateString();
         const newEnsayo = await Ensayo.create({
+            carga,
+            radioTrayectoria,
+            diametroBola,
+            distanciaTotal,
+            tiempoTotal,
+            materialBola,
             nroEnsayo,
             fecha,
             operador,
@@ -30,7 +37,7 @@ controller.new = async (req, res) => {
 };
 
 //Query an Ensayo
-controller.getAll = async (req, res) => {
+controller.getAll = async(req, res) => {
     try {
         ensayos = await Ensayo.findAll();
         return res.json({
@@ -45,21 +52,26 @@ controller.getAll = async (req, res) => {
 };
 
 //Edit an ensayo
-controller.change = async (req, res) => {
+controller.change = async(req, res) => {
     const { idEnsayo } = req.params;
-    const { nroEnsayo, fecha, operador, observaciones } = req.body;
+    const { carga, radioTrayectoria, diametroBola, distanciaTotal, tiempoTotal, materialBola, nroEnsayo, operador, observaciones } = req.body;
     try {
         await Ensayo.update({
+            carga,
+            radioTrayectoria,
+            diametroBola,
+            distanciaTotal,
+            tiempoTotal,
+            materialBola,
             nroEnsayo,
             fecha,
             operador,
             observaciones
-        },
-            {
-                where: {
-                    idEnsayo
-                },
-            });
+        }, {
+            where: {
+                idEnsayo
+            },
+        });
         const ensayo = await Ensayo.findOne({
             where: {
                 idEnsayo
@@ -77,7 +89,7 @@ controller.change = async (req, res) => {
     }
 };
 //Delete an ensayo
-controller.delete = async (req, res) => {
+controller.delete = async(req, res) => {
     try {
         const { idEnsayo } = req.params;
         const deleteRowCount = await Ensayo.destroy({
@@ -98,7 +110,7 @@ controller.delete = async (req, res) => {
     }
 };
 //Find an Ensayo
-controller.getById = async (req, res) => {
+controller.getById = async(req, res) => {
     const { idEnsayo } = req.params;
     try {
         const ensayo = await Ensayo.findOne({
@@ -117,50 +129,9 @@ controller.getById = async (req, res) => {
     }
 };
 
-//Find all ensayo's dato
-controller.getAllDato = async (req, res) => {
-    const { idEnsayo } = req.params;
-    try {
-        const dato = await Datos.findAll({
-            where: {
-                idEnsayo
-            }
-        });
-        return res.json({
-            data: dato
-        });
-    } catch (error) {
-        console.log(error);
-        return res.json({
-            error: 'The server has an error'
-        });
-    }
-};
-//Find an Ensayo's Dato
-controller.getADato = async (req, res) => {
-    const { idEnsayo, idDato } = req.params;
-    try {
-        const dato = await Datos.findOne({
-            where: {
-                idEnsayo,
-                idDato
-            }
-        });
-
-
-        return res.json({
-            data: dato
-        });
-    } catch (error) {
-        console.log(error);
-        return res.json({
-            error: 'The server has an error'
-        });
-    }
-};
 
 //Find all ensayo's probeta
-controller.getAllProbeta = async (req, res) => {
+controller.getAllProbeta = async(req, res) => {
     const { idEnsayo } = req.params;
     try {
         const probeta = await Probeta.findAll({
@@ -180,7 +151,7 @@ controller.getAllProbeta = async (req, res) => {
 };
 
 //Find an Ensayo's Probeta
-controller.getAProbeta = async (req, res) => {
+controller.getAProbeta = async(req, res) => {
     const { idEnsayo, idProbeta } = req.params;
     try {
         const probeta = await Probeta.findOne({
@@ -201,5 +172,121 @@ controller.getAProbeta = async (req, res) => {
         });
     }
 };
+
+//Find all Ensayo's parametros
+controller.getAllParametros = async(req, res) => {
+    const { Ensayo } = req.params;
+    try {
+        const parametro = await Parametros.findAll({
+            where: {
+                Ensayo
+            }
+        });
+        return res.json({
+            data: parametro
+        });
+    } catch (error) {
+        console.log(error);
+        return res.json({
+            error: 'The server has an error'
+        });
+    }
+};
+//Create an Ensayo's Parametro
+/*controller.newParametro = async(req, res) => {
+    const { Ensayo } = req.params;
+    const Ensayo = await Ensayos.findOne({
+        where: {
+            Ensayo
+        }
+    });
+    try {
+        const coeficienteRozamiento = (9.8 * Ensayo.carga) / fuerzaRozamiento;
+        const newParametros = await Parametros.create({
+            Ensayo,
+            fuerzaRozamiento,
+            coeficienteRozamiento,
+            vueltas,
+            tiempoActual,
+        });
+        if (newParametros) {
+            return res.json({
+                message: 'The Parametros has been created',
+                data: newParametros
+            });
+        };
+    } catch (error) {
+        console.log(error);
+        return res.json({
+            error: 'The server has an error'
+        });
+    }
+};*/
+//Find a Ensayo's Parametro
+controller.getAParametro = async(req, res) => {
+    const { idParametro, Ensayo } = req.params;
+    try {
+        const parametro = await Parametros.findOne({
+            where: {
+                idParametro,
+                Ensayo
+            }
+        });
+
+
+        return res.json({
+            data: parametro
+        });
+    } catch (error) {
+        console.log(error);
+        return res.json({
+            error: 'The server has an error'
+        });
+    }
+};
+
+//Find all Ensayo's ambiente
+controller.getAllAmbiente = async(req, res) => {
+    const { Ensayo } = req.params;
+    try {
+        const ambiente = await Ambiente.findAll({
+            where: {
+                Ensayo
+            }
+        });
+        return res.json({
+            data: ambiente
+        });
+    } catch (error) {
+        console.log(error);
+        return res.json({
+            error: 'The server has an error'
+        });
+    }
+};
+
+//Find a Ensayo's ambiente
+controller.getAnAmbiente = async(req, res) => {
+    const { idAmbiente, Ensayo } = req.params;
+    try {
+        const ambiente = await Ambiente.findOne({
+            where: {
+                idAmbiente,
+                Ensayo
+            }
+        });
+
+
+        return res.json({
+            data: ambiente
+        });
+    } catch (error) {
+        console.log(error);
+        return res.json({
+            error: 'The server has an error'
+        });
+    }
+};
+
 
 module.exports = controller;

@@ -28,7 +28,7 @@ const Parametros = sequelize.define('Parametros', {
         type: Sequelize.TIME,
         allowNull: false
     },
-    idDato: {
+    idEnsayo: {
         type: Sequelize.INTEGER,
         allowNull: false
     }

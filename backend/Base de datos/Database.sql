@@ -4,20 +4,17 @@ CREATE TABLE "Ensayo" (
     "fecha" DATE NOT NULL,
     "operador" VARCHAR(50) NOT NULL,
     "observaciones" TEXT,
-    PRIMARY KEY ("idEnsayo")
-);
-
-CREATE TABLE "Datos" (
     "carga" REAL NOT NULL,
-    "radio" REAL NOT NULL,
+    "radioTrayectoria" REAL NOT NULL,
+    "diametroBola" REAL NOT NULL,
     "distanciaTotal" REAL NOT NULL,
     "tiempoTotal" INT NOT NULL,
     "idDato" serial NOT NULL,
     "materialBola" VARCHAR(60) NOT NULL,
     "idEnsayo" INT NOT NULL,
-    PRIMARY KEY ("idDato"),
-    FOREIGN KEY ("idEnsayo") REFERENCES "Ensayo"
+    PRIMARY KEY ("idEnsayo")
 );
+
 
 CREATE TABLE "Parametros" (
     "idParametro" serial NOT NULL,
@@ -25,9 +22,9 @@ CREATE TABLE "Parametros" (
     "coeficienteRozamiento" REAL NOT NULL,
     "vueltas" INT,
     "tiempoActual" REAL NOT NULL,
-    "idDato" INT NOT NULL,
-    PRIMARY KEY ("idParametro","idDato"),
-    FOREIGN KEY ("idDato") REFERENCES "Datos"
+    "idEnsayo" INT NOT NULL,
+    PRIMARY KEY ("idParametro","idEnsayo"),
+    FOREIGN KEY ("idEnsayo") REFERENCES "Ensayo"
 );
 
 CREATE TABLE "Ambiente" (
@@ -35,9 +32,9 @@ CREATE TABLE "Ambiente" (
     "temperatura" REAL NOT NULL,
     "humedad" REAL NOT NULL,
     "horaActual" TIME NOT NULL,
-    "idDato" INT NOT NULL,
-    PRIMARY KEY ("idAmbiente","idDato"),
-    FOREIGN KEY ("idDato") REFERENCES "Datos"
+    "idEnsayo" INT NOT NULL,
+    PRIMARY KEY ("idAmbiente","idEnsayo"),
+    FOREIGN KEY ("idEnsayo") REFERENCES "Ensayo"
 );
 
 CREATE TABLE "Probeta" (

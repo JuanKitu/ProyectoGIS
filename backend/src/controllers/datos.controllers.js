@@ -136,6 +136,36 @@ controller.getAllParametros = async(req, res) => {
         });
     }
 };
+//Create an Ensayo's Parametro
+controller.newParametro = async(req, res) => {
+    const { idDato } = req.params;
+    const dato = await Datos.findOne({
+        where: {
+            idDato
+        }
+    });
+    try {
+        const coeficienteRozamiento = (9.8 * dato.carga) / fuerzaRozamiento;
+        const newParametros = await Parametros.create({
+            idDato,
+            fuerzaRozamiento,
+            coeficienteRozamiento,
+            vueltas,
+            tiempoActual,
+        });
+        if (newParametros) {
+            return res.json({
+                message: 'The Parametros has been created',
+                data: newParametros
+            });
+        };
+    } catch (error) {
+        console.log(error);
+        return res.json({
+            error: 'The server has an error'
+        });
+    }
+};
 //Find a Dato's Parametro
 controller.getAParametro = async(req, res) => {
     const { idParametro, idDato } = req.params;
