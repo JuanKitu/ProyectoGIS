@@ -11,7 +11,7 @@ import { AppRoutingModule } from './app-routing.module';
 
 
 import {HttpClientModule} from '@angular/common/http'
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MenuComponent } from './components/menu/menu.component';
 
 
@@ -19,7 +19,7 @@ import { MenuComponent } from './components/menu/menu.component';
   declarations: [AppComponent, MenuComponent],
   entryComponents: [],
   exports:[MenuComponent],
-  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, HttpClientModule, FormsModule],
+  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, HttpClientModule, FormsModule, ReactiveFormsModule],
   providers: [
     StatusBar,
     SplashScreen,

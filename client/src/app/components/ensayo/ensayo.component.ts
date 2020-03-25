@@ -3,16 +3,14 @@ import { Ensayo } from '../../interfaces/interfaces';
 
 @Component({
   selector: 'app-ensayo',
-  templateUrl: './ensayo.page.html',
-  styleUrls: ['./ensayo.page.scss'],
+  templateUrl: './ensayo.component.html',
+  styleUrls: ['./ensayo.component.scss'],
 })
-export class EnsayoPage implements OnInit {
-  nroEnsayo:number;
-
+export class EnsayoComponent implements OnInit {
+  ensayo:Ensayo
   constructor() { }
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
   altaEnsayo(){
     console.log('hola');
   }
