@@ -3,6 +3,15 @@
 
 DHT dht(DHTPIN, DHTTYPE); //Instancia del sensor de humedad
 
+/*Respuesta a comandos:
+CMD   || Respuesta
+CONN        0     -> Conectado
+STAR        0     -> Exp comenzando
+  -        -1     -> Exp terminado
+STOP        1     -> Exp detenido  
+DCON        0     -> Desconectado  
+*/
+
 void setup()
 {
   Serial.begin(9600);
@@ -30,12 +39,13 @@ void loop()
   switch (state)
   {
   case CONN:
+  {
     consumeCommand();
-    Serial.println("Conectado");
+    Serial.println("0");
     isConnected = 1;
     state = WAIT;
     break;
-
+  }
   case STAR:
   {
     if (!isRunning)
@@ -45,37 +55,22 @@ void loop()
     }
     if (vueltas >= vueltasTarget)
     {
-      Serial.println(vueltas);
-      Serial.println(vueltasTarget);
+      Serial.println("1");
       analogWrite(ENB, 0);
       consumeCommand();
-      state = STOP;
+      state = WAIT;
       break;
     }
 
     if (strcmp(cmd, "PAUS") == 0)
     {
-      Serial.println("Experimento pausado");
+      Serial.println("0");
       analogWrite(ENB, 0);
-
-      while ((int)rpm > 0)
-      {
-        calculoVueltasYVelocidad();
-        controlador();
-        Serial.println(rpm);
-      }
       state = PAUS;
       break;
     }
     else if (strcmp(cmd, "STOP") == 0)
     {
-      analogWrite(ENB, 0); //Cast a unsigned char para salida de 0-255
-      //ref = 0; //Freno el motor
-      // while (rpm > 0.0)
-      // {
-      //   calculoVueltasYVelocidad();
-      //   controlador();
-      // }
       state = STOP;
       break;
     }
@@ -86,7 +81,7 @@ void loop()
     }
     else if (strcmp(cmd, "SEND") == 0)
     {
-      Serial.println(vueltas);
+      Serial.println(int(vueltas));
       consumeCommand();
     }
     uint32_t now = millis();
@@ -95,37 +90,43 @@ void loop()
       calculoVueltasYVelocidad(); //Calculo velocidad cada SAMPLE_DELAY milisegundos
       controlador();              //Computo la salida cada vez que tenga una lectura nueva de la velocidad
       lastTime = now;
-      Serial.println(vueltas);
     }
     break;
   }
   case PAUS:
+  {
+    consumeCommand();
     if (strcmp(cmd, "STAR") == 0)
     {
       state = STAR;
-      Serial.println("Resumiendo experimento");
+      Serial.println("0");
     }
     else if (strcmp(cmd, "STOP") == 0)
     {
       state = STOP;
     }
     break;
-
+  }
   case STOP:
+  {
     consumeCommand();
-    Serial.println("Experimento detenido");
+    analogWrite(ENB, 0);
+    Serial.println("-1");
     isRunning = 0;
     state = WAIT;
     break;
-
+  }
   case DCON:
-    Serial.println("Desconectado");
+  {
+    consumeCommand();
+    Serial.println("0");
     isConnected = 0;
     resetVars();
     state = WAIT;
     break;
-
+  }
   case WAIT:
+  {
     if (strcmp(cmd, "CONN") == 0 && isConnected != 1)
     {
       state = CONN;
@@ -145,14 +146,45 @@ void loop()
       {
         ref = velocidades[2];
       }
-      Serial.println("Comenzando experimento");
+      Serial.println("0");
     }
+
+    else if (strcmp(cmd, "TEST") == 0 && isConnected == 1)
+    {
+      state = TEST;
+      
+    }
+
+    else if (strcmp(cmd, "STOP") == 0 && isConnected == 1) 
+    {
+      state = STOP;
+    }
+
     else if (strcmp(cmd, "DCON") == 0 && isConnected == 1)
     {
       state = DCON;
     }
     break;
   }
+  case TEST:
+  {
+    test = !test;
+    if (test){
+      analogWrite(ENB, (unsigned char)(80));
+      consumeCommand();
+      Serial.println("0");
+      state = WAIT;
+    }
+    else {
+      analogWrite(ENB, 0);
+      consumeCommand();
+      Serial.println("-1");
+      state = WAIT;
+    }
+    
+    
+  }
+}
 }
 
 void readEncoder() //Rutina de interrupcion en PIN 3
@@ -210,18 +242,14 @@ void getTemperaturaYHumedad()
   t = dht.readTemperature();
   if (isnan(h))
   {
-    Serial.println("Error leyendo humedad");
+    Serial.println("NaN");
   }
   else if (isnan(t))
   {
-    Serial.println("Error leyendo temperatura");
+    Serial.println("NaN");
   }
-  Serial.print("Humedad: ");
-  Serial.print(h);
-  Serial.print("%\t");
-  Serial.print("Temperatura: ");
-  Serial.print(t);
-  Serial.println(" *C");
+  Serial.println(h);
+  Serial.println(t);
 }
 
 void recvWithStartEndMarkers()
