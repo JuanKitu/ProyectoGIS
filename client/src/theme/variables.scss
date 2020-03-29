@@ -12,7 +12,7 @@
     --ion-color-primary-shade: #3171e0;
     --ion-color-primary-tint: #4c8dff;
     /** secondary **/
-    --ion-color-secondary: #3dc2ff;
+    --ion-color-secondary: #ECF218;
     --ion-color-secondary-rgb: 61, 194, 255;
     --ion-color-secondary-contrast: #ffffff;
     --ion-color-secondary-contrast-rgb: 255, 255, 255;
@@ -199,4 +199,34 @@ body.dark {
     --ion-color-step-900: #e7e7e7;
     --ion-color-step-950: #f3f3f3;
     --ion-item-background: #1A1B1E;
+    ion-card {
+        background-color: #081B33;
+        position: center;
+        margin-top: 10px;
+        margin-bottom: 10px;
+        margin-right: 10px;
+        margin-left: 10px;
+    }
+}
+
+ion-card {
+    --ion-background-color: #e5e5ff;
+    position: center;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-right: 10px;
+    margin-left: 10px;
+}
+
+ion-card {
+    --ion-background-color: #e5e5ff;
+    position: center;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-right: 10px;
+    margin-left: 10px;
+}
+
+ion-item {
+    --ion-background-color: #FFFFFF;
 }
