@@ -5,6 +5,7 @@ const path = require('path');
 const cookieparser = require('cookie-parser');
 colors = require('colors');
 const app = express();
+const cors = require('cors');
 /*settings*/
 console.log(new Date());
 app.set('json spaces', 2);
@@ -20,6 +21,15 @@ const usuariosRoutes = require('./routes/usuarios');
 /* middleware */
 app.use(morgan('dev'));
 app.use(json());
+
+// Configurar cabeceras y cors
+const corsOptions = {
+    origin: 'http://localhost:8100',
+    optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+};
+app.use(cors(corsOptions));
+
+
 
 /* routes */
 app.use('/api/ensayos', ensayosRoutes);

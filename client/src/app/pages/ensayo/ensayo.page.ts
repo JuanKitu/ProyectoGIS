@@ -34,6 +34,6 @@ export class EnsayoPage implements OnInit {
   ngOnInit() {
   }
   altaEnsayo(){
-    console.log('hola');
+    console.log(this.formularioEnsayo.value);
   }
 }
