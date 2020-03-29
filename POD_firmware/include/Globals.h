@@ -40,7 +40,7 @@ float deriv = 0;
 float vueltas = 0;
 
 //Variables de comunicacion
-enum State {CONN, STAR, PAUS, STOP, DCON, WAIT}; //Estados de la FSM
+enum State {CONN, STAR, PAUS, STOP, DCON, WAIT, TEST}; //Estados de la FSM
 const uint8_t numChars = 32; //Buffer de puerto serial
 char receivedChars[numChars];
 char tempChars[numChars]; //Array temporal para usar en parseData()     
@@ -49,6 +49,7 @@ uint8_t radius = 0; //Radio del experimento
 uint16_t vueltasTarget = 0; //Vueltas del experimento
 bool newData = false; //Flag de llegada de comando
 bool isRunning = 0;
+bool test = 0;
 
 
 void readEncoder();
