@@ -19,6 +19,10 @@ const Ensayo = sequelize.define('Ensayo', {
         type: Sequelize.DATE,
         allowNull: false
     },
+    radioTrayectoria: {
+        type: Sequelize.REAL,
+        allowNull: false
+    },
     operador: {
         type: Sequelize.STRING(50),
         allowNull: false
