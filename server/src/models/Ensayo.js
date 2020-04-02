@@ -40,7 +40,7 @@ const Ensayo = sequelize.define('Ensayo', {
     },
     tiempoTotal: {
         type: Sequelize.INTEGER,
-        allowNull: false
+        allowNull: true
     },
     materialBola: {
         type: Sequelize.STRING(60),
