@@ -26,7 +26,7 @@ const Ensayo = sequelize.define('Ensayo', {
     observaciones: {
         type: Sequelize.TEXT,
     },
-    radio: {
+    diametroBola: {
         type: Sequelize.REAL,
         allowNull: false
     },

@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Ensayo } from '../../interfaces/interfaces';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { EnsayoService } from '../../services/ensayo.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-ensayo',
@@ -10,7 +12,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 export class EnsayoPage implements OnInit {
   formularioEnsayo: FormGroup;
 
-  constructor() { 
+  constructor(private ensayoService:EnsayoService, private router:Router) { 
     this.formularioEnsayo = new FormGroup({
       'nroEnsayo': new FormControl('',Validators.required),
       'fecha': new FormControl(),
@@ -34,6 +36,10 @@ export class EnsayoPage implements OnInit {
   ngOnInit() {
   }
   altaEnsayo(){
-    console.log(this.formularioEnsayo.value);
+    const data:Ensayo = this.formularioEnsayo.value;
+    console.log(data);
+    this.ensayoService.altaEnsayo(data).subscribe(data=>{
+       this.router.navigate(['lista']);
+     });
   }
 }
