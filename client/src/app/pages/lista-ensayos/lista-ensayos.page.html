@@ -14,9 +14,23 @@
         </ion-toolbar>
     </ion-header>
 
-    <div id="container">
+    <ion-list>
+        <ion-list-header>
+            Lista de Ensayos
+        </ion-list-header>
 
-        <strong class="capitalize">Home</strong>
-        <p>Explore <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
-    </div>
+        <ion-item *ngFor="let ensayo of ensayos">
+            <ion-avatar slot="start">
+                <img src="../../assets/img/probeta-1.png">
+            </ion-avatar>
+            <ion-label>
+                <h2>Numero del Ensayo: {{ensayo.nroEnsayo}}</h2>
+                <h3>Operador: {{ensayo.operador}}</h3>
+                <p>Radio de la Trayectoria: {{ensayo.radioTrayectoria}}</p>
+                <p>Carga: {{ensayo.carga}}</p>
+
+            </ion-label>
+        </ion-item>
+
+    </ion-list>
 </ion-content>

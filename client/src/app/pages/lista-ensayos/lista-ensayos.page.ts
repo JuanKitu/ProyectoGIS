@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { EnsayoService } from '../../services/ensayo.service';
+import { Ensayo } from 'src/app/interfaces/interfaces';
 
 @Component({
   selector: 'app-lista-ensayos',
@@ -6,10 +8,16 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./lista-ensayos.page.scss'],
 })
 export class ListaEnsayosPage implements OnInit {
+  ensayos:Ensayo[];
 
-  constructor() { }
+  constructor(private ensayoService:EnsayoService) {
+    
+   };
 
   ngOnInit() {
+    this.ensayoService.getAll().subscribe(data=>{
+      this.ensayos=data['data'];
+    });
   }
 
 }
