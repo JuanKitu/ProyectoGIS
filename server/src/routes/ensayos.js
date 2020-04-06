@@ -10,6 +10,4 @@ router.get('/:idEnsayo/parametros', controller.getAllParametros);
 router.get('/:idEnsayo/parametros/:idParametro', controller.getAParametro);
 router.get('/:idEnsayo/ambiente', controller.getAllAmbiente);
 router.get('/:idEnsayo/ambiente/:idAmbiente', controller.getAnAmbiente);
-router.get('/:idEnsayo/probetas', controller.getAllProbeta);
-router.get('/:idEnsayo/probetas/:idProbeta', controller.getAProbeta);
 module.exports = router;

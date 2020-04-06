@@ -14,7 +14,6 @@ app.set('port', 3000);
 
 /*importin routes*/
 const ensayosRoutes = require('./routes/ensayos');
-const probetasRoutes = require('./routes/probetas');
 const ambientesRoutes = require('./routes/ambientes');
 const parametrosRoutes = require('./routes/parametros');
 const usuariosRoutes = require('./routes/usuarios');
@@ -33,7 +32,6 @@ app.use(cors(corsOptions));
 
 /* routes */
 app.use('/api/ensayos', ensayosRoutes);
-app.use('/api/probetas', probetasRoutes);
 app.use('/api/ambientes', ambientesRoutes);
 app.use('/api/parametros', parametrosRoutes);
 app.use('/api/usuarios', usuariosRoutes);
