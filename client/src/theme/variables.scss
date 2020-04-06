@@ -199,6 +199,7 @@ body.dark {
     --ion-color-step-900: #e7e7e7;
     --ion-color-step-950: #f3f3f3;
     --ion-item-background: #1A1B1E;
+    //CSS propio pero en modo nocturno
     ion-card {
         background-color: #081B33;
         position: center;
@@ -207,10 +208,12 @@ body.dark {
         margin-right: 10px;
         margin-left: 10px;
     }
+    ;
 }
 
+//CSS normal
 ion-card {
-    --ion-background-color: #e5e5ff;
+    background-color: #e5e5ff;
     position: center;
     margin-top: 10px;
     margin-bottom: 10px;
@@ -218,15 +221,15 @@ ion-card {
     margin-left: 10px;
 }
 
-ion-card {
-    --ion-background-color: #e5e5ff;
-    position: center;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    margin-right: 10px;
-    margin-left: 10px;
-}
-
+;
 ion-item {
-    --ion-background-color: #FFFFFF;
+    background-color: #FFFFFF;
+}
+
+ion-grid {
+    border-color: red;
+}
+
+ion-row .cabecera {
+    background-color: #e5e5ff;
 }

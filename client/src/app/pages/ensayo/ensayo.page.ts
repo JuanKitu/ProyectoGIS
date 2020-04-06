@@ -15,7 +15,6 @@ export class EnsayoPage implements OnInit {
   constructor(private ensayoService:EnsayoService, private router:Router) { 
     this.formularioEnsayo = new FormGroup({
       'nroEnsayo': new FormControl('',Validators.required),
-      'fecha': new FormControl(),
       'operador': new FormControl('',Validators.required),
       'observaciones': new FormControl(),
       'distanciaTotal': new FormControl('',Validators.required),
@@ -38,8 +37,8 @@ export class EnsayoPage implements OnInit {
   altaEnsayo(){
     const data:Ensayo = this.formularioEnsayo.value;
     console.log(data);
-    this.ensayoService.altaEnsayo(data).subscribe(data=>{
-       this.router.navigate(['lista']);
+    this.ensayoService.new(data).subscribe(data=>{
+       this.router.navigate(['/ensayo','lista']);
      });
   }
 }
