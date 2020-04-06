@@ -24,10 +24,6 @@ const Parametros = sequelize.define('Parametros', {
         type: Sequelize.INTEGER,
         allowNull: false
     },
-    horaActual: {
-        type: Sequelize.TIME,
-        allowNull: false
-    },
     idEnsayo: {
         type: Sequelize.INTEGER,
         allowNull: false

@@ -1,6 +1,5 @@
 const Sequelize = require('sequelize');
 const { sequelize } = require('../database/database.js');
-const Probeta = require('./Probeta');
 const Ambiente = require('./Ambiente');
 const Parametros = require('./Parametros');
 
@@ -11,16 +10,12 @@ const Ensayo = sequelize.define('Ensayo', {
         autoIncrement: true,
         allowNull: false
     },
-    nroEnsayo: {
-        type: Sequelize.INTEGER,
-        allowNull: false
-    },
     fecha: {
         type: Sequelize.DATE,
         allowNull: false
     },
     radioTrayectoria: {
-        type: Sequelize.REAL,
+        type: Sequelize.INTEGER,
         allowNull: false
     },
     operador: {
@@ -44,10 +39,26 @@ const Ensayo = sequelize.define('Ensayo', {
     },
     tiempoTotal: {
         type: Sequelize.INTEGER,
-        allowNull: true
+        allowNull: false
     },
     materialBola: {
         type: Sequelize.STRING(60),
+        allowNull: false
+    },
+    durezaProbeta: {
+        type: Sequelize.STRING(30),
+        allowNull: false
+    },
+    tratamientoProbeta: {
+        type: Sequelize.STRING(40),
+        allowNull: false
+    },
+    materialProbeta: {
+        type: Sequelize.STRING(60),
+        allowNull: true
+    },
+    codigoProbeta: {
+        type: Sequelize.STRING(20),
         allowNull: false
     }
 
@@ -63,8 +74,5 @@ Ambiente.belongsTo(Ensayo, { foreignKey: 'idEnsayo', sourceKey: 'idEnsayo' });
 Ensayo.hasMany(Parametros, { foreignKey: 'idEnsayo', sourceKey: 'idEnsayo' });
 Parametros.belongsTo(Ensayo, { foreignKey: 'idEnsayo', sourceKey: 'idEnsayo' });
 
-//Cardinality with Probeta
-Ensayo.hasMany(Probeta, { foreignKey: 'idEnsayo', sourceKey: 'idEnsayo' });
-Probeta.belongsTo(Ensayo, { foreignKey: 'idEnsayo', sourceKey: 'idEnsayo' });
 
 module.exports = Ensayo;

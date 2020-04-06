@@ -1,12 +1,11 @@
 const Ensayo = require('../models/Ensayo');
 const Parametros = require('../models/Parametros');
 const Ambiente = require('../models/Ambiente');
-const Probeta = require('../models/Probeta');
 const controller = {};
 
 //Create an Ensayo
 controller.new = async(req, res) => {
-    const { carga, radioTrayectoria, diametroBola, distanciaTotal, tiempoTotal, materialBola, nroEnsayo, operador, observaciones } = req.body;
+    const { carga, radioTrayectoria, diametroBola, distanciaTotal, tiempoTotal, materialBola, fecha, operador, observaciones, codigoProbeta, durezaProbeta, materialProbeta, tratamientoProbeta } = req.body;
     try {
         const dateNow = new Date();
         const fecha = dateNow.toLocaleDateString();
@@ -17,10 +16,13 @@ controller.new = async(req, res) => {
             distanciaTotal,
             tiempoTotal,
             materialBola,
-            nroEnsayo,
             fecha,
             operador,
-            observaciones
+            observaciones,
+            codigoProbeta,
+            durezaProbeta,
+            materialProbeta,
+            tratamientoProbeta
         });
         if (newEnsayo) {
             return res.json({
@@ -54,7 +56,7 @@ controller.getAll = async(req, res) => {
 //Edit an ensayo
 controller.change = async(req, res) => {
     const { idEnsayo } = req.params;
-    const { carga, radioTrayectoria, diametroBola, distanciaTotal, tiempoTotal, materialBola, nroEnsayo, operador, observaciones } = req.body;
+    const { carga, radioTrayectoria, diametroBola, distanciaTotal, tiempoTotal, materialBola, fecha, operador, observaciones, codigoProbeta, durezaProbeta, materialProbeta, tratamientoProbeta } = req.body;
     try {
         await Ensayo.update({
             carga,
@@ -63,10 +65,13 @@ controller.change = async(req, res) => {
             distanciaTotal,
             tiempoTotal,
             materialBola,
-            nroEnsayo,
             fecha,
             operador,
-            observaciones
+            observaciones,
+            codigoProbeta,
+            durezaProbeta,
+            materialProbeta,
+            tratamientoProbeta
         }, {
             where: {
                 idEnsayo
@@ -129,57 +134,13 @@ controller.getById = async(req, res) => {
     }
 };
 
-
-//Find all ensayo's probeta
-controller.getAllProbeta = async(req, res) => {
-    const { idEnsayo } = req.params;
-    try {
-        const probeta = await Probeta.findAll({
-            where: {
-                idEnsayo
-            }
-        });
-        return res.json({
-            data: probeta
-        });
-    } catch (error) {
-        console.log(error);
-        return res.json({
-            error: 'The server has an error'
-        });
-    }
-};
-
-//Find an Ensayo's Probeta
-controller.getAProbeta = async(req, res) => {
-    const { idEnsayo, idProbeta } = req.params;
-    try {
-        const probeta = await Probeta.findOne({
-            where: {
-                idEnsayo,
-                idProbeta
-            }
-        });
-
-
-        return res.json({
-            data: probeta
-        });
-    } catch (error) {
-        console.log(error);
-        return res.json({
-            error: 'The server has an error'
-        });
-    }
-};
-
 //Find all Ensayo's parametros
 controller.getAllParametros = async(req, res) => {
-    const { Ensayo } = req.params;
+    const { idEnsayo } = req.params;
     try {
         const parametro = await Parametros.findAll({
             where: {
-                Ensayo
+                idEnsayo
             }
         });
         return res.json({
@@ -192,22 +153,20 @@ controller.getAllParametros = async(req, res) => {
         });
     }
 };
+
 //Create an Ensayo's Parametro
 /*controller.newParametro = async(req, res) => {
-    const { Ensayo } = req.params;
+    const { idEnsayo } = req.params;
     const Ensayo = await Ensayos.findOne({
         where: {
-            Ensayo
+            idEnsayo
         }
     });
     try {
         const coeficienteRozamiento = (9.8 * Ensayo.carga) / fuerzaRozamiento;
         const newParametros = await Parametros.create({
-            Ensayo,
-            fuerzaRozamiento,
             coeficienteRozamiento,
-            vueltas,
-            tiempoActual,
+            idEnsayo
         });
         if (newParametros) {
             return res.json({
@@ -221,15 +180,16 @@ controller.getAllParametros = async(req, res) => {
             error: 'The server has an error'
         });
     }
-};*/
+};
+*/
 //Find a Ensayo's Parametro
 controller.getAParametro = async(req, res) => {
-    const { idParametro, Ensayo } = req.params;
+    const { idParametro, idEnsayo } = req.params;
     try {
         const parametro = await Parametros.findOne({
             where: {
                 idParametro,
-                Ensayo
+                idEnsayo
             }
         });
 
@@ -251,7 +211,7 @@ controller.getAllAmbiente = async(req, res) => {
     try {
         const ambiente = await Ambiente.findAll({
             where: {
-                Ensayo
+                idEnsayo
             }
         });
         return res.json({
@@ -272,7 +232,7 @@ controller.getAnAmbiente = async(req, res) => {
         const ambiente = await Ambiente.findOne({
             where: {
                 idAmbiente,
-                Ensayo
+                idEnsayo
             }
         });
 
