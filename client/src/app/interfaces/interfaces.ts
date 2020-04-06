@@ -6,13 +6,10 @@ export interface Componente{
 export interface Ensayo{
     nroEnsayo: number,
     operador:string,
-    Probeta:{
-        codigoProbeta:string,
-        dureza:number,
-        tratamiento:string,
-        materialProbeta:string,
-        idProbeta?:number
-    },
+    codigoProbeta:string,
+    dureza:number,
+    tratamiento:string,
+    materialProbeta:string,
     idEnsayo?:number,
     fecha?:Date,
     observaciones?:string

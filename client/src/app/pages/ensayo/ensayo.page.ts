@@ -14,7 +14,6 @@ export class EnsayoPage implements OnInit {
 
   constructor(private ensayoService:EnsayoService, private router:Router) { 
     this.formularioEnsayo = new FormGroup({
-      'nroEnsayo': new FormControl('',Validators.required),
       'operador': new FormControl('',Validators.required),
       'observaciones': new FormControl(),
       'distanciaTotal': new FormControl('',Validators.required),
@@ -22,13 +21,10 @@ export class EnsayoPage implements OnInit {
       'materialBola': new FormControl('',Validators.required),
       'carga': new FormControl('', Validators.required),
       'diametroBola': new FormControl('',Validators.required),
-      'Probeta': new FormGroup({
-        'codigoProbeta': new FormControl('',Validators.required),
-        'dureza': new FormControl('',Validators.required),
-        'tratamiento': new FormControl('', Validators.required),
-        'materialProbeta': new FormControl('',Validators.required)
-      })
-
+      'codigoProbeta': new FormControl('',Validators.required),
+      'dureza': new FormControl('',Validators.required),
+      'tratamiento': new FormControl('', Validators.required),
+      'materialProbeta': new FormControl('',Validators.required)
     });
   }
 
