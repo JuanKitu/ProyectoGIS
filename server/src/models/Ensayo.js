@@ -31,7 +31,7 @@ const Ensayo = sequelize.define('Ensayo', {
     },
     distanciaTotal: {
         type: Sequelize.REAL,
-        allowNull: false
+        allowNull: true
     },
     carga: {
         type: Sequelize.REAL,
@@ -39,7 +39,7 @@ const Ensayo = sequelize.define('Ensayo', {
     },
     tiempoTotal: {
         type: Sequelize.INTEGER,
-        allowNull: false
+        allowNull: true
     },
     materialBola: {
         type: Sequelize.STRING(60),

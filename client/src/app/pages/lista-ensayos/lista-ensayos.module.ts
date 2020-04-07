@@ -7,6 +7,7 @@ import { IonicModule } from '@ionic/angular';
 import { ListaEnsayosPageRoutingModule } from './lista-ensayos-routing.module';
 
 import { ListaEnsayosPage } from './lista-ensayos.page';
+import { VacioDescripcionPipe } from '../../pipes/vacio-descripcion.pipe';
 
 @NgModule({
   imports: [
@@ -15,6 +16,6 @@ import { ListaEnsayosPage } from './lista-ensayos.page';
     IonicModule,
     ListaEnsayosPageRoutingModule
   ],
-  declarations: [ListaEnsayosPage]
+  declarations: [ListaEnsayosPage, VacioDescripcionPipe]
 })
 export class ListaEnsayosPageModule {}

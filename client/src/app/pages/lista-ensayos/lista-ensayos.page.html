@@ -24,10 +24,10 @@
                 <img src="../../assets/img/probeta-1.png">
             </ion-avatar>
             <ion-label>
-                <h2>{{ensayo.codigoProbeta}}</h2>
+                <h2 class="tituloListaEnsayo">{{ensayo.codigoProbeta}} R{{ensayo.radioTrayectoria}} {{ensayo.carga}}N {{ensayo.distanciaTotal}}m</h2>
                 <h3>Operador: {{ensayo.operador}}</h3>
-                <p>Radio de la Trayectoria: {{ensayo.radioTrayectoria}}</p>
-                <p>Carga: {{ensayo.carga}}</p>
+                <p>Material de la bola: {{ensayo.materialBola}}</p>
+                <p>Observaciones: {{ensayo.observaciones | vacioDescripcion}}</p>
 
             </ion-label>
         </ion-item>

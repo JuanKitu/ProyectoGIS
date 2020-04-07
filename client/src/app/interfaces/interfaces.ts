@@ -4,11 +4,15 @@ export interface Componente{
     redirectTo:string;
 }
 export interface Ensayo{
-    nroEnsayo: number,
     operador:string,
+    distanciaTotal:number,
+    radioTrayectoria:number,
+    materialBola:string,
+    carga:number,
+    diametroBola:number,
     codigoProbeta:string,
-    dureza:number,
-    tratamiento:string,
+    durezaProbeta:number,
+    tratamientoProbeta:string,
     materialProbeta:string,
     idEnsayo?:number,
     fecha?:Date,

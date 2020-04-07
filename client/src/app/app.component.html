@@ -5,8 +5,8 @@
         <ion-menu side="start" menuId="first" contentId="main-content" type="overlay">
             <ion-content>
                 <ion-list id="inbox-list">
-                    <ion-list-header>Inbox</ion-list-header>
-                    <ion-note>hi@ionicframework.com</ion-note>
+                    <ion-list-header>GIS</ion-list-header>
+                    <ion-note>gis@frcu.utn.edu.ar</ion-note>
 
                     <ion-menu-toggle auto-hide="false" *ngFor="let p of appPages |async; let i = index">
                         <ion-item (click)="selectedIndex = i" routerDirection="root" [routerLink]="[p.url]" lines="none" detail="false" [class.selected]="selectedIndex == i">

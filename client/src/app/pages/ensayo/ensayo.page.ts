@@ -22,8 +22,8 @@ export class EnsayoPage implements OnInit {
       'carga': new FormControl('', Validators.required),
       'diametroBola': new FormControl('',Validators.required),
       'codigoProbeta': new FormControl('',Validators.required),
-      'dureza': new FormControl('',Validators.required),
-      'tratamiento': new FormControl('', Validators.required),
+      'durezaProbeta': new FormControl('',Validators.required),
+      'tratamientoProbeta': new FormControl('', Validators.required),
       'materialProbeta': new FormControl('',Validators.required)
     });
   }
