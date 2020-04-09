@@ -16,5 +16,5 @@ export interface Ensayo{
     materialProbeta:string,
     idEnsayo?:number,
     fecha?:Date,
-    observaciones?:string
+    observaciones:string
 }

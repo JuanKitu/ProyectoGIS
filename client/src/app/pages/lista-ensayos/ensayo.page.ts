@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Ensayo } from '../../interfaces/interfaces';
+import { ActivatedRoute } from '@angular/router';
+import { EnsayoService } from '../../services/ensayo.service';
 
 @Component({
   selector: 'app-ensayo',
@@ -19,10 +21,21 @@ export class EnsayoPage implements OnInit {
     tratamientoProbeta:"",
     materialProbeta:"",
     observaciones:"string"
+  };;
+  
+  constructor(private activeRoute:ActivatedRoute, private ensayoService:EnsayoService) {
+    
+   }
 
-  };
+  ngOnInit() {
+    this.activeRoute.params.subscribe(params=>{
+      this.ensayo.idEnsayo=params['idEnsayo'];
+    });
+    if(this.ensayo.idEnsayo){
+      this.ensayoService.getOne(this.ensayo.idEnsayo).subscribe(data=>{
+        this.ensayo=data['data'];
+      });
+    };
+  }
 
-  constructor() {}
-
-  ngOnInit() {}
 }

@@ -1,0 +1,77 @@
+<form [formGroup]="formularioEnsayo" (ngSubmit)="altaEnsayo()">
+    <ion-list>
+        <!-- ENSAYO PIN-ON-DISK: -->
+        <ion-card>
+            <ion-card-header>Ensayo Pin-On-Disk</ion-card-header>
+            <ion-item>
+                <ion-icon name="person" slot="start"></ion-icon>
+                <ion-label position="stacked">Operador:</ion-label>
+                <ion-input formControlName="operador" type="text" placeholder="Juan" [value]="ensayo.operador"></ion-input>
+            </ion-item>
+        </ion-card>
+        <!-- Parametros -->
+        <ion-card>
+            <ion-card-header>Parametros</ion-card-header>
+            <ion-item>
+                <ion-icon name="ellipse-outline" slot="start"></ion-icon>
+                <ion-label position="stacked">Radio de la trayectoria (mm):</ion-label>
+                <ion-input formControlName="radioTrayectoria" type="number" placeholder="5" [value]="ensayo.radioTrayectoria"></ion-input>
+            </ion-item>
+            <ion-item>
+                <ion-icon name="remove-outline" slot="start"></ion-icon>
+                <ion-label position="stacked">Longitud (m):</ion-label>
+                <ion-input formControlName="distanciaTotal" type="number" placeholder="500" [value]="ensayo.distanciaTotal"></ion-input>
+            </ion-item>
+            <ion-item>
+                <ion-icon name="arrow-up-outline" slot="start"></ion-icon>
+                <ion-label position="stacked">Carga (N):</ion-label>
+                <ion-input formControlName="carga" type="number" placeholder="6" [value]="ensayo.carga"></ion-input>
+            </ion-item>
+            <ion-item>
+                <ion-icon name="document-text-outline" slot="start"></ion-icon>
+                <ion-label position="stacked">Material de la bola:</ion-label>
+                <ion-input formControlName="materialBola" type="text" placeholder="QWER 123" [value]="ensayo.materialBola"></ion-input>
+            </ion-item>
+            <ion-item>
+                <ion-icon name="football-outline" slot="start"></ion-icon>
+                <ion-label position="stacked">Diamentro de la Bola (mm):</ion-label>
+                <ion-input formControlName="diametroBola" type="number" placeholder="6" [value]="ensayo.diametroBola"></ion-input>
+            </ion-item>
+            <ion-item>
+                <ion-icon name="information-circle-outline" slot="start"></ion-icon>
+                <ion-label position="stacked">Observaciones:</ion-label>
+                <ion-textarea formControlName="observaciones" placeholder="Alguna observacion (Es optativo)" [value]="ensayo.observaciones"></ion-textarea>
+            </ion-item>
+        </ion-card>
+        <!-- Probeta -->
+        <ion-card>
+            <ion-card-header>Probeta</ion-card-header>
+            <ion-item>
+                <ion-icon name="pricetag" slot="start"></ion-icon>
+                <ion-label position="stacked">Codigo de la Probeta:</ion-label>
+                <ion-input formControlName="codigoProbeta" type="text" placeholder="TP22" [value]="ensayo.codigoProbeta"></ion-input>
+            </ion-item>
+            <ion-item>
+                <ion-icon name="keypad" slot="start"></ion-icon>
+                <ion-label position="stacked">Dureza (HV):</ion-label>
+                <ion-input formControlName="durezaProbeta" type="number" placeholder="200" [value]="ensayo.durezaProbeta"></ion-input>
+            </ion-item>
+            <ion-item>
+                <ion-icon name="color-wand" slot="start"></ion-icon>
+                <ion-label position="stacked">Tratamiento:</ion-label>
+                <ion-input formControlName="tratamientoProbeta" type="text" placeholder="Recubierto con TIN" [value]="ensayo.tratamientoProbeta"></ion-input>
+            </ion-item>
+            <ion-item>
+                <ion-icon name="document-text-outline" slot="start"></ion-icon>
+                <ion-label position="stacked">Material de la probeta:</ion-label>
+                <ion-input formControlName="materialProbeta" type="text" placeholder="AISI 420" [value]="ensayo.materialProbeta"></ion-input>
+            </ion-item>
+        </ion-card>
+
+
+    </ion-list>
+    <div padding>
+        <ion-button type="submit" shape="round" fill="solid" [disabled]="!formularioEnsayo.valid">Guardar</ion-button>
+        <ion-button *ngIf="ensayo.idEnsayo">Borrar</ion-button>
+    </div>
+</form>

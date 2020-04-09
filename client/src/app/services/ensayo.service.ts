@@ -18,4 +18,7 @@ export class EnsayoService {
   getAll(){
     return this.httpClient.get(this.ensayoURL);
   };
+  getOne(key$:number){
+    return this.httpClient.get(this.ensayoURL+`/${key$}`);
+  }
 }
