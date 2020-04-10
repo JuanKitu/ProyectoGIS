@@ -20,7 +20,7 @@ export class EnsayoPage implements OnInit {
     durezaProbeta:null,
     tratamientoProbeta:"",
     materialProbeta:"",
-    observaciones:"string"
+    observaciones:"",
   };;
   
   constructor(private activeRoute:ActivatedRoute, private ensayoService:EnsayoService) {
@@ -34,6 +34,7 @@ export class EnsayoPage implements OnInit {
     if(this.ensayo.idEnsayo){
       this.ensayoService.getOne(this.ensayo.idEnsayo).subscribe(data=>{
         this.ensayo=data['data'];
+        //console.log(this.ensayo);
       });
     };
   }

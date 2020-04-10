@@ -17,6 +17,9 @@ export class FormularioEnsayoComponent implements OnInit {
     this.formularioEnsayo = new FormGroup({
       'operador': new FormControl('',Validators.required),
       'observaciones': new FormControl(),
+      'idEnsayo': new FormControl(),
+      'fecha': new FormControl(),
+      'tiempoTotal': new FormControl(),
       'distanciaTotal': new FormControl('',Validators.required),
       'radioTrayectoria': new FormControl('',Validators.required),
       'materialBola': new FormControl('',Validators.required),
@@ -27,15 +30,38 @@ export class FormularioEnsayoComponent implements OnInit {
       'tratamientoProbeta': new FormControl('', Validators.required),
       'materialProbeta': new FormControl('',Validators.required)
     });
+    //console.log(this.ensayo)
+
   }
 
-  ngOnInit() {};
+  ngOnInit() {
+    //console.log(this.ensayo)
+    if(this.ensayo.idEnsayo){
+      this.ensayoService.getOne(this.ensayo.idEnsayo).subscribe(async data=>{
+        //console.log(data)
+        this.ensayo=data['data'];
+        await this.formularioEnsayo.setValue(this.ensayo);
+      });
+    }
+  };
 
   altaEnsayo(){
-    const data:Ensayo = this.formularioEnsayo.value;
-    this.ensayoService.new(data).subscribe(data=>{
-       this.router.navigate(['/ensayo','lista']);
-     });
+    if(this.ensayo.idEnsayo){
+      console.log("Esta Editando");
+      const key$=this.ensayo.idEnsayo
+      this.ensayo = this.formularioEnsayo.value;
+      this.ensayo.idEnsayo=key$;
+      this.ensayoService.change(this.ensayo,this.ensayo.idEnsayo).subscribe(data=>{
+        this.router.navigate(['/ensayo','lista']);
+      })
+    }else{
+      console.log("Esta Creando");
+      const data:Ensayo = this.formularioEnsayo.value;
+      this.ensayoService.new(data).subscribe(data=>{
+        this.router.navigate(['/ensayo','lista']);
+      });
+    }
+    
   }
 
 }

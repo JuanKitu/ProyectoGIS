@@ -11,13 +11,19 @@ export class ListaEnsayosPage implements OnInit {
   ensayos:Ensayo[];
 
   constructor(private ensayoService:EnsayoService) {
-    
    };
 
   ngOnInit() {
     this.ensayoService.getAll().subscribe(data=>{
       this.ensayos=data['data'];
     });
-  }
+  };
 
+  doRefresh(event) {
+    console.log('Begin async operation');
+    this.ensayoService.getAll().subscribe(data=>{
+      this.ensayos=data['data'];
+    });
+    event.target.complete();
+  }
 }

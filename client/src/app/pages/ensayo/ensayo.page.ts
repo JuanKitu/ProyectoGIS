@@ -18,7 +18,9 @@ export class EnsayoPage implements OnInit {
     durezaProbeta:null,
     tratamientoProbeta:"",
     materialProbeta:"",
-    observaciones:"string"
+    observaciones:"",
+    idDato:null,
+    tiempoTotal:null
 
   };
 

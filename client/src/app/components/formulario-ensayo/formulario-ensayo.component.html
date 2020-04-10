@@ -8,6 +8,11 @@
                 <ion-label position="stacked">Operador:</ion-label>
                 <ion-input formControlName="operador" type="text" placeholder="Juan" [value]="ensayo.operador"></ion-input>
             </ion-item>
+            <ion-item>
+                <ion-icon name="calendar" slot="start"></ion-icon>
+                <ion-label position="stacked">Fecha:</ion-label>
+                <ion-datetime formControlName="fecha" displayFormat="MM-DD-YYYY" placeholder="MM-DD-YYYY"></ion-datetime>
+            </ion-item>
         </ion-card>
         <!-- Parametros -->
         <ion-card>
@@ -72,6 +77,6 @@
     </ion-list>
     <div padding>
         <ion-button type="submit" shape="round" fill="solid" [disabled]="!formularioEnsayo.valid">Guardar</ion-button>
-        <ion-button *ngIf="ensayo.idEnsayo">Borrar</ion-button>
+        <ion-button *ngIf="ensayo.idEnsayo" fill="solid" shape="round" color="danger" class="ion-float-right">Borrar</ion-button>
     </div>
 </form>
