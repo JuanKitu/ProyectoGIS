@@ -7,6 +7,8 @@ import { Component, OnInit } from '@angular/core';
 })
 export class EnsayosArchivadosPage implements OnInit {
 
+  titulo:string="Ensayos Archivados";
+
   constructor() { }
 
   ngOnInit() {

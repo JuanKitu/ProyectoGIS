@@ -7,13 +7,15 @@ import { IonicModule } from '@ionic/angular';
 import { EnsayosArchivadosPageRoutingModule } from './ensayos-archivados-routing.module';
 
 import { EnsayosArchivadosPage } from './ensayos-archivados.page';
+import { ComponentsModule } from '../../components/components.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    EnsayosArchivadosPageRoutingModule
+    EnsayosArchivadosPageRoutingModule,
+    ComponentsModule
   ],
   declarations: [EnsayosArchivadosPage]
 })

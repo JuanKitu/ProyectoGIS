@@ -9,6 +9,7 @@ import { EnsayoService } from '../../services/ensayo.service';
   styleUrls: ['./ensayo.page.scss'],
 })
 export class EnsayoPage implements OnInit {
+  titulo:string="Info ensayo";
   ensayo:Ensayo={
     operador:"",
     distanciaTotal:null,

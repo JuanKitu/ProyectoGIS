@@ -1,31 +1,12 @@
-<ion-header [translucent]="true">
-    <ion-toolbar>
-        <ion-buttons slot="start">
-            <ion-menu-button menu="first"></ion-menu-button>
-        </ion-buttons>
-        <ion-title>Home</ion-title>
-    </ion-toolbar>
-</ion-header>
+<app-header [titulo]="titulo"></app-header>
 
 <ion-content [fullscreen]="true">
-    <ion-header collapse="condense">
-        <ion-toolbar>
-            <ion-title size="large">Home</ion-title>
-        </ion-toolbar>
-    </ion-header>
 
-
+    <!--Refresher-->
     <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
-        <ion-refresher-content>
-
-
-        </ion-refresher-content>
+        <ion-refresher-content></ion-refresher-content>
     </ion-refresher>
-
-
-
-
-
+    <!--List-->
     <ion-list>
         <ion-list-header>
             Lista de Ensayos

@@ -8,13 +8,15 @@ import { ListaEnsayosPageRoutingModule } from './lista-ensayos-routing.module';
 
 import { ListaEnsayosPage } from './lista-ensayos.page';
 import { VacioDescripcionPipe } from '../../pipes/vacio-descripcion.pipe';
+import { ComponentsModule } from '../../components/components.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    ListaEnsayosPageRoutingModule
+    ListaEnsayosPageRoutingModule,
+    ComponentsModule
   ],
   declarations: [ListaEnsayosPage, VacioDescripcionPipe]
 })

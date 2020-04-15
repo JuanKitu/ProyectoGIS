@@ -7,6 +7,8 @@ import { Component, OnInit } from '@angular/core';
 })
 export class UsuariosPage implements OnInit {
 
+  titulo:string="Usuarios";
+
   constructor() { }
 
   ngOnInit() {

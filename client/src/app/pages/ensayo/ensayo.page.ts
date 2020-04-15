@@ -7,6 +7,7 @@ import { Ensayo } from '../../interfaces/interfaces';
   styleUrls: ['./ensayo.page.scss'],
 })
 export class EnsayoPage implements OnInit {
+  titulo:string="Nuevo Ensayo";
   ensayo:Ensayo={
     operador:"",
     distanciaTotal:null,

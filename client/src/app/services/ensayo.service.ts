@@ -20,12 +20,15 @@ export class EnsayoService {
   };
   getOne(key$:number){
     return this.httpClient.get(this.ensayoURL+`/${key$}`);
-  }
+  };
   change(ensayo:Ensayo,key$:number){
     const body = ensayo;
     const headers = new HttpHeaders({
       'Content-Type':'application/json'
     });
     return this.httpClient.put(this.ensayoURL+`/${key$}`,body,{headers})
-  }
+  };
+  delete(key$:number){
+    return this.httpClient.delete(this.ensayoURL+ `/${key$}`);
+  };
 }

@@ -9,6 +9,7 @@ import { Ensayo } from 'src/app/interfaces/interfaces';
 })
 export class ListaEnsayosPage implements OnInit {
   ensayos:Ensayo[];
+  titulo:string="Lista de Ensayos";
 
   constructor(private ensayoService:EnsayoService) {
    };
@@ -18,12 +19,13 @@ export class ListaEnsayosPage implements OnInit {
       this.ensayos=data['data'];
     });
   };
-
+ 
   doRefresh(event) {
-    console.log('Begin async operation');
-    this.ensayoService.getAll().subscribe(data=>{
-      this.ensayos=data['data'];
-    });
-    event.target.complete();
+    setTimeout(() => {
+      this.ensayoService.getAll().subscribe(data=>{
+        this.ensayos=data['data'];
+      });
+      event.target.complete();
+    }, 1500);
   }
 }
