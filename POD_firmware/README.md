@@ -62,7 +62,7 @@ Comando | Respuesta | Descripción
 
 ### TEST
 ***
-Hace girar el motor sin control de velocidad, para alinear la probeta antes de cada experimento. Funciona como switch. Enviar `<SWITCH>` la primera vez hará que el motor gire de forma indeterminada, y enviar `<SWITCH>` una vez mas lo detendra.
+Hace girar el motor sin control de velocidad, para alinear la probeta antes de cada experimento. Funciona como switch. Enviar `<TEST>` la primera vez hará que el motor gire de forma indeterminada, y enviar `<TEST>` una vez mas lo detendra.
 
  Comando | Respuesta | Descripción
  :---: | :---: | :---: 
@@ -93,4 +93,4 @@ Para comenzar un experimento y luego obtener los datos necesarios del controlado
 2. Enviamos `<STAR,radio,vueltas>` con los datos del experimento. Si el controlador responde un `0`, entonces el experimento comenzó.
 3. Espero a que lleguen los datos de la celda de carga de forma sincrónica (2.5 datos por segundo). Cada vez que un nuevo dato llega, enviamos `<SEND>` al controlador para obtener el numero de vueltas.
 4. Cada t segundos (t=60 sugeridos) enviamos `<TMHM>` para obtener humedad relativa y temperatura. 
-5. Cuando el experimento termine (alcanzó el número de vueltas), el controlador enviará `1` y querá listo para comenzar un experimento nuevo (desde el paso 2).
+5. Cuando el experimento termine (alcanzó el número de vueltas), el controlador enviará `-1` y quedará listo para comenzar un experimento nuevo (desde el paso 2).
