@@ -55,9 +55,10 @@ void loop()
     }
     if (vueltas >= vueltasTarget)
     {
-      Serial.println("1");
+      Serial.println("-1");
       analogWrite(ENB, 0);
       consumeCommand();
+      isRunning = 0;
       state = WAIT;
       break;
     }

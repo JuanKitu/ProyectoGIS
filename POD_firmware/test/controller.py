@@ -36,12 +36,14 @@ def listener():
                 lock.acquire()
                 command = read[1:5]
                 lock.release()
+                print(command)
             elif (read[1:5] == 'STAR'):
                 lock.acquire()
                 command = read[1:5]
                 radio = int(read.split(',')[1])
                 vueltas = int(read.split(',')[2].split('>')[0])
                 lock.release()
+                print(f'<STAR,{radio},{vueltas}>')
         read = ''    
 
 def resetVars():
@@ -60,7 +62,8 @@ def main():
                 resetVars()
                 isRunning = True
             if (vueltasT >= vueltas):
-                ser.write('1\n'.encode())
+                ser.write('-1\n'.encode())
+                isRunning = False
                 state = 'WAIT'
             if (command == 'PAUS'):
                 ser.write('0\n'.encode())

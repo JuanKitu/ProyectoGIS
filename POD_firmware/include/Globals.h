@@ -29,7 +29,7 @@ float rpm;
 const float Kp = 0.5;
 const float Ki = 0.8;
 const float Kd = 3;
-const  uint8_t velocidades[] = {130, 140, 150}; //Chequear en la maquina cuales son las velocidades del ensayo
+const  uint8_t velocidades[] = {191, 159, 136}; //Chequear en la maquina cuales son las velocidades del ensayo
 uint8_t ref = 0;
 float error = 0;
 float output = 0;
