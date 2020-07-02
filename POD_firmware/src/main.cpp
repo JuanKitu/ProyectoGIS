@@ -82,7 +82,7 @@ void loop()
     }
     else if (strcmp(cmd, "SEND") == 0)
     {
-      Serial.println(int(vueltas));
+      Serial.println(uint32_t(vueltas));
       consumeCommand();
     }
     uint32_t now = millis();
