@@ -1,2 +1,13 @@
-server/node_modules
-backend/node_modules
+server\node_modules
+/server/node_modules
+\backend\node_modules
+node_modules
+node_modules/.bin/detect-libc
+node_modules/.bin/detect-libc.cmd
+server/src/testserial.js
+server/src/testserial2.js
+server/test.js
+server/testserial.js
+server/node_modules/.bin/prebuild-install.ps1
+server/node_modules/.bin/prebuild-install.ps1
+server/node_modules/@serialport/bindings/.prebuild-installrc
