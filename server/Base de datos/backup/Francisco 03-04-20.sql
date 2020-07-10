@@ -1,6 +1,5 @@
 CREATE TABLE "Ensayo" (
     "idEnsayo"  serial NOT NULL,
-    "nroEnsayo" INT NOT NULL,
     "fecha" DATE NOT NULL,
     "operador" VARCHAR(50) NOT NULL,
     "observaciones" TEXT,

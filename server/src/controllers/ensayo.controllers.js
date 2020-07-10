@@ -5,7 +5,7 @@ const controller = {};
 
 //Create an Ensayo
 controller.new = async(req, res) => {
-    const { carga, radioTrayectoria, diametroBola, distanciaTotal, tiempoTotal, materialBola, fecha, operador, observaciones, codigoProbeta, durezaProbeta, materialProbeta, tratamientoProbeta } = req.body;
+    const { carga, radioTrayectoria, diametroBola, distanciaTotal, tiempoTotal, materialBola, operador, observaciones, codigoProbeta, durezaProbeta, materialProbeta, tratamientoProbeta } = req.body;
     try {
         const dateNow = new Date();
         const fecha = dateNow.toLocaleDateString();
