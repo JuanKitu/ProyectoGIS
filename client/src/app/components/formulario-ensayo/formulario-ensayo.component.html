@@ -76,7 +76,8 @@
 
     </ion-list>
     <div padding>
-        <ion-button type="submit" shape="round" fill="solid" [disabled]="!formularioEnsayo.valid">Guardar</ion-button>
+        <ion-button type="submit" shape="round" fill="solid" [disabled]="!formularioEnsayo.valid" *ngIf="!archivado">Guardar</ion-button>
+        <ion-button shape="round" fill="solid" color="warning" *ngIf="archivado" (click)="desarchivarEnsayo()">Desarchivar</ion-button>
         <ion-button *ngIf="ensayo.idEnsayo" fill="solid" shape="round" color="danger" class="ion-float-right" (click)="bajaEnsayo()">Borrar</ion-button>
     </div>
 </form>

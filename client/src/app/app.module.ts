@@ -14,7 +14,8 @@ import {HttpClientModule} from '@angular/common/http'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MenuComponent } from './components/menu/menu.component';
 import { CommonModule } from '@angular/common';
-import { ComponentsModule } from './components/components.module';
+import { VacioDescripcionPipe } from './pipes/vacio-descripcion.pipe';
+
 
 
 

@@ -2,7 +2,7 @@ export interface Componente{
     icon:string;
     name:string;
     redirectTo:string;
-}
+};
 export interface Ensayo{
     operador:string,
     distanciaTotal:number,
@@ -19,4 +19,5 @@ export interface Ensayo{
     idDato?:number,
     tiempoTotal?:number,
     observaciones:string
-}
+};
+export const urlServices= "http://192.168.0.159:3000/api/";

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Ensayo } from '../../interfaces/interfaces';
 import { ActivatedRoute } from '@angular/router';
-import { EnsayoService } from '../../services/ensayo.service';
+import { EnsayoArchivadoService } from '../../services/ensayo-archivado.service';
 
 @Component({
   selector: 'app-ensayo',
@@ -23,17 +23,14 @@ export class EnsayoPage implements OnInit {
     materialProbeta:"",
     observaciones:"",
   };
-  
-  constructor(private activeRoute:ActivatedRoute, private ensayoService:EnsayoService) {
-    
-   }
+  constructor(private activeRoute:ActivatedRoute, private ensayoArchivadoService:EnsayoArchivadoService) { }
 
   ngOnInit() {
     this.activeRoute.params.subscribe(params=>{
       this.ensayo.idEnsayo=params['idEnsayo'];
     });
     if(this.ensayo.idEnsayo){
-      this.ensayoService.getOne(this.ensayo.idEnsayo).subscribe(data=>{
+      this.ensayoArchivadoService.getOne(this.ensayo.idEnsayo).subscribe(data=>{
         this.ensayo=data['data'];
         //console.log(this.ensayo);
       });

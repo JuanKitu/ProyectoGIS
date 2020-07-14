@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Ensayo } from '../interfaces/interfaces';
-import { Observable } from 'rxjs';
+import { Ensayo, urlServices } from '../interfaces/interfaces';
 @Injectable({
   providedIn: 'root'
 })
 export class EnsayoService {
-  ensayoURL:string = "http://192.168.0.6:3000/api/ensayos";
+  ensayoURL:string = `${urlServices}ensayos`;
   constructor(private httpClient:HttpClient) { }
 
   new(unEnsayo:Ensayo){

@@ -1,6 +1,7 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { EnsayoService } from '../../services/ensayo.service';
+import { EnsayoArchivadoService } from '../../services/ensayo-archivado.service';
 import { Router } from '@angular/router';
 import { Ensayo } from '../../interfaces/interfaces';
 
@@ -13,7 +14,8 @@ export class FormularioEnsayoComponent implements OnInit {
   
   formularioEnsayo: FormGroup;
   @Input() ensayo: Ensayo;
-  constructor(private ensayoService:EnsayoService, private router:Router) { 
+  @Input() archivado:boolean;
+  constructor(private ensayoService:EnsayoService, private router:Router, private ensayoArchivadoService:EnsayoArchivadoService) { 
     this.formularioEnsayo = new FormGroup({
       'operador': new FormControl('',Validators.required),
       'observaciones': new FormControl(),
@@ -35,13 +37,24 @@ export class FormularioEnsayoComponent implements OnInit {
   }
 
   ngOnInit() {
+    if(this.archivado){
+      this.formularioEnsayo.disable();
+    }
     //console.log(this.ensayo)
     if(this.ensayo.idEnsayo){
-      this.ensayoService.getOne(this.ensayo.idEnsayo).subscribe(async data=>{
-        //console.log(data)
-        this.ensayo=data['data'];
-        await this.formularioEnsayo.setValue(this.ensayo);
-      });
+      if(!this.archivado){
+        this.ensayoService.getOne(this.ensayo.idEnsayo).subscribe(async data=>{
+          //console.log(data)
+          this.ensayo=data['data'];
+          await this.formularioEnsayo.setValue(this.ensayo);
+        });
+      }else{
+        this.ensayoArchivadoService.getOne(this.ensayo.idEnsayo).subscribe(async data=>{
+          //console.log(data)
+          this.ensayo=data['data'];
+          await this.formularioEnsayo.setValue(this.ensayo);
+        });
+      }
     }
   };
   altaEnsayo(){
@@ -61,7 +74,20 @@ export class FormularioEnsayoComponent implements OnInit {
     
   }
   bajaEnsayo(){
-    this.ensayoService.delete(this.ensayo.idEnsayo).subscribe(data=>{
+    if(!this.archivado){
+      this.ensayoService.delete(this.ensayo.idEnsayo).subscribe(data=>{
+        console.log(data);
+        this.router.navigate(['/ensayo','lista',{onSameUrlNavigation:'reload'}]);
+      });
+    }else{
+      this.ensayoArchivadoService.delete(this.ensayo.idEnsayo).subscribe(data=>{
+        console.log(data);
+        this.router.navigate(['/ensayo','lista',{onSameUrlNavigation:'reload'}]);
+      });
+    };
+  };
+  desarchivarEnsayo(){
+    this.ensayoArchivadoService.restore(this.ensayo.idEnsayo).subscribe(data=>{
       console.log(data);
       this.router.navigate(['/ensayo','lista',{onSameUrlNavigation:'reload'}]);
     });
