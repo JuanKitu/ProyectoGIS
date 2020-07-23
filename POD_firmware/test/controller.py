@@ -31,6 +31,7 @@ def listener():
     global command, radio, vueltas
     while True:
         read = ser.readline().decode().strip()
+        
         if (read[0] == '<' and read[-1] == '>' and read[1:5] in commands):
             if (len(read) == 6):      #Comando regular, sin argumentos
                 lock.acquire()

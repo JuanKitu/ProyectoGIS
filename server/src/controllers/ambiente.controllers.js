@@ -4,7 +4,7 @@ const moment = require('moment');
 
 //Create an Ambiente
 controller.new = async(req, res) => {
-    const { idEnsayo, temperatura, humedad, horaActual } = req.body;
+    const { idEnsayo, temperatura, humedad } = req.body;
     try {
         const horaActual = (moment().format('HH:mm:ss'));
         const newAmbiente = await Ambiente.create({

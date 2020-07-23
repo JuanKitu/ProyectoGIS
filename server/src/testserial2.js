@@ -1,6 +1,7 @@
 const SerialPort = require('serialport')
-const port = new SerialPort('COM6', {
+const port = new SerialPort('COM4', {
   baudRate: 9600
 })
-port.write('<CONN>')
-port.write(Buffer.from('<CONN>'))
+
+port.write('<STAR,5,100>\n');
+port.on('readable', () => console.log('Data:',parseFloat(port.read().toString()) ) )

@@ -205,6 +205,63 @@ controller.getAParametro = async(req, res) => {
     }
 };
 
+//Edit a Ensayo's Parametro
+controller.EditAParametro = async(req, res) => {
+    const { idParametro, idEnsayo } = req.params;
+    const {vueltas,coeficienteRozamiento,tiempoActual, fuerzaRozamiento} = req.body;
+    try {
+        const parametro = await Parametros.findOne({
+            where: {
+                idParametro,
+                idEnsayo
+            }
+        });
+        await parametro.update({
+            fuerzaRozamiento,
+            coeficienteRozamiento,
+            vueltas,
+            tiempoActual,
+        }, {
+            where: {
+                idParametro,
+                idEnsayo
+            },
+        });
+        return res.json({
+            message: 'The parametro has been changed',
+            data: parametro
+        });
+    } catch (error) {
+        console.log(error);
+        return res.json({
+            error: 'The server has an error'
+        });
+    }
+};
+
+//Delete a Ensayo's parametro
+controller.deleteAParametro = async(req, res) => {
+    try {
+        const { idParametro, idEnsayo } = req.params;
+        const deleteRowCount = await Parametros.destroy({
+            where: {
+                idParametro,
+                idEnsayo
+            }
+        });
+        return res.json({
+            message: 'The parametro has been deleted',
+            count: deleteRowCount
+        });
+
+    } catch (error) {
+        console.log(error);
+        return res.json({
+            error: 'The server has an error'
+        });
+    }
+};
+
 //Find all Ensayo's ambiente
 controller.getAllAmbiente = async(req, res) => {
     const { Ensayo } = req.params;

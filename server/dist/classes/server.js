@@ -23,7 +23,20 @@ class Server {
         return this._instance || (this._instance = new this());
     }
     escucharSockets() {
-        return null;
+        console.log('escuchando conexiones - sockets');
+        /*this.io.on('connection', client => {
+            
+            console.log('Cliente conectado');
+
+            // Conectar cliente
+            socket.conectarCliente( cliente, this.io );
+
+            // Desconectar
+            socket.desconectar( cliente, this.io );
+        
+
+        });*/
+        //return null;
     }
     start(callback) {
         this.httpServer.listen(this.app.get('port'), callback(1));

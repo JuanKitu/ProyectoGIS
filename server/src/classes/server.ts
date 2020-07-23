@@ -20,12 +20,31 @@ export default class Server {
         //escuchando propiedades del socket
         this.escucharSockets();
     }
+
     public static get instance(){
         return this._instance || ( this._instance = new this() );
     }
-    private escucharSockets(){
-        return null;
+
+    private escucharSockets() {
+
+        console.log('escuchando conexiones - sockets');
+
+        /*this.io.on('connection', client => {
+            
+            console.log('Cliente conectado');
+
+            // Conectar cliente
+            socket.conectarCliente( cliente, this.io );
+
+            // Desconectar
+            socket.desconectar( cliente, this.io );    
+        
+
+        });*/
+
+        //return null;
     }
+
     start( callback: Function ) {
 
         this.httpServer.listen( this.app.get('port'), callback(1));
