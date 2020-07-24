@@ -7,13 +7,15 @@ import { IonicModule } from '@ionic/angular';
 import { ListaParametrosPageRoutingModule } from './lista-parametros-routing.module';
 
 import { ListaParametrosPage } from './lista-parametros.page';
+import { ComponentsModule } from '../../../components/components.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    ListaParametrosPageRoutingModule
+    ListaParametrosPageRoutingModule,
+    ComponentsModule
   ],
   declarations: [ListaParametrosPage]
 })

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Ensayo, urlServices } from '../interfaces/interfaces';
+import { Ensayo, urlServices, Parametro } from '../interfaces/interfaces';
 @Injectable({
   providedIn: 'root'
 })
@@ -29,5 +29,23 @@ export class EnsayoService {
   };
   delete(key$:number){
     return this.httpClient.delete(this.ensayoURL+ `/${key$}`);
+  };
+  /*################################ Parametro Service ################################*/
+  getAllParametro(key$:number){
+    return this.httpClient.get(this.ensayoURL+`/${key$}/parametros`);
+  };
+  getOneParametro(key$:number,keyP$:number){
+    return this.httpClient.get(this.ensayoURL+`/${key$}/parametros/${keyP$}`);
+  };
+  changeParametro(parametro:Parametro,key$:number, keyP$:number){
+    const body = parametro;
+    console.log("Cuerpo del parametro", body)
+    const headers = new HttpHeaders({
+    'Content-Type':'application/json'
+    });
+    return this.httpClient.put(this.ensayoURL+`/${key$}/parametros/${keyP$}`,body,{headers})
+  };
+ deleteParametro(key$:number,keyP$:number){
+    return this.httpClient.delete(this.ensayoURL+ `/${key$}/parametros/${keyP$}`);
   };
 }

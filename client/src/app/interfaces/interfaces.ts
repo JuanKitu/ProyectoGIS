@@ -18,6 +18,14 @@ export interface Ensayo{
     fecha?:Date,
     idDato?:number,
     tiempoTotal?:number,
-    observaciones:string
+    observaciones?:string
+};
+export interface Parametro{
+    fuerzaRozamiento:number,
+    coeficienteRozamiento:number,
+    vueltas:number,
+    tiempoActual:number,
+    idEnsayo?:number,
+    idParametro?:number,
 };
 export const urlServices= "http://192.168.0.159:3000/api/";

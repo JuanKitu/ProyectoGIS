@@ -1,9 +1,9 @@
-<ion-header>
-    <ion-toolbar>
-        <ion-title>listaParametros</ion-title>
-    </ion-toolbar>
-</ion-header>
+<app-header [titulo]="titulo">
 
-<ion-content>
-    <h1>Probando la pagina</h1>
+</app-header>
+
+<ion-content [fullscreen]="true">
+
+    <app-plantilla-lista-parametro [parametros]="parametros" [archivado]=false></app-plantilla-lista-parametro>
+
 </ion-content>

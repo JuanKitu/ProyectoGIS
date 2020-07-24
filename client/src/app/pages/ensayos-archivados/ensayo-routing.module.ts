@@ -5,12 +5,13 @@ import { EnsayoPage } from './ensayo.page';
 
 const routes: Routes = [
   {
-    path: ':idEnsayo',
+    path: '',
     component: EnsayoPage
   },
+  //ruta child de parametros archivados
   {
-    path: 'parametros-archivados',
-    loadChildren: () => import('./parametros-archivados/parametros-archivados.module').then( m => m.ListaParametrosPageModule)
+    path: 'parametros',
+    loadChildren: () => import('./parametros-archivados/parametros-archivados.module').then( m => m.ParametrosArchivadosPageModule)
   }
 ];
 
