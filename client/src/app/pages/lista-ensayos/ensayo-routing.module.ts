@@ -5,8 +5,13 @@ import { EnsayoPage } from './ensayo.page';
 
 const routes: Routes = [
   {
-    path: ':idEnsayo',
+    path: '',
     component: EnsayoPage
+  },
+  //se tiene que vincular a mano la lista de parametros
+  {
+    path: 'parametros',
+    loadChildren: () => import('./lista-parametros/lista-parametros.module').then( m => m.ListaParametrosPageModule)
   }
 ];
 

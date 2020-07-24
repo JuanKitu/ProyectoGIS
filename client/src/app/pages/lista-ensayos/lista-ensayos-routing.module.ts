@@ -8,11 +8,10 @@ const routes: Routes = [
     path: '',
     component: ListaEnsayosPage
   },
-  //se tiene que vincular a mano la lista de parametros
   {
-    path: 'lista-parametros',
-    loadChildren: () => import('./lista-parametros/lista-parametros.module').then( m => m.ListaParametrosPageModule)
-  }
+    path: 'info/:idEnsayo',
+    loadChildren: () => import('./ensayo.module').then( m => m.EnsayoPageModule)
+  },
 ];
 
 @NgModule({

@@ -1,3 +1,25 @@
-<p>
-  plantilla-lista-parametro works!
-</p>
+<ion-content [fullscreen]="true">
+
+    <!--Refresher-->
+    <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+        <ion-refresher-content></ion-refresher-content>
+    </ion-refresher>
+    <!--List-->
+    <ion-list>
+        <div *ngFor="let parametro of parametros; let i = index">
+            <ion-item (click)="selectedIndex = i; seleccionarParametro(parametro)" routerDirection="forward" [class.selected]="selectedIndex == i">
+                <ion-avatar slot="start">
+                    <img src="../../assets/img/parametro.png">
+                </ion-avatar>
+                <ion-label>
+                    <h2 class="tituloListaEnsayo">{{parametro.fuerzaRozamiento}} N</h2>
+                    <h3>Coeficiente: {{parametro.coeficienteRozamiento}}</h3>
+                    <h3>Vueltas: {{parametro.vueltas}}</h3>
+                    <h3>Tiempo actual: {{parametro.tiempoActual}}</h3>
+
+                </ion-label>
+            </ion-item>
+        </div>
+
+    </ion-list>
+</ion-content>

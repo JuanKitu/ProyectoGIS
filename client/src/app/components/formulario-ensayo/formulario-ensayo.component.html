@@ -76,8 +76,27 @@
 
     </ion-list>
     <div padding>
-        <ion-button type="submit" shape="round" fill="solid" [disabled]="!formularioEnsayo.valid" *ngIf="!archivado">Guardar</ion-button>
-        <ion-button shape="round" fill="solid" color="warning" *ngIf="archivado" (click)="desarchivarEnsayo()">Desarchivar</ion-button>
-        <ion-button *ngIf="ensayo.idEnsayo" fill="solid" shape="round" color="danger" class="ion-float-right" (click)="bajaEnsayo()">Borrar</ion-button>
+        <ion-grid>
+            <ion-row>
+                <ion-col>
+                    <ion-button type="submit" shape="round" fill="solid" [disabled]="!formularioEnsayo.valid" *ngIf="!archivado">
+                        <ion-icon name="add-circle-outline"></ion-icon>
+                    </ion-button>
+                    <ion-button shape="round" fill="solid" color="tertiary" *ngIf="archivado" (click)="desarchivarEnsayo()">
+                        <ion-icon name="file-tray-stacked-outline"></ion-icon>
+                    </ion-button>
+                </ion-col>
+                <ion-col class="ion-text-center">
+                    <ion-button shape="round" fill="solid" color="warning" *ngIf="ensayo.idEnsayo" (click)="mostrarParametros()">
+                        <ion-icon name="list-outline"></ion-icon>
+                    </ion-button>
+                </ion-col>
+                <ion-col>
+                    <ion-button *ngIf="ensayo.idEnsayo" fill="solid" shape="round" color="danger" class="ion-float-right" (click)="bajaEnsayo()">
+                        <ion-icon name="trash-outline"></ion-icon>
+                    </ion-button>
+                </ion-col>
+            </ion-row>
+        </ion-grid>
     </div>
 </form>

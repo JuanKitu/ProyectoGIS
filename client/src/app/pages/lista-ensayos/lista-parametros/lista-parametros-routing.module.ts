@@ -7,6 +7,10 @@ const routes: Routes = [
   {
     path: '',
     component: ListaParametrosPage
+  },
+  {
+    path: ':idParametro',
+    loadChildren: () => import('./parametro/parametro.module').then( m => m.ParametroPageModule)
   }
 ];
 

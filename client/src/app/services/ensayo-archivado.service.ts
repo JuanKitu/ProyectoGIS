@@ -25,4 +25,11 @@ export class EnsayoArchivadoService {
     });
     return this.httpClient.post(this.ensayoURL+ `/${key$}`,{headers});
   };
+    /*################################ Parametro Service ################################*/
+    getAllParametro(key$:number){
+      return this.httpClient.get(this.ensayoURL+`/${key$}/parametros_archivados`);
+    };
+    getOneParametro(key$:number,keyP$:number){
+      return this.httpClient.get(this.ensayoURL+`/${key$}/parametros_archivados/${keyP$}`);
+    };
 }

@@ -8,11 +8,10 @@ const routes: Routes = [
     path: '',
     component: EnsayosArchivadosPage
   },
-  //ruta child de parametros archivados
   {
-    path: 'parametros-archivados',
-    loadChildren: () => import('./parametros-archivados/parametros-archivados.module').then( m => m.ParametrosArchivadosPageModule)
-  }
+    path: 'info/:idEnsayo',
+    loadChildren: () => import('./ensayo.module').then( m => m.EnsayoPageModule)
+  },
 ];
 
 @NgModule({

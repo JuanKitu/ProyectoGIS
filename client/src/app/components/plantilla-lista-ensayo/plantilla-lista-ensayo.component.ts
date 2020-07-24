@@ -9,7 +9,6 @@ import { Ensayo } from '../../interfaces/interfaces';
 })
 export class PlantillaListaEnsayoComponent implements OnInit {
   @Input() ensayos: Ensayo[];
-  test: Ensayo[];
   titulo:string="Lista de Ensayos";
 
   constructor(private ensayoService:EnsayoService) {

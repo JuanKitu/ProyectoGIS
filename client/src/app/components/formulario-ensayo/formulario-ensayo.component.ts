@@ -59,15 +59,17 @@ export class FormularioEnsayoComponent implements OnInit {
   };
   altaEnsayo(){
     if(this.ensayo.idEnsayo){
-      const key$=this.ensayo.idEnsayo
+      const key$=this.ensayo.idEnsayo;
       this.ensayo = this.formularioEnsayo.value;
       this.ensayo.idEnsayo=key$;
       this.ensayoService.change(this.ensayo,this.ensayo.idEnsayo).subscribe(data=>{
         this.router.navigate(['/ensayo','lista']);
-      })
+      });
     }else{
       const data:Ensayo = this.formularioEnsayo.value;
       this.ensayoService.new(data).subscribe(data=>{
+        //const idEnsayo = data['data'].idEnsayo;
+        //console.log("id Ensayo", idEnsayo);
         this.router.navigate(['/ensayo','lista']);
       });
     }
@@ -91,6 +93,15 @@ export class FormularioEnsayoComponent implements OnInit {
       console.log(data);
       this.router.navigate(['/ensayo','lista',{onSameUrlNavigation:'reload'}]);
     });
+  }
+  mostrarParametros(){
+    const idEnsayo=this.ensayo.idEnsayo;
+    if(!this.archivado){
+      this.router.navigate(['/ensayo','lista','info',idEnsayo,'parametros',{onSameUrlNavigation:'reload'}]);
+    }else{
+      this.router.navigate(['/ensayo','archivados','info',idEnsayo,'parametros',{onSameUrlNavigation:'reload'}]);
+    }
+
   }
 
 }
