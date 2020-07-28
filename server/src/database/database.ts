@@ -1,7 +1,7 @@
   
-const Sequelize = require('sequelize');
+import { Sequelize } from 'sequelize';
 
-const sequelize = new Sequelize(
+export const sequelize = new Sequelize(
     'GISDB',//Data Base
     'postgres',//user
     'investigacion',//password
@@ -11,12 +11,8 @@ const sequelize = new Sequelize(
         dialect:'postgres',
         pool:{
             max:5,
-            mix:0,
-            require:30000,
             idle:1000
         },
         logging: false
     }
 )
-
-module.exports = {sequelize};

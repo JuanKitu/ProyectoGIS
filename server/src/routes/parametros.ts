@@ -1,6 +1,8 @@
-const {Router} = require('express');
+import { Router } from 'express';
+import ParametrosController from '../controllers/parametros.controllers';
+
 const router = Router();
-const controller = require('../controllers/parametros.controllers');
+const controller = new ParametrosController();
 router.get('/',controller.getAll);
 router.get('/:idParametro',controller.getById);
 router.post('/',controller.new);
@@ -10,4 +12,4 @@ router.put('/:idParametro',controller.change);
 
 
 
-module.exports = router;
+export default router;

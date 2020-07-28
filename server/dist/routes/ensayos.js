@@ -1,6 +1,12 @@
-const { Router } = require('express');
-const router = Router();
-const controller = require('../controllers/ensayo.controllers');
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const ensayo_controllers_1 = __importDefault(require("../controllers/ensayo.controllers"));
+const router = express_1.Router();
+const controller = new ensayo_controllers_1.default();
 router.get('/', controller.getAll);
 router.get('/:idEnsayo', controller.getById);
 router.post('/', controller.new);
@@ -13,4 +19,4 @@ router.get('/:idEnsayo/parametros', controller.getAllParametros);
 router.get('/:idEnsayo/parametros/:idParametro', controller.getAParametro);
 router.get('/:idEnsayo/ambiente', controller.getAllAmbiente);
 router.get('/:idEnsayo/ambiente/:idAmbiente', controller.getAnAmbiente);
-module.exports = router;
+exports.default = router;

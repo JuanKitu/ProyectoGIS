@@ -1,6 +1,8 @@
-const { Router } = require('express');
+import { Router } from 'express';
+import EnsayoArchivadosController from '../controllers/ensayo_archivados.controllers';
+
 const router = Router();
-const controller = require('../controllers/ensayo_archivados.controllers');
+const controller = new EnsayoArchivadosController();
 router.get('/', controller.getAll);
 router.get('/:idEnsayo', controller.getById);
 router.post('/:idEnsayo', controller.restoreEnsayo);
@@ -9,4 +11,5 @@ router.get('/:idEnsayo/parametros_archivados', controller.getAllParametros);
 router.get('/:idEnsayo/parametros_archivados/:idParametro', controller.getAParametro);
 router.get('/:idEnsayo/ambiente', controller.getAllAmbiente);
 router.get('/:idEnsayo/ambiente/:idAmbiente', controller.getAnAmbiente);
-module.exports = router;
+
+export default router;
