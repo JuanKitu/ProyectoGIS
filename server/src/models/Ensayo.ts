@@ -3,7 +3,23 @@ import { sequelize } from '../database/database';
 import {EnsayoInterface} from '../interfaces/interfaces'
 //El creation Attributes es primordia para que ande el .create en los controladores
 interface EnsayoCreationAttributes extends Optional<EnsayoInterface, "idEnsayo">{};
-export default class Ensayo extends Model<EnsayoInterface,EnsayoCreationAttributes>{};
+export default class Ensayo extends Model<EnsayoInterface,EnsayoCreationAttributes> implements EnsayoInterface{
+    public operador!:string;
+    public distanciaTotal!:number;
+    public radioTrayectoria!:number;
+    public materialBola!:string;
+    public carga!:number;
+    public diametroBola!:number;
+    public codigoProbeta!:string;
+    public durezaProbeta!:number;
+    public tratamientoProbeta!:string;
+    public materialProbeta!:string;
+    public idEnsayo!:number;
+    public fecha!:string;
+    public idDato!:number;
+    public tiempoTotal!:number;
+    public observaciones!:string;
+};
 import Ambiente from './Ambiente';
 import Parametros from './Parametros';
 

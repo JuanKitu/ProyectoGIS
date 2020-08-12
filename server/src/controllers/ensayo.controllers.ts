@@ -156,34 +156,7 @@ export default class EnsayoController {
         }
     };
 
-    //Create an Ensayo's Parametro
-    /*newParametro = async(req, res) => {
-        const { idEnsayo } = req.params;
-        const Ensayo = await Ensayos.findOne({
-            where: {
-                idEnsayo
-            }
-        });
-        try {
-            const coeficienteRozamiento = (9.8 * Ensayo.carga) / fuerzaRozamiento;
-            const newParametros = await Parametros.create({
-                coeficienteRozamiento,
-                idEnsayo
-            });
-            if (newParametros) {
-                return res.json({
-                    message: 'The Parametros has been created',
-                    data: newParametros
-                });
-            };
-        } catch (error) {
-            console.log(error);
-            return res.json({
-                error: 'The server has an error'
-            });
-        }
-    };
-    */
+    
     //Find a Ensayo's Parametro
     getAParametro = async (req: Request, res: Response) => {
         const { idParametro, idEnsayo } = req.params;

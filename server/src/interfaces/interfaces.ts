@@ -1,4 +1,5 @@
 import { Optional } from 'sequelize';
+import Queue from '../classes/queue';
 export interface AmbienteInterface{
     temperatura:number,
     humedad:number,
@@ -36,5 +37,13 @@ export interface UsuarioInterface{
     legajo:number,
     salt:string,
     hash:string
+}
+export interface colaDatos{
+    id:number,
+    dato:any
+};
+export interface colaDual{
+    fuerzas:Queue,
+    vueltas:Queue
 }
 export interface EnsayoCreationAttributes extends Optional<EnsayoInterface, "idEnsayo"|"operador"|"fecha"|"distanciaTotal">{};
