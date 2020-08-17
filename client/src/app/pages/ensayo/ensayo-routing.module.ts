@@ -7,6 +7,10 @@ const routes: Routes = [
   {
     path: '',
     component: EnsayoPage
+  },
+  {
+    path: ':idEnsayo/grafico',
+    loadChildren: () => import('./grafico/grafico.module').then( m => m.GraficoPageModule)
   }
 ];
 

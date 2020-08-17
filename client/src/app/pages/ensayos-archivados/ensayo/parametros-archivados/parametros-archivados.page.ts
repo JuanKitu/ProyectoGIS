@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Parametro } from '../../../interfaces/interfaces';
 import { ActivatedRoute } from '@angular/router';
-import { EnsayoService } from '../../../services/ensayo.service';
-import { EnsayoArchivadoService } from 'src/app/services/ensayo-archivado.service';
+import { Parametro } from '../../../../interfaces/interfaces';
+import { EnsayoArchivadoService } from '../../../../services/ensayo-archivado.service';
 
 @Component({
   selector: 'app-parametros-archivados',

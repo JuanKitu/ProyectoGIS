@@ -10,7 +10,7 @@ const routes: Routes = [
   },
   {
     path: 'info/:idEnsayo',
-    loadChildren: () => import('./ensayo.module').then( m => m.EnsayoPageModule)
+    loadChildren: () => import('./ensayo/ensayo.module').then( m => m.EnsayoPageModule)
   },
 ];
 

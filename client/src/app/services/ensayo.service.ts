@@ -48,4 +48,13 @@ export class EnsayoService {
  deleteParametro(key$:number,keyP$:number){
     return this.httpClient.delete(this.ensayoURL+ `/${key$}/parametros/${keyP$}`);
   };
+
+  crearListaParametros(key$:number){
+    const headers = new HttpHeaders({
+      'Content-Type':'application/json'
+    });
+    //console.log(`${this.ensayoURL}/${key$}`)
+    return this.httpClient.post(`${this.ensayoURL}/${key$}`,{headers});
+  };
+
 }

@@ -4,19 +4,20 @@ import { FormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-import { ParametroPageRoutingModule } from './parametro-routing.module';
+import { ListaParametrosPageRoutingModule } from './lista-parametros-routing.module';
 
-import { ParametroPage } from './parametro.page';
+import { ListaParametrosPage } from './lista-parametros.page';
 import { ComponentsModule } from '../../../../components/components.module';
+
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    ParametroPageRoutingModule,
+    ListaParametrosPageRoutingModule,
     ComponentsModule
   ],
-  declarations: [ParametroPage]
+  declarations: [ListaParametrosPage]
 })
-export class ParametroPageModule {}
+export class ListaParametrosPageModule {}

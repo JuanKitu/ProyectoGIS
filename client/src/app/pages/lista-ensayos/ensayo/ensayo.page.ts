@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { Ensayo } from '../../interfaces/interfaces';
+
 import { ActivatedRoute } from '@angular/router';
-import { EnsayoService } from '../../services/ensayo.service';
+import { Ensayo } from '../../../interfaces/interfaces';
+import { EnsayoService } from '../../../services/ensayo.service';
+
 
 @Component({
   selector: 'app-ensayo',

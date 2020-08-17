@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { EnsayoService } from '../../../services/ensayo.service';
-import { Parametro } from '../../../interfaces/interfaces';
+import { Parametro } from '../../../../interfaces/interfaces';
+import { EnsayoService } from '../../../../services/ensayo.service';
+
 
 @Component({
   selector: 'app-lista-parametros',

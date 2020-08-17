@@ -1,15 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { Ensayo } from '../../interfaces/interfaces';
 import { ActivatedRoute } from '@angular/router';
-import { EnsayoArchivadoService } from '../../services/ensayo-archivado.service';
+import { EnsayoService } from '../../../services/ensayo.service';
+import { Ensayo } from 'src/app/interfaces/interfaces';
 
 @Component({
-  selector: 'app-ensayo',
-  templateUrl: './ensayo.page.html',
-  styleUrls: ['./ensayo.page.scss'],
+  selector: 'app-grafico',
+  templateUrl: './grafico.page.html',
+  styleUrls: ['./grafico.page.scss'],
 })
-export class EnsayoPage implements OnInit {
-  titulo:string="Info ensayo";
+export class GraficoPage implements OnInit {
   ensayo:Ensayo={
     operador:"",
     distanciaTotal:null,
@@ -23,14 +22,15 @@ export class EnsayoPage implements OnInit {
     materialProbeta:"",
     observaciones:"",
   };
-  constructor(private activeRoute:ActivatedRoute, private ensayoArchivadoService:EnsayoArchivadoService) { }
+  titulo:string = "Grafico Ensayo";
+  constructor(private activeRoute:ActivatedRoute, private ensayoService:EnsayoService) { }
 
   ngOnInit() {
     this.activeRoute.params.subscribe(params=>{
       this.ensayo.idEnsayo=params['idEnsayo'];
     });
     if(this.ensayo.idEnsayo){
-      this.ensayoArchivadoService.getOne(this.ensayo.idEnsayo).subscribe(data=>{
+      this.ensayoService.getOne(this.ensayo.idEnsayo).subscribe(data=>{
         this.ensayo=data['data'];
         //console.log(this.ensayo);
       });

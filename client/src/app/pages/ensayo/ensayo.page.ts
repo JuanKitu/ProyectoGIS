@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Ensayo } from '../../interfaces/interfaces';
+import { WebSocketService } from '../../services/web-socket.service';
 
 @Component({
   selector: 'app-ensayo',
@@ -25,7 +26,12 @@ export class EnsayoPage implements OnInit {
 
   };
 
-  constructor() {}
+  constructor(private webSocket:WebSocketService) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.webSocket.listen('prueba2').subscribe(data=>{
+      console.log("Esto es algo basico de los socket ", data);
+    });
+    this.webSocket.emit('respuesta',{hola:'Hola soy el cliente'});
+  }
 }

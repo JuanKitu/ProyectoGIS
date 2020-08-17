@@ -7,7 +7,8 @@ import { IonicModule } from '@ionic/angular';
 import { EnsayoPageRoutingModule } from './ensayo-routing.module';
 
 import { EnsayoPage } from './ensayo.page';
-import { ComponentsModule } from '../../components/components.module';
+import { ComponentsModule } from '../../../components/components.module';
+
 
 @NgModule({
   imports: [

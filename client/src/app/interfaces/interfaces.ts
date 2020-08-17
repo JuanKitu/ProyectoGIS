@@ -28,4 +28,5 @@ export interface Parametro{
     idEnsayo?:number,
     idParametro?:number,
 };
-export const urlServices= "http://192.168.0.159:3000/api/";
+export const urlServices= "http://192.168.0.185:3000/api/";
+export const urlSocket="http://192.168.0.185:3000";

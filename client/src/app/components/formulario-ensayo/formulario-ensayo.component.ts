@@ -68,9 +68,9 @@ export class FormularioEnsayoComponent implements OnInit {
     }else{
       const data:Ensayo = this.formularioEnsayo.value;
       this.ensayoService.new(data).subscribe(data=>{
-        //const idEnsayo = data['data'].idEnsayo;
+        const idEnsayo = data['data'].idEnsayo;
         //console.log("id Ensayo", idEnsayo);
-        this.router.navigate(['/ensayo','lista']);
+        this.router.navigate(['/ensayo',idEnsayo,'grafico']);
       });
     }
     

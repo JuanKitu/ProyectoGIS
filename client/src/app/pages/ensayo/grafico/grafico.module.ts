@@ -4,9 +4,9 @@ import { FormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-import { ListaParametrosPageRoutingModule } from './lista-parametros-routing.module';
+import { GraficoPageRoutingModule } from './grafico-routing.module';
 
-import { ListaParametrosPage } from './lista-parametros.page';
+import { GraficoPage } from './grafico.page';
 import { ComponentsModule } from '../../../components/components.module';
 
 @NgModule({
@@ -14,9 +14,9 @@ import { ComponentsModule } from '../../../components/components.module';
     CommonModule,
     FormsModule,
     IonicModule,
-    ListaParametrosPageRoutingModule,
+    GraficoPageRoutingModule,
     ComponentsModule
   ],
-  declarations: [ListaParametrosPage]
+  declarations: [GraficoPage]
 })
-export class ListaParametrosPageModule {}
+export class GraficoPageModule {}

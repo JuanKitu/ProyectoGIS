@@ -15,15 +15,17 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MenuComponent } from './components/menu/menu.component';
 import { CommonModule } from '@angular/common';
 import { VacioDescripcionPipe } from './pipes/vacio-descripcion.pipe';
-
-
+import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
+import { urlSocket } from './interfaces/interfaces';
+import { ChartsModule } from 'ng2-charts';
+const config: SocketIoConfig = { url: urlSocket, options: {} };
 
 
 @NgModule({
   declarations: [AppComponent, MenuComponent],
   entryComponents: [],
   exports:[MenuComponent],
-  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, HttpClientModule, FormsModule, ReactiveFormsModule, CommonModule],
+  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, HttpClientModule, FormsModule, ReactiveFormsModule, CommonModule, SocketIoModule.forRoot(config), ChartsModule],
   providers: [
     StatusBar,
     SplashScreen,

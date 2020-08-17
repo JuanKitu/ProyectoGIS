@@ -7,7 +7,8 @@ import { IonicModule } from '@ionic/angular';
 import { ParametroPageRoutingModule } from './parametro-routing.module';
 
 import { ParametroPage } from './parametro.page';
-import { ComponentsModule } from '../../../../components/components.module';
+import { ComponentsModule } from '../../../../../components/components.module';
+
 
 @NgModule({
   imports: [

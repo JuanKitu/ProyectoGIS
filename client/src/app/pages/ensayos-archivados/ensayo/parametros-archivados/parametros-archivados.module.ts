@@ -7,7 +7,7 @@ import { IonicModule } from '@ionic/angular';
 import { ParametrosArchivadosPageRoutingModule } from './parametros-archivados-routing.module';
 
 import { ParametrosArchivadosPage } from './parametros-archivados.page';
-import { ComponentsModule } from '../../../components/components.module';
+import { ComponentsModule } from '../../../../components/components.module';
 
 @NgModule({
   imports: [
