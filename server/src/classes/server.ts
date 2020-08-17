@@ -1,6 +1,7 @@
 import express from 'express';
 import socketIO from 'socket.io';
 import http from 'http';
+import * as socket from '../socket/socket';
 
 //Aca habria que importar el archivos de sockets personalizado
 
@@ -29,20 +30,21 @@ export default class Server {
 
         console.log('escuchando conexiones - sockets');
 
-        /*this.io.on('connection', client => {
+        this.io.on('connection', client => {
             
             console.log('Cliente conectado');
 
             // Conectar cliente
-            socket.conectarCliente( cliente, this.io );
+            socket.conectarCliente( client);
 
             // Desconectar
-            socket.desconectar( cliente, this.io );    
+            socket.desconectar( client);    
         
+            //Parametros
+            socket.recibirStrem(client);    
 
-        });*/
+        });
 
-        //return null;
     }
 
     start( callback: Function ) {
