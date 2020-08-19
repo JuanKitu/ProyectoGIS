@@ -32,7 +32,8 @@ void loop()
   recvWithStartEndMarkers();
   if (newData == true)
   {
-    strcpy(tempChars, receivedChars); //Es necesario copiar temporalmente para proteger los datos originales porque strtok() en parseCommand() remplaza las comas con \0
+    // Es necesario copiar temporalmente para proteger los datos originales porque strtok() en parseCommand() remplaza las comas con \0
+    strcpy(tempChars, receivedChars);
     parseCommand();
     newData = false;
   }
@@ -85,6 +86,12 @@ void loop()
       Serial.println(uint32_t(vueltas));
       consumeCommand();
     }
+    else if (strcmp(cmd, "SPEE") == 0)
+    {
+      Serial.println(rpm);
+      consumeCommand();
+    }
+
     uint32_t now = millis();
     if (now - lastTime >= SAMPLE_DELAY)
     {
@@ -126,6 +133,26 @@ void loop()
     state = WAIT;
     break;
   }
+
+  case TEST:
+  {
+    test = !test;
+    if (test){
+      analogWrite(ENB, (unsigned char)(80));
+      consumeCommand();
+      Serial.println("0");
+      state = WAIT;
+    }
+    else {
+      analogWrite(ENB, 0);
+      consumeCommand();
+      Serial.println("-1");
+      state = WAIT;
+    }
+    
+    
+  }
+
   case WAIT:
   {
     if (strcmp(cmd, "CONN") == 0 && isConnected != 1)
@@ -167,24 +194,7 @@ void loop()
     }
     break;
   }
-  case TEST:
-  {
-    test = !test;
-    if (test){
-      analogWrite(ENB, (unsigned char)(80));
-      consumeCommand();
-      Serial.println("0");
-      state = WAIT;
-    }
-    else {
-      analogWrite(ENB, 0);
-      consumeCommand();
-      Serial.println("-1");
-      state = WAIT;
-    }
-    
-    
-  }
+  
 }
 }
 
