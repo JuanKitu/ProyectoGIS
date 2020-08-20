@@ -2,6 +2,14 @@ import { Request, Response } from 'express';
 import Ensayo from '../models/Ensayo'
 import Parametros from '../models/Parametros';
 import Ambiente from '../models/Ambiente';
+import { async } from 'rxjs';
+import EnsayoArchivadosController from './ensayo_archivados.controllers';
+import { fork } from 'child_process';
+import SerialPort from 'serialport';
+import * as socket from '../socket/socket';
+import Server from '../classes/server';
+import { any } from 'bluebird';
+import { arregloDM } from '../interfaces/interfaces';
 
 //const Parametros = require('../models/Parametros');
 //const Ambiente = require('../models/Ambiente');
@@ -156,6 +164,58 @@ export default class EnsayoController {
         }
     };
 
+    //Create an Ensayo's Parametro
+    crearParametros = async (req: Request, res: Response) => {
+        const {idEnsayo} = req.params;
+        try {
+            const elEnsayo = await Ensayo.findOne({
+                where: {
+                    idEnsayo
+                },
+                raw:true
+            });
+            if(elEnsayo){
+                const server = Server.instance;
+                let arreglosDM:arregloDM={
+                    arregloDistancias:[],
+                    arregloMu:[]
+                };
+                
+                //console.log(elEnsayo);
+                //portControlador.open();
+                const hijoPFV = fork('../server/dist/serialport/Serialport.js', ['normal']);
+                hijoPFV.send(elEnsayo);
+                hijoPFV.on('message',(M:any)=>{
+                    if(typeof(M) == "object"){
+                        const punto = {
+                            distancia: (((M.vueltas)*(2*Math.PI*elEnsayo.radioTrayectoria)).toFixed(2)).toString(),
+                            mu: M.coeficienteRozamiento
+                        };
+                        arreglosDM.arregloDistancias.push(punto.distancia);
+                        arreglosDM.arregloMu.push(punto.mu);
+                        server.setearArray(arreglosDM);
+                        console.log(punto);
+                        server.io.emit('parametros',punto);
+                    }
+                    if(typeof(M) == "string"){
+                        console.log(M);
+                        hijoPFV.kill();
+                        return res.json({
+                            data:elEnsayo
+                        });
+
+                    }
+                    
+                })
+            }
+            
+        } catch (error) {
+            console.log(error);
+            return res.json({
+                error: 'The server has an error'
+            });
+        }
+    };
     
     //Find a Ensayo's Parametro
     getAParametro = async (req: Request, res: Response) => {

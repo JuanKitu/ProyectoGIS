@@ -1,28 +1,25 @@
 const SerialPort = require('serialport');
 import Parametros from '../src/models/Parametros';
 import {ParametroInterface} from '../src/interfaces/interfaces'
+import Server from './classes/server';
+import { fork } from 'child_process';
 
-const portCelda = new SerialPort('COM5', {
-  baudRate: 9600
-})
-const portControlador = new SerialPort('COM4', {
-  baudRate: 9600
-})
-// Read data that is available but keep the stream in "paused mode"
-const AllParametros = new Array;
+/*
+const server = Server.instance;
+setInterval(hacerPrueba,5000)
 
-async function  ParametrosPuerto(time:number){
-  const tiempo = time + 0.4;
-  const newParametro = await Parametros.create({
-    idEnsayo:5,
-    fuerzaRozamiento: (portCelda.on('readable', function () {parseFloat(portCelda.read().toString().substring(8))})),
-    coeficienteRozamiento:( (portCelda.on('readable', function () {parseFloat(portCelda.read().toString().substring(8))})) * 9.8 ) / 8,
-    vueltas: (portControlador.on('readable', function () {parseFloat(portControlador.read().toString())})),
-    tiempoActual: tiempo
-  });
-  return tiempo
+let i:number = 0;
+function hacerPrueba(){
+  console.log(i)
+  server.io.emit('prueba',i)
+  i++;
 }
-async function ParametrosArray(unParametro:ParametroInterface,arrayParametro:ParametroInterface[], time:number){
-  unParametro.tiempoActual=time;
-  return arrayParametro.push(unParametro);
-}
+*/
+
+const server = Server.instance;
+const hijoPrueba = fork('testChildProcess.js');
+hijoPrueba.send({server:server});
+hijoPrueba.on('message',(FIN:any)=>{
+  console.log(FIN);
+  hijoPrueba.kill();
+})

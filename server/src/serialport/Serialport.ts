@@ -2,20 +2,22 @@ import SerialPort from 'serialport';
 const { fork } = require('child_process');
 import Ensayo from '../models/Ensayo'
 import { EnsayoInterface } from '../interfaces/interfaces';
+import Server from '../classes/server';
 
 
-const portControlador = new SerialPort('COM4', {
+let servidor:Server = Server.instance;
+
+let portControlador = new SerialPort('COM4', {
     autoOpen: false,
-    baudRate: 9600
-  })
+    baudRate: 9600,
+});
 
 
-
-async function conectar(portControlador:SerialPort) {
+async function conectar(puerto:SerialPort) {
     let promesa = new Promise((resolve,reject) => {
-        portControlador.write('<CONN>\n')
-        portControlador.on('readable',()=>{
-        const control = portControlador.read();
+        puerto.write('<CONN>\n')
+        puerto.on('readable',()=>{
+        const control = puerto.read();
         if(control) {
             return resolve(parseFloat(control.toString()));
             
@@ -47,36 +49,32 @@ async function iniciar(radio: number,vueltas: number,puerto:SerialPort) {
 
 
 
-async function comenzarExperimeto(puerto:SerialPort,idEnsayo:number){
-    
-    const ensayo = await Ensayo.findOne({
-        where:{
-            idEnsayo
-        },
-        raw: true
-    });
-    
-    try{
-        if (ensayo){
-            if(ensayo.distanciaTotal && ensayo.radioTrayectoria){
-                //console.log (ensayo)
-                const distancia:number = ensayo.distanciaTotal;
-                const unRadio:number = ensayo.radioTrayectoria;
-                const vueltas:number = Math.round(distancia/(2*Math.PI*(unRadio/1000)));
-                puerto.open();
-                console.log('Vueltas',vueltas);
-                conectar(portControlador).then(data=>{
-                    console.log('Vueltas2');
+async function comenzarExperimeto(puerto:SerialPort,ensayo:Ensayo){
+        if(ensayo.distanciaTotal && ensayo.radioTrayectoria){
+            const distancia:number = ensayo.distanciaTotal;
+            const unRadio:number = ensayo.radioTrayectoria;
+            const vueltas:number = Math.round(distancia/(2*Math.PI*(unRadio/1000)));
+            puerto.open();
+            console.log('Vueltas',vueltas,puerto.isOpen);
+            conectar(puerto).then(data=>{
+                console.log('Vueltas2');
                 iniciar(unRadio,vueltas,puerto).then(data2=>{
                     console.log('Vueltas3');
-                    const childFuerza = fork('SerialportFuerza.js');
-                    const childVuelta = fork('SerialportVueltas.js');
-                    //const ensayoEnviar:EnsayoInterface= ensayo;
-                    setTimeout(() => {const childParametros = fork('procesamientoParameros.js'); childParametros.send({ensayo}); 
-                    childParametros.on('message',(FinP:any)=>{
-                        console.log(FinP);
-                        childParametros.kill();
-                    })},1000);
+                    const childFuerza = fork('dist/serialport/SerialportFuerza.js');
+                    const childVuelta = fork('dist/serialport/SerialportVueltas.js');
+                    setTimeout(() => {const childParametros = fork('dist/serialport/procesamientoParameros.js'); childParametros.send(ensayo); 
+                        childParametros.on('message',(M:any)=>{
+                            if(typeof(M)=="object"){
+                                (<any> process).send(M);
+                            }
+                            if(typeof(M)=="string"){
+                                //console.log(M);
+                                childParametros.kill();
+                                (<any> process).send('Parametros agregados satisfactoriamente');
+                            }
+                            
+                        })
+                    },1000);
                     childFuerza.on('message',(FinF:any)=>{
                         console.log(FinF);
                         childVuelta.kill();
@@ -87,14 +85,14 @@ async function comenzarExperimeto(puerto:SerialPort,idEnsayo:number){
                     })
                     puerto.close();
                 })
-            });  
-            };
+            }); 
+                
+            
+              
         };
-    }catch(error){
-        console.log(error)
-    }
     
-}
+    }
 
-
-comenzarExperimeto(portControlador,19);
+process.on('message',async (m)=>{
+    await comenzarExperimeto(portControlador,m);
+});

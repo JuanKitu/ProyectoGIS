@@ -2,6 +2,8 @@ import express from 'express';
 import socketIO from 'socket.io';
 import http from 'http';
 import * as socket from '../socket/socket';
+import { arregloDM } from '../interfaces/interfaces';
+import { any } from 'bluebird';
 
 //Aca habria que importar el archivos de sockets personalizado
 
@@ -10,6 +12,7 @@ export default class Server {
     public app: express.Application;
     public io: socketIO.Server;
     private httpServer: http.Server;
+    private arreglos:arregloDM;
     private constructor(){
         this.app = express();
         //settings
@@ -20,12 +23,18 @@ export default class Server {
         this.io = socketIO( this.httpServer );
         //escuchando propiedades del socket
         this.escucharSockets();
+        this.arreglos={
+            arregloMu:[],
+            arregloDistancias:[]
+        };
     }
 
     public static get instance(){
         return this._instance || ( this._instance = new this() );
     }
-
+    public setearArray(unArray:arregloDM){
+        this.arreglos=unArray;
+    }
     private escucharSockets() {
 
         console.log('escuchando conexiones - sockets');
@@ -35,13 +44,17 @@ export default class Server {
             console.log('Cliente conectado');
 
             // Conectar cliente
-            socket.conectarCliente( client);
+            socket.conectarCliente( client, this.io);
 
             // Desconectar
-            socket.desconectar( client);    
+            socket.desconectar( client,this.io);    
         
-            //Parametros
-            socket.recibirStrem(client);    
+            //hola
+            socket.decirHola(client,this.io);
+
+            //mensaje
+            socket.mensaje(client,this.io,this.arreglos);
+            
 
         });
 
@@ -49,7 +62,7 @@ export default class Server {
 
     start( callback: Function ) {
 
-        this.httpServer.listen( this.app.get('port'), callback(1));
+        this.httpServer.listen( this.app.get('port'),'192.168.0.185', callback(1));
 
     }
 }

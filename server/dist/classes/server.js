@@ -38,24 +38,33 @@ class Server {
         this.io = socket_io_1.default(this.httpServer);
         //escuchando propiedades del socket
         this.escucharSockets();
+        this.arreglos = {
+            arregloMu: [],
+            arregloDistancias: []
+        };
     }
     static get instance() {
         return this._instance || (this._instance = new this());
+    }
+    setearArray(unArray) {
+        this.arreglos = unArray;
     }
     escucharSockets() {
         console.log('escuchando conexiones - sockets');
         this.io.on('connection', client => {
             console.log('Cliente conectado');
             // Conectar cliente
-            socket.conectarCliente(client);
+            socket.conectarCliente(client, this.io);
             // Desconectar
-            socket.desconectar(client);
-            //Parametros
-            socket.recibirStrem(client);
+            socket.desconectar(client, this.io);
+            //hola
+            socket.decirHola(client, this.io);
+            //mensaje
+            socket.mensaje(client, this.io, this.arreglos);
         });
     }
     start(callback) {
-        this.httpServer.listen(this.app.get('port'), callback(1));
+        this.httpServer.listen(this.app.get('port'), '192.168.0.185', callback(1));
     }
 }
 exports.default = Server;
