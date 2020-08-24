@@ -46,4 +46,9 @@ export interface colaDual{
     fuerzas:Queue,
     vueltas:Queue
 }
+
+export interface arregloDM{
+    arregloDistancias:any[],
+    arregloMu:any[]
+}
 export interface EnsayoCreationAttributes extends Optional<EnsayoInterface, "idEnsayo"|"operador"|"fecha"|"distanciaTotal">{};

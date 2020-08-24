@@ -7,11 +7,11 @@ import { reject, resolve } from 'bluebird';
 const fs = require('fs');
 import { Observable, Subscription, async } from 'rxjs';
 import { col } from 'sequelize/types';
+import { isObject } from 'util';
 let ensayo:EnsayoInterface;
 
-
 process.on('message',  async(m) => {
-    ensayo =  await m['ensayo'];
+    ensayo =  await m;
 
 function crearParametro(unDato:number,unaVuelta:number,unTiempo:number,unEnsayo:EnsayoInterface):ParametroInterface{
     if(unEnsayo.carga && unEnsayo.idEnsayo){
@@ -116,6 +116,11 @@ let i=1;
 const arregloParametros:any[]=[];
 obserbableDatos.subscribe(data=>{
     arregloParametros.push(data);
+    /* const datos = {
+        unParametro: data,
+        arreglo: arregloParametros
+    }; */
+    (<any> process).send(data);
     console.log(data, i);
     i++;
 },

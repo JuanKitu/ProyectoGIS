@@ -15,6 +15,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const Ensayo_1 = __importDefault(require("../models/Ensayo"));
 const Parametros_1 = __importDefault(require("../models/Parametros"));
 const Ambiente_1 = __importDefault(require("../models/Ambiente"));
+const child_process_1 = require("child_process");
+const server_1 = __importDefault(require("../classes/server"));
 //const Parametros = require('../models/Parametros');
 //const Ambiente = require('../models/Ambiente');
 class EnsayoController {
@@ -164,6 +166,55 @@ class EnsayoController {
                 return res.json({
                     data: parametro
                 });
+            }
+            catch (error) {
+                console.log(error);
+                return res.json({
+                    error: 'The server has an error'
+                });
+            }
+        });
+        //Create an Ensayo's Parametro
+        this.crearParametros = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            const { idEnsayo } = req.params;
+            try {
+                const elEnsayo = yield Ensayo_1.default.findOne({
+                    where: {
+                        idEnsayo
+                    },
+                    raw: true
+                });
+                if (elEnsayo) {
+                    const server = server_1.default.instance;
+                    let arreglosDM = {
+                        arregloDistancias: [],
+                        arregloMu: []
+                    };
+                    //console.log(elEnsayo);
+                    //portControlador.open();
+                    const hijoPFV = child_process_1.fork('../server/dist/serialport/Serialport.js', ['normal']);
+                    hijoPFV.send(elEnsayo);
+                    hijoPFV.on('message', (M) => {
+                        if (typeof (M) == "object") {
+                            const punto = {
+                                distancia: (((M.vueltas) * (2 * Math.PI * elEnsayo.radioTrayectoria)).toFixed(2)).toString(),
+                                mu: M.coeficienteRozamiento
+                            };
+                            arreglosDM.arregloDistancias.push(punto.distancia);
+                            arreglosDM.arregloMu.push(punto.mu);
+                            server.setearArray(arreglosDM);
+                            console.log(punto);
+                            server.io.emit('parametros', punto);
+                        }
+                        if (typeof (M) == "string") {
+                            console.log(M);
+                            hijoPFV.kill();
+                            return res.json({
+                                data: elEnsayo
+                            });
+                        }
+                    });
+                }
             }
             catch (error) {
                 console.log(error);

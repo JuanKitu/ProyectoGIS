@@ -5,6 +5,8 @@ import morgan from 'morgan';
 import path from 'path';
 import cookieparser from 'cookie-parser';
 import cors from 'cors'
+import bodyParser from 'body-parser';
+
 //const morgan = require('morgan');
 //const path = require('path');
 //const cookieparser = require('cookie-parser');
@@ -25,6 +27,13 @@ import ensayo_archivadosRoutes from './routes/ensayos_archivados';
 server.app.use(morgan('dev'));
 server.app.use(json());
 
+
+
+//const io = require('socket.io')(3001);
+
+//body-parser
+server.app.use( bodyParser.urlencoded({ extended: true }) );
+server.app.use( bodyParser.json() );
 // Configurar cabeceras y cors
 const corsOptions = { // se debe configurar mas adelante
     origin: 'http://localhost:8100',
