@@ -7,6 +7,7 @@ import { Primitive } from 'sequelize/types/lib/utils';
 import Queue from '../classes/queue';
 import { Observable, Subscription } from 'rxjs';
 import clc from 'cli-color';
+import { Console } from 'console';
 const fs = require('fs');
 const colaDato= new Queue();
 
@@ -33,6 +34,8 @@ const youtube:Subscription =obserbableFuerza.subscribe(data=>{
             dato:-1
         };
         colaDato.enqueue(unDato);
+        console.log(unDato);
+        console.log(colaDato.print());
         let datos = colaDato.print();
         let jsonObj = {
             data:datos

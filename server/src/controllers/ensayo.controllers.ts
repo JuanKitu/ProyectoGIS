@@ -10,7 +10,7 @@ import * as socket from '../socket/socket';
 import Server from '../classes/server';
 import { any } from 'bluebird';
 import { arregloDM } from '../interfaces/interfaces';
-
+const server = Server.instance;
 //const Parametros = require('../models/Parametros');
 //const Ambiente = require('../models/Ambiente');
 export default class EnsayoController {
@@ -19,29 +19,38 @@ export default class EnsayoController {
     new = async (req: Request, res: Response) => {
         const { carga, radioTrayectoria, diametroBola, distanciaTotal, tiempoTotal, materialBola, operador, observaciones, codigoProbeta, durezaProbeta, materialProbeta, tratamientoProbeta } = req.body;
         try {
-            const dateNow = new Date();
-            const fecha = dateNow.toLocaleDateString();
-            const newEnsayo = await Ensayo.create({
-                carga,
-                radioTrayectoria,
-                diametroBola,
-                distanciaTotal,
-                tiempoTotal,
-                materialBola,
-                fecha,
-                operador,
-                observaciones,
-                codigoProbeta,
-                durezaProbeta,
-                materialProbeta,
-                tratamientoProbeta
-            });
-            if (newEnsayo) {
-                return res.json({
-                    message: 'The Ensayo has been created',
-                    data: newEnsayo
+            if(server.enUso()==-1){
+                const dateNow = new Date();
+                const fecha = dateNow.toLocaleDateString();
+                const newEnsayo = await Ensayo.create({
+                    carga,
+                    radioTrayectoria,
+                    diametroBola,
+                    distanciaTotal,
+                    tiempoTotal,
+                    materialBola,
+                    fecha,
+                    operador,
+                    observaciones,
+                    codigoProbeta,
+                    durezaProbeta,
+                    materialProbeta,
+                    tratamientoProbeta
                 });
-            };
+                if (newEnsayo) {
+                    server.setearEnsayo(newEnsayo.idEnsayo)
+                    return res.json({
+                        message: 'The Ensayo has been created',
+                        data: newEnsayo
+                    });
+                };
+            }else{
+                return res.json({
+                    message: 'Experimento en progreso',
+                    data:-1
+                });
+            }
+            
         } catch (error) {
             console.log(error);
             return res.json({
@@ -175,7 +184,6 @@ export default class EnsayoController {
                 raw:true
             });
             if(elEnsayo){
-                const server = Server.instance;
                 let arreglosDM:arregloDM={
                     arregloDistancias:[],
                     arregloMu:[]
@@ -200,6 +208,7 @@ export default class EnsayoController {
                     if(typeof(M) == "string"){
                         console.log(M);
                         hijoPFV.kill();
+                        server.setearEnsayo(-1);
                         return res.json({
                             data:elEnsayo
                         });

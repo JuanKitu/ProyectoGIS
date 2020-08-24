@@ -29,6 +29,12 @@ export const mensaje = ( cliente: Socket, io:SocketIO.Server, arreglos:arregloDM
 
 }
 
+export const consultaUso = (cliente: Socket,io:SocketIO.Server,enUso:number)=>{
+    cliente.on('consultarUso',()=>{
+        io.emit('respuestaUso',enUso);
+    })
+}
+
 
 
 //Listening message from client

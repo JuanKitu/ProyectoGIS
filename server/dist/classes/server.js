@@ -42,12 +42,19 @@ class Server {
             arregloMu: [],
             arregloDistancias: []
         };
+        this.ensayoActual = 10;
     }
     static get instance() {
         return this._instance || (this._instance = new this());
     }
     setearArray(unArray) {
         this.arreglos = unArray;
+    }
+    enUso() {
+        return this.ensayoActual;
+    }
+    setearEnsayo(unEnsayo) {
+        this.ensayoActual = unEnsayo;
     }
     escucharSockets() {
         console.log('escuchando conexiones - sockets');
@@ -61,6 +68,8 @@ class Server {
             socket.decirHola(client, this.io);
             //mensaje
             socket.mensaje(client, this.io, this.arreglos);
+            //En uso
+            socket.consultaUso(client, this.io, this.ensayoActual);
         });
     }
     start(callback) {

@@ -59,7 +59,7 @@ function leerJson(ruta:string):colaDatos[] {
          let unaFuerza = colaFuerzas.peek();
          let unaVuelta = colaVueltas.peek();
          //condicion de parada
-         if(unaFuerza.dato == -1  || unaVuelta.dato == -1) {
+         if(unaVuelta.dato == -1) {
              clearInterval(intervalo);
              subscriber.complete();
          }

@@ -79,10 +79,6 @@ async function comenzarExperimeto(puerto:SerialPort,ensayo:Ensayo){
                         console.log(FinF);
                         childVuelta.kill();
                     })
-                    childVuelta.on('message',(FinV:any)=>{
-                        console.log(FinV);
-                        childFuerza.kill();
-                    })
                     puerto.close();
                 })
             }); 

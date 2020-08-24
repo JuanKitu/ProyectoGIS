@@ -2,7 +2,7 @@ import express from 'express';
 import socketIO from 'socket.io';
 import http from 'http';
 import * as socket from '../socket/socket';
-import { arregloDM } from '../interfaces/interfaces';
+import { arregloDM, EnsayoInterface } from '../interfaces/interfaces';
 import { any } from 'bluebird';
 
 //Aca habria que importar el archivos de sockets personalizado
@@ -13,6 +13,7 @@ export default class Server {
     public io: socketIO.Server;
     private httpServer: http.Server;
     private arreglos:arregloDM;
+    private ensayoActual:number;
     private constructor(){
         this.app = express();
         //settings
@@ -27,6 +28,7 @@ export default class Server {
             arregloMu:[],
             arregloDistancias:[]
         };
+        this.ensayoActual = 10;
     }
 
     public static get instance(){
@@ -35,6 +37,14 @@ export default class Server {
     public setearArray(unArray:arregloDM){
         this.arreglos=unArray;
     }
+    public enUso(){
+        return this.ensayoActual;
+    }
+
+    public setearEnsayo(unEnsayo:number){
+        this.ensayoActual=unEnsayo;
+    }
+
     private escucharSockets() {
 
         console.log('escuchando conexiones - sockets');
@@ -54,6 +64,9 @@ export default class Server {
 
             //mensaje
             socket.mensaje(client,this.io,this.arreglos);
+
+            //En uso
+            socket.consultaUso(client,this.io,this.ensayoActual)
             
 
         });

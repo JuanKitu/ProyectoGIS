@@ -17,6 +17,7 @@ const Parametros_1 = __importDefault(require("../models/Parametros"));
 const Ambiente_1 = __importDefault(require("../models/Ambiente"));
 const child_process_1 = require("child_process");
 const server_1 = __importDefault(require("../classes/server"));
+const server = server_1.default.instance;
 //const Parametros = require('../models/Parametros');
 //const Ambiente = require('../models/Ambiente');
 class EnsayoController {
@@ -25,30 +26,39 @@ class EnsayoController {
         this.new = (req, res) => __awaiter(this, void 0, void 0, function* () {
             const { carga, radioTrayectoria, diametroBola, distanciaTotal, tiempoTotal, materialBola, operador, observaciones, codigoProbeta, durezaProbeta, materialProbeta, tratamientoProbeta } = req.body;
             try {
-                const dateNow = new Date();
-                const fecha = dateNow.toLocaleDateString();
-                const newEnsayo = yield Ensayo_1.default.create({
-                    carga,
-                    radioTrayectoria,
-                    diametroBola,
-                    distanciaTotal,
-                    tiempoTotal,
-                    materialBola,
-                    fecha,
-                    operador,
-                    observaciones,
-                    codigoProbeta,
-                    durezaProbeta,
-                    materialProbeta,
-                    tratamientoProbeta
-                });
-                if (newEnsayo) {
+                if (server.enUso() == -1) {
+                    const dateNow = new Date();
+                    const fecha = dateNow.toLocaleDateString();
+                    const newEnsayo = yield Ensayo_1.default.create({
+                        carga,
+                        radioTrayectoria,
+                        diametroBola,
+                        distanciaTotal,
+                        tiempoTotal,
+                        materialBola,
+                        fecha,
+                        operador,
+                        observaciones,
+                        codigoProbeta,
+                        durezaProbeta,
+                        materialProbeta,
+                        tratamientoProbeta
+                    });
+                    if (newEnsayo) {
+                        server.setearEnsayo(newEnsayo.idEnsayo);
+                        return res.json({
+                            message: 'The Ensayo has been created',
+                            data: newEnsayo
+                        });
+                    }
+                    ;
+                }
+                else {
                     return res.json({
-                        message: 'The Ensayo has been created',
-                        data: newEnsayo
+                        message: 'Experimento en progreso',
+                        data: -1
                     });
                 }
-                ;
             }
             catch (error) {
                 console.log(error);
@@ -185,7 +195,6 @@ class EnsayoController {
                     raw: true
                 });
                 if (elEnsayo) {
-                    const server = server_1.default.instance;
                     let arreglosDM = {
                         arregloDistancias: [],
                         arregloMu: []
@@ -209,6 +218,7 @@ class EnsayoController {
                         if (typeof (M) == "string") {
                             console.log(M);
                             hijoPFV.kill();
+                            server.setearEnsayo(-1);
                             return res.json({
                                 data: elEnsayo
                             });
