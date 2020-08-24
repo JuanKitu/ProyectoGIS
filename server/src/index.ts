@@ -23,6 +23,7 @@ import parametrosRoutes  from './routes/parametros';
 import parametros_archivadosRoutes  from './routes/parametros_archivados';
 import usuariosRoutes  from './routes/usuarios';
 import ensayo_archivadosRoutes from './routes/ensayos_archivados';
+import socket from './routes/socket'
 /* middleware */
 server.app.use(morgan('dev'));
 server.app.use(json());
@@ -50,6 +51,7 @@ server.app.use('/api/parametros', parametrosRoutes);
 server.app.use('/api/parametros_archivados', parametros_archivadosRoutes);
 server.app.use('/api/usuarios', usuariosRoutes);
 server.app.use('/api/ensayos_archivados', ensayo_archivadosRoutes);
+server.app.use('/api/socket', socket);
 
 console.log(new Date());
 

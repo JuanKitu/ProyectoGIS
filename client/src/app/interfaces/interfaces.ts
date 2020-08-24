@@ -36,5 +36,5 @@ export interface ArrayPuntos{
     arregloDistancias?:string[],
     arregloMu?:number[]
 }
-export const urlServices= "http://192.168.0.185:3000/api/";
-export const urlSocket="http://192.168.0.185:3000";
+export const urlSocket="http://localhost:3000";
+export const urlServices= "http://localhost:3000/api/";
