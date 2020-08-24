@@ -29,7 +29,7 @@ export class EnsayoPage implements OnInit {
   constructor(private webSocket:WebSocketService) {}
 
   ngOnInit() {
-    this.webSocket.listen('prueba2').subscribe(data=>{
+    this.webSocket.listen('parametros').subscribe(data=>{
       console.log("Esto es algo basico de los socket ", data);
     });
     this.webSocket.emit('respuesta',{hola:'Hola soy el cliente'});

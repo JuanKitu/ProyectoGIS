@@ -6,6 +6,7 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { Observable } from 'rxjs';
 import { Componente } from './interfaces/interfaces';
 import { DataService } from './services/data.service';
+import { WebSocketService } from './services/web-socket.service';
 
 @Component({
   selector: 'app-root',
@@ -15,11 +16,14 @@ import { DataService } from './services/data.service';
 export class AppComponent {
   appPages: Observable<Componente[]>;
   darkMode:boolean = false;
+  idEnsayo:number|unknown = -1;
+  enUso:boolean;
   constructor(
     private platform: Platform,
     private splashScreen: SplashScreen,
     private statusBar: StatusBar,
-    private dataService:DataService
+    private dataService:DataService,
+    private webSocket:WebSocketService
   ) {
     this.initializeApp();
   }
@@ -29,6 +33,10 @@ export class AppComponent {
       this.statusBar.styleDefault();
       this.splashScreen.hide();
       this.appPages = this.dataService.getMenuOpciones();
+      this.webSocket.emit('consultarUso');
+      this.webSocket.listen('respuestaUso').subscribe( data=>{
+        this.idEnsayo = data;
+    });
 
     });
   }

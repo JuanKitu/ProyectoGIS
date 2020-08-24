@@ -1,4 +1,9 @@
 [{
+        "title": "Ver Ensayo",
+        "url": "/ensayo",
+        "icon": "eye"
+    },
+    {
         "title": "Nuevo Ensayo",
         "url": "/ensayo",
         "icon": "add-circle"

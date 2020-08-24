@@ -1,56 +1,123 @@
-import { Component, OnInit, Input, OnDestroy } from '@angular/core';
-import { ChartOptions, ChartType, ChartDataSets } from 'chart.js';
-import pluginDataLabels from 'chartjs-plugin-datalabels';
-import { Label } from 'ng2-charts';
+import { Component, OnInit, ViewChild, Input } from '@angular/core';
+import { ChartDataSets, ChartOptions } from 'chart.js';
+import { Color, BaseChartDirective, Label } from 'ng2-charts';
+import * as pluginAnnotations from 'chartjs-plugin-annotation';
 import { EnsayoService } from '../../services/ensayo.service';
 import { WebSocketService } from '../../services/web-socket.service';
 import { Subscription } from 'rxjs';
+import { Parametro, PuntoGrafico, ArrayPuntos } from '../../interfaces/interfaces';
 
 @Component({
   selector: 'app-grafico-ensayo',
   templateUrl: './grafico-ensayo.component.html',
   styleUrls: ['./grafico-ensayo.component.scss'],
 })
-export class GraficoEnsayoComponent implements OnInit, OnDestroy {
+export class GraficoEnsayoComponent implements OnInit {
   @Input() idEnsayo:number;
-  parametroSubscription: Subscription
-  public barChartOptions: ChartOptions = {
-    responsive: true,
-    // We use these empty structures as placeholders for dynamic theming.
-    scales: { xAxes: [{}], yAxes: [{}] },
-    plugins: {
-      datalabels: {
-        anchor: 'end',
-        align: 'end',
-      }
-    }
-  };
-  public barChartLabels: Label[] = ['2006', '2007', '2008', '2009', '2010', '2011', '2012'];
-  public barChartType: ChartType = 'bar';
-  public barChartLegend = true;
-  public barChartPlugins = [pluginDataLabels];
-
-  public barChartData: ChartDataSets[] = [
-    { data: [65, 59, 80, 81, 56, 55, 40], label: 'Series A' },
-    { data: [28, 48, 40, 19, 86, 27, 90], label: 'Series B' }
+  public lineChartData: ChartDataSets[] = [
+    { data: [], label: 'μ' },
   ];
+  public lineChartLabels: Label[] = [];
+  public lineChartOptions: (ChartOptions & { annotation: any }) = {
+    responsive: true,
+    scales: {
+      // We use this empty structure as a placeholder for dynamic theming.
+      xAxes: [{
+        scaleLabel: {
+          display: true,
+          labelString: 'Distancia'
+        }
+      }],
+      yAxes: [
+        {
+          scaleLabel: {
+            display: true,
+            labelString: 'Coeficiente'
+          },
+          id: 'y-axis-0',
+          position: 'left',
+        },
+        {
+          id: 'y-axis-1',
+          position: 'right',
+          gridLines: {
+            color: 'rgba(255,0,0,0.3)',
+          }
+        }
+      ]
+    },
+    annotation: {
+      annotations: [
+        {
+          type: 'line',
+          mode: 'vertical',
+          scaleID: 'x-axis-0',
+          value: 'March',
+          borderColor: 'orange',
+          borderWidth: 2,
+          label: {
+            enabled: true,
+            fontColor: 'orange',
+            content: 'LineAnno'
+          }
+        },
+      ],
+    },
+  };
+  public lineChartColors: Color[] = [
+    { // red
+      backgroundColor: 'rgba(255,0,0,0.3)',
+      borderColor: 'red',
+      pointBackgroundColor: 'rgba(148,159,177,1)',
+      pointBorderColor: '#fff',
+      pointHoverBackgroundColor: '#fff',
+      pointHoverBorderColor: 'rgba(148,159,177,0.8)'
+    }
+  ];
+  public lineChartLegend = true;
+  public lineChartType = 'line';
+  public lineChartPlugins = [pluginAnnotations];
 
-  constructor(private ensayoService:EnsayoService, private webSocket:WebSocketService) { }
+  @ViewChild(BaseChartDirective, { static: true }) chart: BaseChartDirective;
+
+  constructor(private webSocket:WebSocketService, private ensayoService:EnsayoService) { }
 
   ngOnInit() {
-    console.log("Entrando a la peticion",this.idEnsayo)
-    this.ensayoService.crearListaParametros(this.idEnsayo).subscribe();
-
-    this.parametroSubscription= this.webSocket.listen('parametro').subscribe(data2=>{
-      console.log("Info del socket de parametros: ", data2);
+    this.webSocket.emit('arrayPuntos',()=>{
+      
+    })
+    this.webSocket.listen('envioArray').subscribe(datos=>{
+      console.log("datos del envio array: ",datos)
+      const arrayPuntos:ArrayPuntos=datos;
+      const puntos:ChartDataSets[]=[{data:arrayPuntos.arregloMu, label:'asdasd'}]
+      this.lineChartData = puntos;
+      const arreglosLabels:Label[]= arrayPuntos.arregloDistancias
+      this.lineChartLabels= arreglosLabels;
+    })
+    this.ensayoService.crearListaParametros(this.idEnsayo).subscribe(data=>{
+      
+    })
+    this.webSocket.listen('parametros').subscribe((datos)=>{
+      const unPunto:PuntoGrafico=datos;
+      this.lineChartData.forEach((x, i) => {
+        const data: number[] = x.data as number[];
+        data.push(unPunto.mu);
+      });
+      this.lineChartLabels.push(unPunto.distancia);
     });
-    this.parametroSubscription= this.webSocket.listen('prueba').subscribe(data2=>{
-      console.log("prueba: ", data2);
-    });
-    
   }
-  ngOnDestroy(){
-    this.parametroSubscription.unsubscribe();
+
+  public randomize(): void {
+    for (let i = 0; i < this.lineChartData.length; i++) {
+      for (let j = 0; j < this.lineChartData[i].data.length; j++) {
+        this.lineChartData[i].data[j] = this.generateNumber(i);
+      }
+    }
+    this.chart.update();
+  }
+
+  private generateNumber(i: number) {
+    return Math.floor((Math.random() * (i < 2 ? 100 : 1000)) + 1);
   }
 
   // events
@@ -62,16 +129,18 @@ export class GraficoEnsayoComponent implements OnInit, OnDestroy {
     console.log(event, active);
   }
 
-  public randomize(): void {
-    // Only Change 3 values
-    const data = [
-      Math.round(Math.random() * 100),
-      59,
-      80,
-      (Math.random() * 100),
-      56,
-      (Math.random() * 100),
-      40];
-    this.barChartData[0].data = data;
+  public hideOne() {
+    const isHidden = this.chart.isDatasetHidden(1);
+    this.chart.hideDataset(1, !isHidden);
   }
+
+  public pushOne() {
+    this.lineChartData.forEach((x, i) => {
+      const num = this.generateNumber(i);
+      const data: number[] = x.data as number[];
+      data.push(num);
+    });
+    this.lineChartLabels.push(`${this.lineChartLabels.length}`);
+  }
+
 }

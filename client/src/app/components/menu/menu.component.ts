@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { DataService } from '../../services/data.service';
 import { Observable } from 'rxjs';
 import { Componente } from 'src/app/interfaces/interfaces';
+import { WebSocketService } from '../../services/web-socket.service';
 
 
 @Component({
@@ -12,12 +13,18 @@ import { Componente } from 'src/app/interfaces/interfaces';
 export class MenuComponent implements OnInit {
   appPages: Observable<Componente[]>;
   darkMode:boolean = false;
-  constructor(private dataService:DataService ) {
+  idEnsayo:number|unknown = -1;
+  constructor(private dataService:DataService, private webSocket:WebSocketService  ) {
       
      }
 
   ngOnInit() {
     this.appPages = this.dataService.getMenuOpciones();
+    this.webSocket.emit('consultarUso');
+    this.webSocket.listen('respuestaUso').subscribe(async data=>{
+         this.idEnsayo = await data; 
+        console.log(this.idEnsayo)
+    });
   }
   darkModeChange(){
     this.darkMode = !this.darkMode;
