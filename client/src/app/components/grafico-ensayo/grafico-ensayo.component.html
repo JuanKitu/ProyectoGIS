@@ -1,11 +1,12 @@
-Markup TypeScript
-
-<div>
-    <div>
-        <div style="display: block">
-            <canvas baseChart [datasets]="barChartData" [labels]="barChartLabels" [options]="barChartOptions" [plugins]="barChartPlugins" [legend]="barChartLegend" [chartType]="barChartType">
-      </canvas>
+<div class="flex">
+    <div class="flex-item">
+        <div style="display: block;">
+            <canvas baseChart width="400" height="200" [datasets]="lineChartData" [labels]="lineChartLabels" [options]="lineChartOptions" [colors]="lineChartColors" [legend]="lineChartLegend" [chartType]="lineChartType" [plugins]="lineChartPlugins" (chartHover)="chartHovered($event)"
+                (chartClick)="chartClicked($event)"></canvas>
         </div>
-        <button mat-button mat-raised-button color="primary" (click)="randomize()">Update</button>
+    </div>
+    <div class="flex-item">
+        <button mat-button mat-raised-button color="primary" (click)="randomize()">Randomize</button>
+        <button mat-button mat-raised-button color="primary" (click)="pushOne()">Push</button>
     </div>
 </div>

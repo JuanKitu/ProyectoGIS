@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { EnsayoService } from '../../../services/ensayo.service';
 import { Ensayo } from 'src/app/interfaces/interfaces';
+import { WebSocketService } from '../../../services/web-socket.service';
 
 @Component({
   selector: 'app-grafico',
@@ -9,6 +10,7 @@ import { Ensayo } from 'src/app/interfaces/interfaces';
   styleUrls: ['./grafico.page.scss'],
 })
 export class GraficoPage implements OnInit {
+  idEnsayo:number|unknown=-1;
   ensayo:Ensayo={
     operador:"",
     distanciaTotal:null,
@@ -21,15 +23,17 @@ export class GraficoPage implements OnInit {
     tratamientoProbeta:"",
     materialProbeta:"",
     observaciones:"",
+    idEnsayo:-1
   };
   titulo:string = "Grafico Ensayo";
-  constructor(private activeRoute:ActivatedRoute, private ensayoService:EnsayoService) { }
+  constructor(private ensayoService:EnsayoService, private webSocket:WebSocketService) { }
 
   ngOnInit() {
-    this.activeRoute.params.subscribe(params=>{
-      this.ensayo.idEnsayo=params['idEnsayo'];
+    this.webSocket.emit('consultarUso');
+    this.webSocket.listen('respuestaUso').subscribe( data=>{
+         this.idEnsayo =  data; 
     });
-    if(this.ensayo.idEnsayo){
+    if(this.idEnsayo){
       this.ensayoService.getOne(this.ensayo.idEnsayo).subscribe(data=>{
         this.ensayo=data['data'];
         //console.log(this.ensayo);

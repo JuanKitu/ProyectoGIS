@@ -21,12 +21,20 @@ export interface Ensayo{
     observaciones?:string
 };
 export interface Parametro{
-    fuerzaRozamiento:number,
-    coeficienteRozamiento:number,
-    vueltas:number,
-    tiempoActual:number,
+    fuerzaRozamiento?:number,
+    coeficienteRozamiento?:number,
+    vueltas?:number,
+    tiempoActual?:number,
     idEnsayo?:number,
     idParametro?:number,
 };
+export interface PuntoGrafico{
+    distancia?:string,
+    mu?:number
+}
+export interface ArrayPuntos{
+    arregloDistancias?:string[],
+    arregloMu?:number[]
+}
 export const urlServices= "http://192.168.0.185:3000/api/";
 export const urlSocket="http://192.168.0.185:3000";

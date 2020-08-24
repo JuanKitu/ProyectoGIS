@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import {Socket} from 'ngx-socket-io'
 import { Router } from '@angular/router';
+import { Parametro } from '../interfaces/interfaces';
 
 @Injectable({
   providedIn: 'root'
@@ -19,8 +20,8 @@ export class WebSocketService {
 
   };
 
-  listen( event: string ) {
-    return this.socket.fromEvent( event );
+  listen( event: string ){
+     return  this.socket.fromEvent( event );
   };
 
 }
