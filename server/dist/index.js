@@ -24,6 +24,7 @@ const parametros_1 = __importDefault(require("./routes/parametros"));
 const parametros_archivados_1 = __importDefault(require("./routes/parametros_archivados"));
 const usuarios_1 = __importDefault(require("./routes/usuarios"));
 const ensayos_archivados_1 = __importDefault(require("./routes/ensayos_archivados"));
+const socket_1 = __importDefault(require("./routes/socket"));
 /* middleware */
 server.app.use(morgan_1.default('dev'));
 server.app.use(express_1.json());
@@ -44,6 +45,7 @@ server.app.use('/api/parametros', parametros_1.default);
 server.app.use('/api/parametros_archivados', parametros_archivados_1.default);
 server.app.use('/api/usuarios', usuarios_1.default);
 server.app.use('/api/ensayos_archivados', ensayos_archivados_1.default);
+server.app.use('/api/socket', socket_1.default);
 console.log(new Date());
 server.start(() => {
     console.log(cli_color_1.default.magenta.inverse.bold(`Server on port: ${server.app.get('port')}`));

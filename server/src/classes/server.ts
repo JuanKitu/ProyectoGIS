@@ -73,9 +73,9 @@ export default class Server {
 
     }
 
-    start( callback: Function ) {
+    start( callback: Function, ip?:string ) {
 
-        this.httpServer.listen( this.app.get('port'),'192.168.0.185', callback(1));
+        this.httpServer.listen( this.app.get('port'),ip, callback(1));
 
     }
 }
