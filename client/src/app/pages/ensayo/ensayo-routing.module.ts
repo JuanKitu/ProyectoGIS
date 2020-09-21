@@ -9,7 +9,7 @@ const routes: Routes = [
     component: EnsayoPage
   },
   {
-    path: decodeURIComponent('%23/grafico'),
+    path: '#/grafico',
     loadChildren: () => import('./grafico/grafico.module').then( m => m.GraficoPageModule)
   }
 ];

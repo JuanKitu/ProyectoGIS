@@ -36,5 +36,16 @@ export interface ArrayPuntos{
     arregloDistancias?:string[],
     arregloMu?:number[]
 }
-export const urlSocket="http://localhost:3000";
-export const urlServices= "http://localhost:3000/api/";
+export interface DatosEnsayo{
+    horaInicio?:string,
+    horaFin?:string,
+    velocidad?:number,
+    temperatura?:number,
+    humedad?:number
+}
+export interface ControlIdEnsayo{
+    idEnsayo:number
+}
+const domIP= "192.168.0.185";
+export const urlSocket= `http://${domIP}:3000`;
+export const urlServices= `${urlSocket}/api/`;

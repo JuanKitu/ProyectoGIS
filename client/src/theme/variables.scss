@@ -208,7 +208,10 @@ body.dark {
         margin-right: 10px;
         margin-left: 10px;
     }
-    ;
+    ion-card.tablero {
+        margin-top: 12%;
+        background-color: transparent;
+    }
 }
 
 //CSS normal
@@ -219,6 +222,11 @@ ion-card {
     margin-bottom: 10px;
     margin-right: 10px;
     margin-left: 10px;
+}
+
+ion-card.tablero {
+    margin-top: 12%;
+    background-color: transparent;
 }
 
 ;
