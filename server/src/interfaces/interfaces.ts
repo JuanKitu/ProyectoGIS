@@ -1,12 +1,12 @@
 import { Optional } from 'sequelize';
 import Queue from '../classes/queue';
 export interface AmbienteInterface{
-    temperatura:number,
-    humedad:number,
-    horaActual:Date,
-    idAmbiente:number,
-    idEnsayo:number
-}
+    temperatura?:number,
+    humedad?:number,
+    horaActual?:Date,
+    idAmbiente?:number,
+    idEnsayo?:number
+};
 export interface EnsayoInterface{
     operador?:string,
     distanciaTotal?:number,
@@ -50,5 +50,13 @@ export interface colaDual{
 export interface arregloDM{
     arregloDistancias:any[],
     arregloMu:any[]
+}
+
+export interface objetoDatos{
+    horaInicio?:any,
+    horaFin?:any,
+    velocidad?:number,
+    temperatura?:number,
+    humedad?:number
 }
 export interface EnsayoCreationAttributes extends Optional<EnsayoInterface, "idEnsayo"|"operador"|"fecha"|"distanciaTotal">{};

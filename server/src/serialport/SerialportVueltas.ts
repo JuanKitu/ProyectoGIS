@@ -1,81 +1,200 @@
 import SerialPort from 'serialport';
-import { ParametroInterface, colaDatos } from '../interfaces/interfaces';
+import { ParametroInterface, colaDatos, EnsayoInterface, AmbienteInterface, objetoDatos } from '../interfaces/interfaces';
 import { any } from 'sequelize/types/lib/operators';
 import { reject, resolve } from 'bluebird';
 import { Primitive } from 'sequelize/types/lib/utils';
 import Queue from '../classes/queue';
-import { Observable, Subscription } from 'rxjs';
+import { Observable, Subscription, async } from 'rxjs';
 import clc from 'cli-color';
+import { time } from 'console';
+import Ambiente from '../models/Ambiente';
 const fs = require('fs');
-const colaDato= new Queue();
-
-
+import moment from 'moment'
+import { type } from 'os';
+const colaDato = new Queue();
+let fin = false;
+let estadoScript: number = 1;
 
 const portControlador = new SerialPort('COM4', {
     baudRate: 9600
 });
 
-const obserbableVueltas = new Observable(subscriber=>{
-    const ciclo= ()=>{
-        portControlador.write('<SEND>\n');
-    };
-    const intervalo = setInterval(ciclo,400);
-    portControlador.on('data',(data)=>{
-        
-        if(parseFloat(data.toString())===-1){
-            i++
-            let unDato:colaDatos={
-             id:i,
-             dato:-1
-            };
-        colaDato.enqueue(unDato);
-        let datos = colaDato.print();
-        let jsonObj = {
-            data:datos
-        }
-        let jsonContent = JSON.stringify(jsonObj);
-        fs.writeFile('vueltas.json',jsonContent,'utf8',function(err:any) {
-            if(err){
-                console.log("An error occured while writing JSON Object to File.");
-                return console.log(err);
-            }
-        });
-            clearInterval(intervalo);
-            portControlador.close();
-            (<any> process).send('Finalizo el script de Vueltas');
-            subscriber.complete();
-        }else{
-            subscriber.next(parseFloat(data.toString()));
-        }
-    });
-    
-})
 
+function crearAmbiente(unaTemperatura: number, unaHumedad: number, unEnsayo: EnsayoInterface): AmbienteInterface {
+    if (unEnsayo.idEnsayo) {
+        /* Datos necesarios para la creacion */
+        const temperatura = unaTemperatura;
+        const humedad = unaHumedad;
+        const horaActual: any = moment().format('HH:mm:ss');
+        const idEnsayo = unEnsayo.idEnsayo
 
-let i:number=0
-const youtube:Subscription =obserbableVueltas.subscribe(data=>{
-    i++
-    let unDato:colaDatos={
-        id:i,
-        dato:data
-    };
-    colaDato.enqueue(unDato);
-    let datos = colaDato.print();
-    let jsonObj = {
-        data:datos
+        const newAmbiente: AmbienteInterface = {
+            temperatura,
+            humedad,
+            horaActual,
+            idEnsayo
+        };
+        return newAmbiente;
     }
-    let jsonContent = JSON.stringify(jsonObj);
-        fs.writeFile('vueltas.json',jsonContent,'utf8',function(err:any) {
-            if(err){
-                console.log("An error occured while writing JSON Object to File.");
-                return console.log(err);
-            }
-        });
-},
-(error)=>{
-    console.log(error)
-},
-()=>{
-    console.log("finish");
+    /*En caso de que el ensayo no cumpla el if, el parametro es NULL */
+    const newAmbiente: AmbienteInterface = {}
+    return newAmbiente;
+};
 
-})
+let ensayo: EnsayoInterface;
+
+process.on('message', async (m) => {
+    if (typeof (m) == "object") {
+        ensayo = await m;
+
+        const obserbableVueltas = new Observable(subscriberV => {
+
+            const ciclo = () => {
+                if (estadoScript === 1) {
+                    portControlador.write('<SEND>\n');
+                }
+            };
+            const intervalo = setInterval(ciclo, 400);
+            portControlador.on('data', (data) => {
+                if (parseFloat(data.toString()) === -1) {
+                    i++
+                    let unDato: colaDatos = {
+                        id: i,
+                        dato: -1
+                    };
+                    colaDato.enqueue(unDato);
+                    let datos = colaDato.print();
+                    let jsonObj = {
+                        data: datos
+                    }
+                    let jsonContent = JSON.stringify(jsonObj);
+                    fs.writeFile('vueltas.json', jsonContent, 'utf8', function (err: any) {
+                        if (err) {
+                            console.log("An error occured while writing JSON Object to File.");
+                            return console.log(err);
+                        }
+                    });
+                    clearInterval(intervalo);
+                    subscriberV.complete();
+                } else {
+                    subscriberV.next(parseFloat(data.toString()));
+                }
+            });
+
+        })
+
+        let i: number = 0
+        const youtube: Subscription = obserbableVueltas.subscribe(data => {
+            if (data != 0 && estadoScript === 1) {
+                i++
+                let unDato: colaDatos = {
+                    id: i,
+                    dato: data
+                };
+                colaDato.enqueue(unDato);
+                //console.log('DATO: ',colaDato.print());
+                let datos = colaDato.print();
+                let jsonObj = {
+                    data: datos
+                }
+                let jsonContent = JSON.stringify(jsonObj);
+                fs.writeFile('vueltas.json', jsonContent, 'utf8', function (err: any) {
+                    if (err) {
+                        console.log("An error occured while writing JSON Object to File.");
+                        return console.log(err);
+                    }
+                });
+            }
+        },
+            (error) => {
+                console.log(error)
+            },
+            () => {
+                fin = true;
+                console.log("finish vuelta");
+
+            }
+        );
+
+        const obserbableAmbiente = new Observable(subscriberA => {
+            const ciclo2 = () => {
+                if (!fin) {
+                    if (estadoScript === 1) {
+                        console.log('ME EJECUTO');
+                        portControlador.write('<TMHM>\n');
+                    }
+                } else {
+                    console.log('NO ME EJECUTO');
+                    clearInterval(intervalo2);
+                    subscriberA.complete();
+                }
+            };
+            const intervalo2 = setInterval(ciclo2, 5113);
+
+            portControlador.on('data', (data) => {
+                const arreglo: any = data.toString().match(/\n.*\n/);
+                if (arreglo != null) {
+                    let cadena: string = data.toString();
+                    const nuevoAmbiente = crearAmbiente(parseFloat(cadena.substring(0, cadena.indexOf('\n'))), parseFloat(cadena.substring(cadena.indexOf('\n'))), ensayo);
+                    subscriberA.next(nuevoAmbiente);
+                }
+            })
+
+
+        })
+
+
+
+
+        const arregloAmbientes: any[] = [];
+        const youtube2: Subscription = obserbableAmbiente.subscribe(data2 => {
+            let pasaje: any = data2;
+            if (pasaje.humedad !== undefined && pasaje.temperatura !== undefined) {
+                const objeto: objetoDatos = {
+                    humedad: pasaje.humedad,
+                    temperatura: pasaje.temperatura
+                };
+                (<any>process).send(objeto);
+            }
+            arregloAmbientes.push(pasaje);
+            //console.log(data);
+            //console.log(arregloAmbientes);
+        },
+            (error) => {
+                console.log(error)
+            },
+            async () => {
+                await Ambiente.bulkCreate(arregloAmbientes);
+                console.log("finish ambiente");
+                (<any>process).send('AMBIENTES');
+
+            }
+        )
+
+    }
+    if (typeof (m) == "string") {
+        if (m === "PAUSA") {
+            estadoScript = 0;
+            console.log('PAUSANDO EN VUELTA');
+            portControlador.write('<PAUS>\n');
+            (<any>process).send('PAUSADO');
+        }
+        if (m === "CANCELAR") {
+            portControlador.write('<STOP>\n');
+            console.log('CANCELADO EN VUELTAS');
+            (<any>process).send('CANCELAR');
+        }
+        if (m === "TEST") {
+            portControlador.write('<TEST>\n');
+            (<any>process).send('TEST');
+        }
+        if (m === "REANUDAR") {
+            setTimeout(()=>{portControlador.write('<STAR>\n')},55);
+            estadoScript = 1;
+            console.log('REANUDANDO EN VUELTA');
+            (<any>process).send('REANUDAR');
+        }
+    }
+
+
+});

@@ -31,18 +31,17 @@ export const mensaje = ( cliente: Socket, io:SocketIO.Server, arreglos:arregloDM
 
 export const consultaUso = (cliente: Socket,io:SocketIO.Server,enUso:number)=>{
     cliente.on('consultarUso',()=>{
+        console.log('CONSULTANDO DESDE EL CLIENTE');
         io.emit('respuestaUso',enUso);
     })
 }
 
 
 
-//Listening message from client
-/*
-export const emitirStream = (client: Socket,io:SocketIO.Server,unEnsayo:Ensayo) => {
-    client.on('recibirStream', (payload) => {
-        io.emit('grafica',payload)
-    });
+//Pausando
+export const pausar = (cliente: Socket,io:SocketIO.Server,pausado:boolean)=>{
+    cliente.on('PAUSAR',()=>{
+        console.log('¡¡¡¡¡PAUSANDO!!!!!');
+        pausado=true;
+    })
 }
-
-*/

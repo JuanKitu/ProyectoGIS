@@ -5,7 +5,10 @@ import { EnsayoInterface } from '../interfaces/interfaces';
 import Server from '../classes/server';
 
 
-let servidor:Server = Server.instance;
+let servidor: Server = Server.instance;
+
+//estadoScript: (0 = DETENIDO) - (1 = CORRIENDO)
+let estadoScript: number = 0;
 
 let portControlador = new SerialPort('COM4', {
     autoOpen: false,
@@ -13,82 +16,127 @@ let portControlador = new SerialPort('COM4', {
 });
 
 
-async function conectar(puerto:SerialPort) {
-    let promesa = new Promise((resolve,reject) => {
+async function conectar(puerto: SerialPort) {
+    let promesa = new Promise((resolve, reject) => {
         puerto.write('<CONN>\n')
-        puerto.on('readable',()=>{
-        const control = puerto.read();
-        if(control) {
-            return resolve(parseFloat(control.toString()));
-            
-            }   
-            else return -1; 
+        puerto.on('readable', () => {
+            const control = puerto.read();
+            if (control) {
+                return resolve(parseFloat(control.toString()));
+
+            }
+            else return -1;
         });
     })
-    
-    
+
+
     return promesa;
 }
 
-async function iniciar(radio: number,vueltas: number,puerto:SerialPort) {
-    let promesa = new Promise((resolve)=>{
-        puerto.write('<STAR,'+radio+','+vueltas+'>\n');
-        puerto.on('data',(data)=>{
+async function iniciar(radio: number, vueltas: number, puerto: SerialPort) {
+    let promesa = new Promise((resolve) => {
+        puerto.write('<STAR,' + radio + ',' + vueltas + '>\n');
+        puerto.on('data', (data) => {
             const control = data;
-            if(control) {
+            if (control) {
                 return resolve(parseFloat(control.toString()));
             }
-            else return -2; 
+            else return -2;
         });
     })
-    
-    
+
+
     return promesa;
 }
 
 
 
 
-async function comenzarExperimeto(puerto:SerialPort,ensayo:Ensayo){
-        if(ensayo.distanciaTotal && ensayo.radioTrayectoria){
-            const distancia:number = ensayo.distanciaTotal;
-            const unRadio:number = ensayo.radioTrayectoria;
-            const vueltas:number = Math.round(distancia/(2*Math.PI*(unRadio/1000)));
-            puerto.open();
-            console.log('Vueltas',vueltas,puerto.isOpen);
-            conectar(puerto).then(data=>{
-                console.log('Vueltas2');
-                iniciar(unRadio,vueltas,puerto).then(data2=>{
-                    console.log('Vueltas3');
-                    const childFuerza = fork('dist/serialport/SerialportFuerza.js');
-                    const childVuelta = fork('dist/serialport/SerialportVueltas.js');
-                    setTimeout(() => {const childParametros = fork('dist/serialport/procesamientoParameros.js'); childParametros.send(ensayo); 
-                        childParametros.on('message',(M:any)=>{
-                            if(typeof(M)=="object"){
-                                (<any> process).send(M);
-                            }
-                            if(typeof(M)=="string"){
-                                //console.log(M);
-                                childParametros.kill();
-                                (<any> process).send('Parametros agregados satisfactoriamente');
-                            }
-                            
-                        })
-                    },1000);
-                    childFuerza.on('message',(FinF:any)=>{
-                        console.log(FinF);
-                        childVuelta.kill();
-                    })
-                    puerto.close();
-                })
-            }); 
-                
-            
-              
-        };
-    
-    }
+async function comenzarExperimeto(puerto: SerialPort, ensayo: Ensayo) {
+    if (ensayo.distanciaTotal && ensayo.radioTrayectoria) {
+        const distancia: number = ensayo.distanciaTotal;
+        const unRadio: number = ensayo.radioTrayectoria;
+        const vueltas: number = Math.round(distancia / (2 * Math.PI * (unRadio / 1000)));
+        puerto.open();
+        console.log('Vueltas', vueltas, puerto.isOpen);
+        conectar(puerto).then(data => {
+            console.log('Vueltas2');
+            iniciar(unRadio, vueltas, puerto).then(data2 => {
+                estadoScript = 1;
+                console.log('Vueltas3');
+                const childFuerza = fork('dist/serialport/SerialportFuerza.js');
+                const childVuelta = fork('dist/serialport/SerialportVueltas.js');
+                childVuelta.send(ensayo);
+                childVuelta.on('message', (MV: any) => {
+                    if (typeof (MV) == "object") {
+                        (<any>process).send(MV);
+                    }
+                    if (typeof (MV) == "string") {
+                        if (MV === "AMBIENTES") {
+                            childVuelta.kill();
+                            (<any>process).send('AMBIENTES');
+                        }
+                        if (MV === "PAUSADO") {
+                            console.log('PAUSADO EN SERIALPORT');
+                            //(<any>process).send('PAUSADO');
+                        }
+                        if (MV === "CANCELAR") {
+                            console.log('CANCELADO EN SERIAL');
+                            (<any>process).send('CANCELAR');
+                        }
 
-process.on('message',async (m)=>{
-    await comenzarExperimeto(portControlador,m);
+                    }
+                })
+
+                setTimeout(() => {
+                    const childParametros = fork('dist/serialport/procesamientoParameros.js');
+                    childParametros.send(ensayo);
+                    childParametros.on('message', (MP: any) => {
+                        if (typeof (MP) == "object") {
+                            (<any>process).send(MP);
+                        }
+                        if (typeof (MP) == "string") {
+                            //console.log(M);
+                            childParametros.kill();
+                            (<any>process).send('Parametros agregados satisfactoriamente');
+                        }
+
+                    })
+                    process.on('message', async (me) => {
+                        if (typeof (me) == "string") {
+                            console.log('pausando en HijoPVF', me)
+                            if (me === "PAUSA") {
+                                childFuerza.send("PAUSA");
+                                childVuelta.send("PAUSA");
+                                childParametros.send("PAUSA");
+                            }
+                            if (me === "CANCELAR") {
+                                childVuelta.send("CANCELAR");
+                            }
+                            if (me === "TEST") {
+                                childVuelta.send("TEST");
+                            }
+                            if(me === "REANUDAR"){
+                                childVuelta.send("REANUDAR");
+                                childParametros.send("REANUDAR");
+                                childFuerza.send("REANUDAR");
+                            }
+                        }
+                    });
+                }, 1000);
+
+                puerto.close();
+            })
+        });
+
+
+
+    };
+
+}
+
+process.on('message', async (m) => {
+    if (typeof (m) == "object") {
+        await comenzarExperimeto(portControlador, m);
+    }
 });

@@ -12,14 +12,19 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.pausar = void 0;
 const Ensayo_1 = __importDefault(require("../models/Ensayo"));
 const Parametros_1 = __importDefault(require("../models/Parametros"));
 const Ambiente_1 = __importDefault(require("../models/Ambiente"));
 const child_process_1 = require("child_process");
 const server_1 = __importDefault(require("../classes/server"));
+const moment_1 = __importDefault(require("moment"));
 const server = server_1.default.instance;
 //const Parametros = require('../models/Parametros');
 //const Ambiente = require('../models/Ambiente');
+function isParametro(object) {
+    return 'fuerzaRozamiento' in object;
+}
 class EnsayoController {
     constructor() {
         //Create an Ensayo
@@ -195,34 +200,91 @@ class EnsayoController {
                     raw: true
                 });
                 if (elEnsayo) {
+                    /* server.io.on('PAUSAR', () => {
+                        console.log('¡¡¡RECIBIENDO PAUSA DEL CLIENTE!!!');
+                        hijoPFV.send('PAUSA');
+                    })
+                    server.io.on('CANCELAR', () => {
+                        console.log('¡¡¡RECIBIENDO CANCELAR DEL CLIENTE!!!');
+                        hijoPFV.send('CANCELAR');
+                    })
+                    server.io.on('REANUDAR', () => {
+                        console.log('¡¡¡RECIBIENDO REANUDAR DEL CLIENTE!!!');
+                        hijoPFV.send('REANUDAR');
+                    }) */
                     let arreglosDM = {
                         arregloDistancias: [],
                         arregloMu: []
                     };
-                    //console.log(elEnsayo);
-                    //portControlador.open();
+                    let velocidadActual = 0;
+                    const horaDeInicio = (moment_1.default().format('HH:mm:ss'));
                     const hijoPFV = child_process_1.fork('../server/dist/serialport/Serialport.js', ['normal']);
                     hijoPFV.send(elEnsayo);
                     hijoPFV.on('message', (M) => {
-                        if (typeof (M) == "object") {
-                            const punto = {
-                                distancia: (((M.vueltas) * (2 * Math.PI * elEnsayo.radioTrayectoria)).toFixed(2)).toString(),
-                                mu: M.coeficienteRozamiento
-                            };
-                            arreglosDM.arregloDistancias.push(punto.distancia);
-                            arreglosDM.arregloMu.push(punto.mu);
-                            server.setearArray(arreglosDM);
-                            console.log(punto);
-                            server.io.emit('parametros', punto);
+                        if (server.enUso() !== -1) {
+                            if (server.consultarPausa() === false) {
+                                if (typeof (M) == "object") {
+                                    if (isParametro(M) && M.vueltas !== undefined) {
+                                        const punto = {
+                                            distancia: (((M.vueltas) * (2 * Math.PI * elEnsayo.radioTrayectoria)).toFixed(2)).toString(),
+                                            mu: M.coeficienteRozamiento
+                                        };
+                                        console.log('DISTANCIA RECORRIDA ', punto.distancia);
+                                        arreglosDM.arregloDistancias.push(punto.distancia);
+                                        arreglosDM.arregloMu.push(punto.mu);
+                                        server.setearArray(arreglosDM);
+                                        if (M.tiempoActual != undefined)
+                                            velocidadActual = parseFloat(punto.distancia) / M.tiempoActual;
+                                        server.io.emit('parametros', punto);
+                                    }
+                                    else {
+                                        M.horaInicio = horaDeInicio;
+                                        M.horaFin = (moment_1.default().format('HH:mm:ss'));
+                                        M.velocidad = velocidadActual;
+                                        console.log('Ambiente: ', M);
+                                        server.io.emit('ambiente', M);
+                                    }
+                                }
+                                if (typeof (M) == "string") {
+                                    if (M === 'AMBIENTES') {
+                                        console.log('FIN PETICION');
+                                        hijoPFV.kill();
+                                        console.log('FIN PETICION 2');
+                                        server.setearEnsayo(-1);
+                                        server.io.emit('fin', 'FIN');
+                                        return res.json({
+                                            data: elEnsayo
+                                        });
+                                    }
+                                }
+                            }
+                            else {
+                                console.log('¡¡¡RECIBIENDO PAUSA DEL CLIENTE!!!');
+                                hijoPFV.send('PAUSA');
+                                const cicloPausa = setInterval(() => {
+                                    if (server.consultarPausa() === false) {
+                                        console.log('¡¡¡RECIBIENDO REANUDAR DEL CLIENTE!!!');
+                                        hijoPFV.send('REANUDAR');
+                                        clearInterval(cicloPausa);
+                                    }
+                                }, 500);
+                            }
                         }
-                        if (typeof (M) == "string") {
-                            console.log(M);
+                        else {
+                            console.log('FIN PETICION');
                             hijoPFV.kill();
-                            server.setearEnsayo(-1);
+                            console.log('FIN PETICION 2');
+                            server.io.emit('fin', 'FIN');
                             return res.json({
-                                data: elEnsayo
+                                data: 'Ensayo cancelado'
                             });
                         }
+                        /* pausar = (cliente: Socket,io:SocketIO.Server)=>{
+                            cliente.on('PAUSAR',()=>{
+                                console.log('¡¡¡RECIBIENDO PAUSA DEL CLIENTE!!!');
+                                hijoPFV.send('PAUSA');
+                            })
+                        } */
                     });
                 }
             }
@@ -345,6 +407,58 @@ class EnsayoController {
                 return res.json({
                     data: ambiente
                 });
+            }
+            catch (error) {
+                console.log(error);
+                return res.json({
+                    error: 'The server has an error'
+                });
+            }
+        });
+        //Test the machine
+        this.realizarTest = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            try {
+                const hijoTest = child_process_1.fork('../server/dist/serialport/SerialportTest.js', ['normal']);
+                hijoTest.on('message', (M) => {
+                    hijoTest.kill();
+                    console.log('Matando test');
+                    return res.json({
+                        data: 'TEST'
+                    });
+                });
+            }
+            catch (error) {
+                console.log(error);
+                return res.json({
+                    error: 'The server has an error'
+                });
+            }
+        });
+        this.pausar = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            try {
+                server.pausar(true);
+            }
+            catch (error) {
+                console.log(error);
+                return res.json({
+                    error: 'The server has an error'
+                });
+            }
+        });
+        this.reanudar = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            try {
+                server.pausar(false);
+            }
+            catch (error) {
+                console.log(error);
+                return res.json({
+                    error: 'The server has an error'
+                });
+            }
+        });
+        this.cancelar = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            try {
+                server.setearEnsayo(-1);
             }
             catch (error) {
                 console.log(error);

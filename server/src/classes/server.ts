@@ -2,6 +2,7 @@ import express from 'express';
 import socketIO from 'socket.io';
 import http from 'http';
 import * as socket from '../socket/socket';
+//import {pausar} from '../controllers/ensayo.controllers'
 import { arregloDM, EnsayoInterface } from '../interfaces/interfaces';
 import { any } from 'bluebird';
 
@@ -14,6 +15,7 @@ export default class Server {
     private httpServer: http.Server;
     private arreglos:arregloDM;
     private ensayoActual:number;
+    private pausado:boolean;
     private constructor(){
         this.app = express();
         //settings
@@ -28,7 +30,8 @@ export default class Server {
             arregloMu:[],
             arregloDistancias:[]
         };
-        this.ensayoActual = 10;
+        this.ensayoActual = -1;
+        this.pausado = false;
     }
 
     public static get instance(){
@@ -43,6 +46,14 @@ export default class Server {
 
     public setearEnsayo(unEnsayo:number){
         this.ensayoActual=unEnsayo;
+    }
+    
+    public pausar(senial:boolean){
+        this.pausado=senial;
+    }
+
+    public consultarPausa(){
+       return this.pausado;
     }
 
     private escucharSockets() {
@@ -67,6 +78,11 @@ export default class Server {
 
             //En uso
             socket.consultaUso(client,this.io,this.ensayoActual)
+
+            //pausar(client,this.io)
+            socket.pausar(client,this.io,this.pausado)
+
+
             
 
         });

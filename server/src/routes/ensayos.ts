@@ -7,7 +7,10 @@ import Server from '../classes/server';
 import { Observable, Subscriber } from 'rxjs';
 import { fork } from 'child_process';
 
-
+router.get('/test', controller.realizarTest);
+router.get('/pausar', controller.pausar);
+router.get('/reanudar', controller.reanudar);
+router.get('/cancelar', controller.cancelar);
 router.get('/', controller.getAll);
 router.get('/:idEnsayo', controller.getById);
 router.post('/', controller.new);
@@ -20,6 +23,7 @@ router.get('/:idEnsayo/parametros', controller.getAllParametros);
 router.get('/:idEnsayo/parametros/:idParametro', controller.getAParametro);
 router.get('/:idEnsayo/ambiente', controller.getAllAmbiente);
 router.get('/:idEnsayo/ambiente/:idAmbiente', controller.getAnAmbiente);
+
 /* router.get('/prueba',(req,res)=>{
   const server = Server.instance;
   const hijoPrueba = fork('./dist/testChildProcess.js');
