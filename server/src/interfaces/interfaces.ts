@@ -1,5 +1,14 @@
 import { Optional } from 'sequelize';
 import Queue from '../classes/queue';
+export const port = {
+    "puertoControlador": "COM4",
+    "puertoCelda": "COM5"
+}
+
+export const tiempoRespuesta = {
+    "tiempoMS": 400
+}
+
 export interface AmbienteInterface{
     temperatura?:number,
     humedad?:number,
@@ -59,4 +68,5 @@ export interface objetoDatos{
     temperatura?:number,
     humedad?:number
 }
+
 export interface EnsayoCreationAttributes extends Optional<EnsayoInterface, "idEnsayo"|"operador"|"fecha"|"distanciaTotal">{};

@@ -1,6 +1,6 @@
 import SerialPort from 'serialport';
 import Parametros from '../models/Parametros';
-import { ParametroInterface, colaDatos } from '../interfaces/interfaces';
+import { ParametroInterface, colaDatos, port } from '../interfaces/interfaces';
 import { any } from 'sequelize/types/lib/operators';
 import { reject, resolve } from 'bluebird';
 import { Primitive } from 'sequelize/types/lib/utils';
@@ -12,7 +12,7 @@ const fs = require('fs');
 const colaDato = new Queue();
 let estadoScript: number = 1;
 
-const portCelda = new SerialPort('COM5', {
+const portCelda = new SerialPort(port.puertoCelda, {
     baudRate: 9600
 });
 

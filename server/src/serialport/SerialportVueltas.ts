@@ -1,5 +1,5 @@
 import SerialPort from 'serialport';
-import { ParametroInterface, colaDatos, EnsayoInterface, AmbienteInterface, objetoDatos } from '../interfaces/interfaces';
+import { ParametroInterface, colaDatos, EnsayoInterface, AmbienteInterface, objetoDatos, port, tiempoRespuesta } from '../interfaces/interfaces';
 import { any } from 'sequelize/types/lib/operators';
 import { reject, resolve } from 'bluebird';
 import { Primitive } from 'sequelize/types/lib/utils';
@@ -15,7 +15,7 @@ const colaDato = new Queue();
 let fin = false;
 let estadoScript: number = 1;
 
-const portControlador = new SerialPort('COM4', {
+const portControlador = new SerialPort(port.puertoControlador, {
     baudRate: 9600
 });
 
@@ -54,7 +54,7 @@ process.on('message', async (m) => {
                     portControlador.write('<SEND>\n');
                 }
             };
-            const intervalo = setInterval(ciclo, 400);
+            const intervalo = setInterval(ciclo, tiempoRespuesta.tiempoMS);
             portControlador.on('data', (data) => {
                 if (parseFloat(data.toString()) === -1) {
                     i++
@@ -129,7 +129,7 @@ process.on('message', async (m) => {
                     subscriberA.complete();
                 }
             };
-            const intervalo2 = setInterval(ciclo2, 5113);
+            const intervalo2 = setInterval(ciclo2, tiempoRespuesta.tiempoMS + 4713);
 
             portControlador.on('data', (data) => {
                 const arreglo: any = data.toString().match(/\n.*\n/);
@@ -189,7 +189,7 @@ process.on('message', async (m) => {
             (<any>process).send('TEST');
         }
         if (m === "REANUDAR") {
-            setTimeout(()=>{portControlador.write('<STAR>\n')},55);
+            setTimeout(() => { portControlador.write('<STAR>\n') }, 55);
             estadoScript = 1;
             console.log('REANUDANDO EN VUELTA');
             (<any>process).send('REANUDAR');

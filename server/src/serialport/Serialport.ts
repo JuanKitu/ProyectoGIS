@@ -1,16 +1,15 @@
 import SerialPort from 'serialport';
 const { fork } = require('child_process');
 import Ensayo from '../models/Ensayo'
-import { EnsayoInterface } from '../interfaces/interfaces';
+import { port } from '../interfaces/interfaces';
 import Server from '../classes/server';
 
 
 let servidor: Server = Server.instance;
-
 //estadoScript: (0 = DETENIDO) - (1 = CORRIENDO)
 let estadoScript: number = 0;
 
-let portControlador = new SerialPort('COM4', {
+let portControlador = new SerialPort(port.puertoControlador, {
     autoOpen: false,
     baudRate: 9600,
 });

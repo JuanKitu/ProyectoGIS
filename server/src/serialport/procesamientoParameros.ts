@@ -1,6 +1,6 @@
 import Parametro from '../models/Parametros';
 import Ensayo from '../models/Ensayo';
-import { EnsayoInterface, ParametroInterface, colaDatos, colaDual } from '../interfaces/interfaces';
+import { EnsayoInterface, ParametroInterface, colaDatos, colaDual, tiempoRespuesta } from '../interfaces/interfaces';
 import { Json } from 'sequelize/types/lib/utils';
 import Queue from '../classes/queue';
 import { reject, resolve } from 'bluebird';
@@ -124,7 +124,7 @@ process.on('message', async (m) => {
                 }
             }
 
-            const intervalo = setInterval(ciclo, 500);
+            const intervalo = setInterval(ciclo, tiempoRespuesta.tiempoMS + 100);
 
 
 
