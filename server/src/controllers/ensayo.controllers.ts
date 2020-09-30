@@ -25,11 +25,9 @@ export default class EnsayoController {
     constructor() { }
     //Create an Ensayo
     new = async (req: Request, res: Response) => {
-        const { carga, radioTrayectoria, diametroBola, distanciaTotal, tiempoTotal, materialBola, operador, observaciones, codigoProbeta, durezaProbeta, materialProbeta, tratamientoProbeta } = req.body;
+        const { carga, radioTrayectoria, diametroBola, distanciaTotal, tiempoTotal, materialBola, fecha, operador, observaciones, codigoProbeta, durezaProbeta, materialProbeta, tratamientoProbeta } = req.body;
         try {
             if (server.enUso() == -1) {
-                const dateNow = new Date();
-                const fecha = dateNow.toLocaleDateString();
                 const newEnsayo = await Ensayo.create({
                     carga,
                     radioTrayectoria,

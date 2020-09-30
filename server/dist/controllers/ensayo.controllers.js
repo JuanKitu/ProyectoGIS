@@ -29,11 +29,9 @@ class EnsayoController {
     constructor() {
         //Create an Ensayo
         this.new = (req, res) => __awaiter(this, void 0, void 0, function* () {
-            const { carga, radioTrayectoria, diametroBola, distanciaTotal, tiempoTotal, materialBola, operador, observaciones, codigoProbeta, durezaProbeta, materialProbeta, tratamientoProbeta } = req.body;
+            const { carga, radioTrayectoria, diametroBola, distanciaTotal, tiempoTotal, materialBola, fecha, operador, observaciones, codigoProbeta, durezaProbeta, materialProbeta, tratamientoProbeta } = req.body;
             try {
                 if (server.enUso() == -1) {
-                    const dateNow = new Date();
-                    const fecha = dateNow.toLocaleDateString();
                     const newEnsayo = yield Ensayo_1.default.create({
                         carga,
                         radioTrayectoria,

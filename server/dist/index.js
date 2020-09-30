@@ -49,4 +49,4 @@ server.app.use('/api/socket', socket_1.default);
 console.log(new Date());
 server.start(() => {
     console.log(cli_color_1.default.magenta.inverse.bold(`Server on port: ${server.app.get('port')}`));
-}, '192.168.0.185');
+}, '192.168.0.137');

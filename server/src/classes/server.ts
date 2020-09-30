@@ -30,7 +30,7 @@ export default class Server {
             arregloMu:[],
             arregloDistancias:[]
         };
-        this.ensayoActual = 27;
+        this.ensayoActual = 28;
         this.pausado = false;
     }
 
