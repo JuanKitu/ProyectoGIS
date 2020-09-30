@@ -56,5 +56,17 @@ export class EnsayoService {
     //console.log(`${this.ensayoURL}/${key$}`)
     return this.httpClient.post(`${this.ensayoURL}/${key$}`,{headers});
   };
-
+  realizarTest(){
+    //console.log(`${this.ensayoURL}/test`)
+    return this.httpClient.get(`${this.ensayoURL}/test`);
+  };
+  pausarEnsayo(){
+    return this.httpClient.get(`${this.ensayoURL}/pausar`);
+  };
+  reanudarEnsayo(){
+    return this.httpClient.get(`${this.ensayoURL}/reanudar`);
+  };
+  cancelarEnsayo(){
+    return this.httpClient.get(`${this.ensayoURL}/cancelar`);
+  };
 }

@@ -11,7 +11,7 @@ import { Ensayo } from '../../interfaces/interfaces';
   styleUrls: ['./formulario-ensayo.component.scss'],
 })
 export class FormularioEnsayoComponent implements OnInit {
-  
+  test:boolean=false
   formularioEnsayo: FormGroup;
   @Input() ensayo: Ensayo;
   @Input() archivado:boolean;
@@ -57,6 +57,10 @@ export class FormularioEnsayoComponent implements OnInit {
       }
     }
   };
+  realizarTest(){
+    this.ensayoService.realizarTest().subscribe();
+    this.test= !this.test;
+  }
   altaEnsayo(){
     if(this.ensayo.idEnsayo){
       const key$=this.ensayo.idEnsayo;
@@ -68,10 +72,10 @@ export class FormularioEnsayoComponent implements OnInit {
     }else{
       const data:Ensayo = this.formularioEnsayo.value;
       this.ensayoService.new(data).subscribe(data=>{
-        console.log("Datos de la peticion: ",data);
         const idEnsayo = data['data'].idEnsayo;
-        console.log("id Ensayo", idEnsayo);
-        this.router.navigate(['/ensayo',idEnsayo,'grafico']);
+        //el state es muy importante, es para mandar el id del ensayo
+        this.ensayoService.crearListaParametros(idEnsayo).subscribe(data=>{})
+        this.router.navigate(['/ensayo','#','grafico']);
       });
     }
     
@@ -79,19 +83,16 @@ export class FormularioEnsayoComponent implements OnInit {
   bajaEnsayo(){
     if(!this.archivado){
       this.ensayoService.delete(this.ensayo.idEnsayo).subscribe(data=>{
-        console.log(data);
         this.router.navigate(['/ensayo','lista',{onSameUrlNavigation:'reload'}]);
       });
     }else{
       this.ensayoArchivadoService.delete(this.ensayo.idEnsayo).subscribe(data=>{
-        console.log(data);
         this.router.navigate(['/ensayo','lista',{onSameUrlNavigation:'reload'}]);
       });
     };
   };
   desarchivarEnsayo(){
     this.ensayoArchivadoService.restore(this.ensayo.idEnsayo).subscribe(data=>{
-      console.log(data);
       this.router.navigate(['/ensayo','lista',{onSameUrlNavigation:'reload'}]);
     });
   }

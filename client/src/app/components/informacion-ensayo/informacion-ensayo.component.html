@@ -1,0 +1,44 @@
+<ion-card class="tablero">
+    <!-- <ion-card-header>Datos</ion-card-header> -->
+    <ion-grid>
+        <ion-row>
+            <ion-col size="auto">
+                <ion-item>
+                    <ion-icon name="stopwatch-outline" slot="start"></ion-icon>
+                    <ion-label position="fixed">{{ambiente.horaInicio}}</ion-label>
+                </ion-item>
+            </ion-col>
+            <ion-col size="auto">
+                <ion-item>
+                    <ion-icon name="timer-outline" slot="start"></ion-icon>
+                    <ion-label position="fixed">{{ambiente.horaFin}}</ion-label>
+                </ion-item>
+            </ion-col>
+            <ion-col size="auto">
+                <ion-item>
+                    <ion-icon name="speedometer-outline" slot="start"></ion-icon>
+                    <ion-label position="fixed">{{ambiente.velocidad | number :'.0-0'}} m/s</ion-label>
+                </ion-item>
+            </ion-col>
+            <ion-col size="auto">
+                <ion-item>
+                    <ion-icon name="thermometer-outline" slot="start"></ion-icon>
+                    <ion-label position="fixed">{{ambiente.temperatura}}ºC</ion-label>
+                </ion-item>
+            </ion-col>
+            <ion-col size="auto">
+                <ion-item>
+                    <ion-icon name="water-outline" slot="start"></ion-icon>
+                    <ion-label position="fixed">{{ambiente.humedad}} hPa</ion-label>
+                </ion-item>
+            </ion-col>
+
+        </ion-row>
+    </ion-grid>
+
+
+
+    <!-- <section class="full-width">
+        <ion-button expand="full" color="primary">Ocultar</ion-button>
+    </section> -->
+</ion-card>

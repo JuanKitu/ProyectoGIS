@@ -78,12 +78,20 @@
     <div padding>
         <ion-grid>
             <ion-row>
-                <ion-col>
+                <ion-col class="ion-float-left">
                     <ion-button type="submit" shape="round" fill="solid" [disabled]="!formularioEnsayo.valid" *ngIf="!archivado">
                         <ion-icon name="add-circle-outline"></ion-icon>
                     </ion-button>
                     <ion-button shape="round" fill="solid" color="tertiary" *ngIf="archivado" (click)="desarchivarEnsayo()">
                         <ion-icon name="file-tray-stacked-outline"></ion-icon>
+                    </ion-button>
+                </ion-col>
+                <ion-col class="derecha" *ngIf="!ensayo.idEnsayo">
+                    <ion-button type="submit" color="success" shape="round" fill="solid" *ngIf="!test" (click)="realizarTest()">
+                        Test
+                    </ion-button>
+                    <ion-button type="submit" color="danger" shape="round" fill="solid" *ngIf="test" (click)="realizarTest()">
+                        <ion-icon name="stop-outline"></ion-icon>
                     </ion-button>
                 </ion-col>
                 <ion-col class="ion-text-center">

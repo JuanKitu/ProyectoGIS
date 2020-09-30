@@ -13,7 +13,7 @@ import { Parametro, PuntoGrafico, ArrayPuntos } from '../../interfaces/interface
   styleUrls: ['./grafico-ensayo.component.scss'],
 })
 export class GraficoEnsayoComponent implements OnInit {
-  @Input() idEnsayo:number;
+ // @Input() idEnsayo:number;
   public lineChartData: ChartDataSets[] = [
     { data: [], label: 'μ' },
   ];
@@ -83,20 +83,18 @@ export class GraficoEnsayoComponent implements OnInit {
   constructor(private webSocket:WebSocketService, private ensayoService:EnsayoService) { }
 
   ngOnInit() {
+    /* this.ensayoService.crearListaParametros(this.idEnsayo).subscribe(data=>{}) */
     this.webSocket.emit('arrayPuntos',()=>{
       
     })
     this.webSocket.listen('envioArray').subscribe(datos=>{
-      console.log("datos del envio array: ",datos)
       const arrayPuntos:ArrayPuntos=datos;
       const puntos:ChartDataSets[]=[{data:arrayPuntos.arregloMu, label:'asdasd'}]
       this.lineChartData = puntos;
       const arreglosLabels:Label[]= arrayPuntos.arregloDistancias
       this.lineChartLabels= arreglosLabels;
     })
-    this.ensayoService.crearListaParametros(this.idEnsayo).subscribe(data=>{
-      
-    })
+    
     this.webSocket.listen('parametros').subscribe((datos)=>{
       const unPunto:PuntoGrafico=datos;
       this.lineChartData.forEach((x, i) => {
@@ -121,13 +119,13 @@ export class GraficoEnsayoComponent implements OnInit {
   }
 
   // events
-  public chartClicked({ event, active }: { event: MouseEvent, active: {}[] }): void {
+/*   public chartClicked({ event, active }: { event: MouseEvent, active: {}[] }): void {
     console.log(event, active);
   }
 
   public chartHovered({ event, active }: { event: MouseEvent, active: {}[] }): void {
     console.log(event, active);
-  }
+  } */
 
   public hideOne() {
     const isHidden = this.chart.isDatasetHidden(1);
