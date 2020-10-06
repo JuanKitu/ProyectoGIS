@@ -254,6 +254,7 @@ export default class EnsayoController {
                                 }
                                 if (FIN===true){
                                     console.log('CANCELANDO DURANTE PAUSA');
+                                    hijoPFV.send('REANUDAR');
                                     clearInterval(cicloPausa);
                                 }
                             }, 500)
