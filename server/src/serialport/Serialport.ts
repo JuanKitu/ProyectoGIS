@@ -71,17 +71,17 @@ async function comenzarExperimeto(puerto: SerialPort, ensayo: Ensayo) {
                         (<any>process).send(MV);
                     }
                     if (typeof (MV) == "string") {
-                        if (MV === "AMBIENTES") {
+                        if (MV === "FIN") {
                             childVuelta.kill();
-                            (<any>process).send('AMBIENTES');
                         }
                         if (MV === "PAUSADO") {
                             console.log('PAUSADO EN SERIALPORT');
-                            //(<any>process).send('PAUSADO');
                         }
-                        if (MV === "CANCELAR") {
-                            console.log('CANCELADO EN SERIAL');
-                            (<any>process).send('CANCELAR');
+                        if (MV === "CANCELADO") {
+                            console.log('RECIBIDO CANCELAR DE CHILD');
+                            childFuerza.kill();
+                            childVuelta.kill();
+                            (<any>process).send('CANCELADO');
                         }
 
                     }
@@ -95,15 +95,14 @@ async function comenzarExperimeto(puerto: SerialPort, ensayo: Ensayo) {
                             (<any>process).send(MP);
                         }
                         if (typeof (MP) == "string") {
-                            //console.log(M);
+                            childFuerza.kill();
                             childParametros.kill();
-                            (<any>process).send('Parametros agregados satisfactoriamente');
+                            (<any>process).send('PARAMETROS AGREGADOS');
                         }
 
                     })
                     process.on('message', async (me) => {
                         if (typeof (me) == "string") {
-                            console.log('pausando en HijoPVF', me)
                             if (me === "PAUSA") {
                                 childFuerza.send("PAUSA");
                                 childVuelta.send("PAUSA");
@@ -111,6 +110,7 @@ async function comenzarExperimeto(puerto: SerialPort, ensayo: Ensayo) {
                             }
                             if (me === "CANCELAR") {
                                 childVuelta.send("CANCELAR");
+                                childParametros.kill();
                             }
                             if (me === "TEST") {
                                 childVuelta.send("TEST");

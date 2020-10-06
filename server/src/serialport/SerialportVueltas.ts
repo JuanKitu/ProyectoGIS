@@ -120,11 +120,10 @@ process.on('message', async (m) => {
             const ciclo2 = () => {
                 if (!fin) {
                     if (estadoScript === 1) {
-                        console.log('ME EJECUTO');
+                        console.log('Ejecutando Ambiente');
                         portControlador.write('<TMHM>\n');
                     }
                 } else {
-                    console.log('NO ME EJECUTO');
                     clearInterval(intervalo2);
                     subscriberA.complete();
                 }
@@ -166,7 +165,7 @@ process.on('message', async (m) => {
             async () => {
                 await Ambiente.bulkCreate(arregloAmbientes);
                 console.log("finish ambiente");
-                (<any>process).send('AMBIENTES');
+                (<any>process).send('FIN');
 
             }
         )
@@ -182,7 +181,7 @@ process.on('message', async (m) => {
         if (m === "CANCELAR") {
             portControlador.write('<STOP>\n');
             console.log('CANCELADO EN VUELTAS');
-            (<any>process).send('CANCELAR');
+            (<any>process).send('CANCELADO');
         }
         if (m === "TEST") {
             portControlador.write('<TEST>\n');

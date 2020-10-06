@@ -20,6 +20,7 @@ const child_process_1 = require("child_process");
 const server_1 = __importDefault(require("../classes/server"));
 const moment_1 = __importDefault(require("moment"));
 const server = server_1.default.instance;
+let FIN = false;
 //const Parametros = require('../models/Parametros');
 //const Ambiente = require('../models/Ambiente');
 function isParametro(object) {
@@ -198,18 +199,6 @@ class EnsayoController {
                     raw: true
                 });
                 if (elEnsayo) {
-                    /* server.io.on('PAUSAR', () => {
-                        console.log('¡¡¡RECIBIENDO PAUSA DEL CLIENTE!!!');
-                        hijoPFV.send('PAUSA');
-                    })
-                    server.io.on('CANCELAR', () => {
-                        console.log('¡¡¡RECIBIENDO CANCELAR DEL CLIENTE!!!');
-                        hijoPFV.send('CANCELAR');
-                    })
-                    server.io.on('REANUDAR', () => {
-                        console.log('¡¡¡RECIBIENDO REANUDAR DEL CLIENTE!!!');
-                        hijoPFV.send('REANUDAR');
-                    }) */
                     let arreglosDM = {
                         arregloDistancias: [],
                         arregloMu: []
@@ -219,7 +208,7 @@ class EnsayoController {
                     const hijoPFV = child_process_1.fork('../server/dist/serialport/Serialport.js', ['normal']);
                     hijoPFV.send(elEnsayo);
                     hijoPFV.on('message', (M) => {
-                        if (server.enUso() !== -1) {
+                        if (FIN != true) {
                             if (server.consultarPausa() === false) {
                                 if (typeof (M) == "object") {
                                     if (isParametro(M) && M.vueltas !== undefined) {
@@ -244,14 +233,22 @@ class EnsayoController {
                                     }
                                 }
                                 if (typeof (M) == "string") {
-                                    if (M === 'AMBIENTES') {
+                                    if (M === 'PARAMETROS AGREGADOS') {
                                         console.log('FIN PETICION');
                                         hijoPFV.kill();
                                         console.log('FIN PETICION 2');
                                         server.setearEnsayo(-1);
-                                        server.io.emit('fin', 'FIN');
+                                        //server.io.emit('fin', 'FIN');
                                         return res.json({
                                             data: elEnsayo
+                                        });
+                                    }
+                                    if (M === 'CANCELADO') {
+                                        hijoPFV.kill();
+                                        console.log('FIN PETICION 2');
+                                        //server.io.emit('fin', 'FIN');
+                                        return res.json({
+                                            data: 'Ensayo cancelado'
                                         });
                                     }
                                 }
@@ -269,13 +266,9 @@ class EnsayoController {
                             }
                         }
                         else {
+                            hijoPFV.send('CANCELAR');
+                            FIN = false;
                             console.log('FIN PETICION');
-                            hijoPFV.kill();
-                            console.log('FIN PETICION 2');
-                            server.io.emit('fin', 'FIN');
-                            return res.json({
-                                data: 'Ensayo cancelado'
-                            });
                         }
                         /* pausar = (cliente: Socket,io:SocketIO.Server)=>{
                             cliente.on('PAUSAR',()=>{
@@ -456,7 +449,7 @@ class EnsayoController {
         });
         this.cancelar = (req, res) => __awaiter(this, void 0, void 0, function* () {
             try {
-                server.setearEnsayo(-1);
+                FIN = true;
             }
             catch (error) {
                 console.log(error);

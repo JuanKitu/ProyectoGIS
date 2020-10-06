@@ -1,10 +1,10 @@
 import SerialPort from "serialport";
-import { EnsayoInterface, AmbienteInterface, objetoDatos } from "./interfaces/interfaces";
+import { EnsayoInterface, AmbienteInterface, objetoDatos, port } from "./interfaces/interfaces";
 import Ensayo from "./models/Ensayo";
 import Ambiente from "./models/Ambiente";
 import moment from "moment";
 import { Observable, Subscription } from "rxjs";
-const elPuerto: SerialPort = new SerialPort('COM4', {
+const elPuerto: SerialPort = new SerialPort(port.puertoControlador, {
    //autoOpen:false
 })
 

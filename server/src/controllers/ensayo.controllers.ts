@@ -13,6 +13,7 @@ import { arregloDM, EnsayoInterface, ParametroInterface } from '../interfaces/in
 import moment from 'moment';
 import { Socket } from 'socket.io';
 const server = Server.instance;
+let FIN:boolean = false;
 //const Parametros = require('../models/Parametros');
 //const Ambiente = require('../models/Ambiente');
 function isParametro(object: any): object is ParametroInterface {
@@ -190,18 +191,6 @@ export default class EnsayoController {
                 raw: true
             });
             if (elEnsayo) {
-                /* server.io.on('PAUSAR', () => {
-                    console.log('¡¡¡RECIBIENDO PAUSA DEL CLIENTE!!!');
-                    hijoPFV.send('PAUSA');
-                })
-                server.io.on('CANCELAR', () => {
-                    console.log('¡¡¡RECIBIENDO CANCELAR DEL CLIENTE!!!');
-                    hijoPFV.send('CANCELAR');
-                })
-                server.io.on('REANUDAR', () => {
-                    console.log('¡¡¡RECIBIENDO REANUDAR DEL CLIENTE!!!');
-                    hijoPFV.send('REANUDAR');
-                }) */
                 let arreglosDM: arregloDM = {
                     arregloDistancias: [],
                     arregloMu: []
@@ -211,7 +200,7 @@ export default class EnsayoController {
                 const hijoPFV = fork('../server/dist/serialport/Serialport.js', ['normal']);
                 hijoPFV.send(elEnsayo);
                 hijoPFV.on('message', (M: any) => {
-                    if (server.enUso() !== -1) {
+                    if (FIN != true) {
                         if (server.consultarPausa() === false) {
                             if (typeof (M) == "object") {
                                 if (isParametro(M) && M.vueltas !== undefined) {
@@ -234,14 +223,21 @@ export default class EnsayoController {
                                 }
                             }
                             if (typeof (M) == "string") {
-                                if (M === 'AMBIENTES') {
+                                if (M === 'PARAMETROS AGREGADOS') {
                                     console.log('FIN PETICION');
                                     hijoPFV.kill();
                                     console.log('FIN PETICION 2');
                                     server.setearEnsayo(-1);
-                                    server.io.emit('fin', 'FIN');
+                                    //server.io.emit('fin', 'FIN');
                                     return res.json({
                                         data: elEnsayo
+                                    });
+                                } if (M === 'CANCELADO') {
+                                    hijoPFV.kill();
+                                    console.log('FIN PETICION 2');
+                                    //server.io.emit('fin', 'FIN');
+                                    return res.json({
+                                        data: 'Ensayo cancelado'
                                     });
                                 }
 
@@ -258,15 +254,10 @@ export default class EnsayoController {
                                 }
                             }, 500)
                         }
-                        
-                    }else{
+                    } else {
+                        hijoPFV.send('CANCELAR');
+                        FIN = false;
                         console.log('FIN PETICION');
-                        hijoPFV.kill();
-                        console.log('FIN PETICION 2');
-                        server.io.emit('fin', 'FIN');
-                        return res.json({
-                            data: 'Ensayo cancelado'
-                        });
 
                     }
 
@@ -461,7 +452,7 @@ export default class EnsayoController {
 
     cancelar = async (req: Request, res: Response) => {
         try {
-            server.setearEnsayo(-1);
+            FIN=true;
         } catch (error) {
             console.log(error);
             return res.json({

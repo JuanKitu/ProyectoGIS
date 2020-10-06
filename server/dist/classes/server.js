@@ -42,7 +42,7 @@ class Server {
             arregloMu: [],
             arregloDistancias: []
         };
-        this.ensayoActual = 28;
+        this.ensayoActual = 96;
         this.pausado = false;
     }
     static get instance() {
