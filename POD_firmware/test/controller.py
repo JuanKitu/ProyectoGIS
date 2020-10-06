@@ -31,20 +31,18 @@ def listener():
     global command, radio, vueltas
     while True:
         read = ser.readline().decode().strip()
-        
+        #ser.write(read.encode())
         if (read[0] == '<' and read[-1] == '>' and read[1:5] in commands):
             if (len(read) == 6):      #Comando regular, sin argumentos
                 lock.acquire()
                 command = read[1:5]
                 lock.release()
-                print(command)
             elif (read[1:5] == 'STAR'):
                 lock.acquire()
                 command = read[1:5]
                 radio = int(read.split(',')[1])
                 vueltas = int(read.split(',')[2].split('>')[0])
                 lock.release()
-                print(f'<STAR,{radio},{vueltas}>')
         read = ''    
 
 def resetVars():
@@ -65,6 +63,7 @@ def main():
             if (vueltasT >= vueltas):
                 ser.write('-1\n'.encode())
                 isRunning = False
+                print('Experimento finalizado')
                 state = 'WAIT'
             if (command == 'PAUS'):
                 ser.write('0\n'.encode())
@@ -98,7 +97,7 @@ def main():
             ser.write('0\n'.encode())
             isConnected = True
             state = 'WAIT'
-        
+
         elif (state == 'DCON'):
             print('Desconectado')
             ser.write('0\n'.encode())
@@ -111,6 +110,10 @@ def main():
             if (command == 'CONN' and isConnected == False):
                 state = 'CONN'
                 command = ''
+
+            elif (command == 'CONN' and isConnected == True):
+                print('Ya Conectado')
+                ser.write('1\n'.encode())
             
             elif (command == 'STAR' and isConnected and (radio in radios) and vueltas > 0):
                 state = 'STAR'
