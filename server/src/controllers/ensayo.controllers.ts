@@ -228,14 +228,14 @@ export default class EnsayoController {
                                     hijoPFV.kill();
                                     console.log('FIN PETICION 2');
                                     server.setearEnsayo(-1);
-                                    //server.io.emit('fin', 'FIN');
+                                    server.io.emit('fin', 'FIN');
                                     return res.json({
                                         data: elEnsayo
                                     });
                                 } if (M === 'CANCELADO') {
                                     hijoPFV.kill();
                                     console.log('FIN PETICION 2');
-                                    //server.io.emit('fin', 'FIN');
+                                    server.io.emit('fin', 'FIN');
                                     return res.json({
                                         data: 'Ensayo cancelado'
                                     });
@@ -250,6 +250,10 @@ export default class EnsayoController {
                                 if (server.consultarPausa() === false) {
                                     console.log('¡¡¡RECIBIENDO REANUDAR DEL CLIENTE!!!');
                                     hijoPFV.send('REANUDAR');
+                                    clearInterval(cicloPausa);
+                                }
+                                if (FIN===true){
+                                    console.log('CANCELANDO DURANTE PAUSA');
                                     clearInterval(cicloPausa);
                                 }
                             }, 500)
