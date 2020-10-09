@@ -1,6 +1,6 @@
 import SerialPort from "serialport";
 
-const portControlador = new SerialPort('COM4', {
+const portControlador = new SerialPort('/dev/ttyS0', {
     //autoOpen:false,
     baudRate: 9600
 });
