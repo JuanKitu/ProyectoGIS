@@ -4,7 +4,7 @@ import Ensayo from "./models/Ensayo";
 import Ambiente from "./models/Ambiente";
 import moment from "moment";
 import { Observable, Subscription } from "rxjs";
-const elPuerto: SerialPort = new SerialPort(port.puertoCelda, {
+const elPuerto: SerialPort = new SerialPort(port.puertoControlador, {
    //autoOpen:false
 })
 
