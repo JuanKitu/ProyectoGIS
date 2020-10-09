@@ -4,11 +4,11 @@ import Ensayo from "./models/Ensayo";
 import Ambiente from "./models/Ambiente";
 import moment from "moment";
 import { Observable, Subscription } from "rxjs";
-const elPuerto: SerialPort = new SerialPort(port.puertoControlador, {
+const elPuerto: SerialPort = new SerialPort('dev/ttyS0', {
    //autoOpen:false
 })
-
-elPuerto.write('<STAR,5,500>');
+elPuerto.write('<CONN>\n');
+elPuerto.write('<STAR,5,500>\n');
 
 /* let i: number = 0;
 const obserbableFuerza = new Observable(subscriber => {
