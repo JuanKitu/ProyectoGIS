@@ -1,6 +1,7 @@
 import SerialPort from "serialport";
+import { port } from '../interfaces/interfaces';
 
-const portControlador = new SerialPort('/dev/ttyS0', {
+const portControlador = new SerialPort(port.puertoControlador, {
     //autoOpen:false,
     baudRate: 9600
 });
