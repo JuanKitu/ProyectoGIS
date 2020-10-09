@@ -1,7 +1,7 @@
 import { Optional } from 'sequelize';
 import Queue from '../classes/queue';
 export const port = {
-    "puertoControlador": "/dev/sda2",
+    "puertoControlador": "/dev/ttyACM0",
     "puertoCelda": "/dev/ttyS0"
 }
 
