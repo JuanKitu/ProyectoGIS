@@ -8,7 +8,7 @@ const elPuerto: SerialPort = new SerialPort(port.puertoControlador, {
    //autoOpen:false
 })
 
-elPuerto.write('<STAR,5,500>\n');
+elPuerto.write('<STAR,5,500>');
 
 /* let i: number = 0;
 const obserbableFuerza = new Observable(subscriber => {
