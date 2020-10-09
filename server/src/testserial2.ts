@@ -8,8 +8,7 @@ const elPuerto: SerialPort = new SerialPort(port.puertoCelda, {
    //autoOpen:false
 })
 
-elPuerto.write('<CONN>\n');
-elPuerto.write('<STAR,5,500>\n');
+elPuerto.write('<DCON>\n');
 elPuerto.on('data', (data) => {
    console.log(data.toString());
 })
