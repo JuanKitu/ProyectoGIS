@@ -420,7 +420,6 @@ export default class EnsayoController {
             const hijoTest = fork('../server/dist/serialport/SerialportTest.js', ['normal']);
             hijoTest.on('message', (M: any) => {
                 hijoTest.kill();
-                console.log('Matando test');
                 return res.json({
                     data: 'TEST'
                 });
@@ -511,7 +510,9 @@ export default class EnsayoController {
 
     consulta = async (req: Request, res: Response) => {
         try {
-            console.log(server.consultarConectado());
+            console.log('CONECTADO: ',server.consultarConectado());
+            console.log('PAUSA: ',server.consultarPausa());
+            console.log('ENSAYO: ',server.enUso());
         } catch (error) {
             console.log(error);
             return res.json({
