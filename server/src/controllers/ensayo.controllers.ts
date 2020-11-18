@@ -13,7 +13,7 @@ import { arregloDM, EnsayoInterface, ParametroInterface } from '../interfaces/in
 import moment from 'moment';
 import { Socket } from 'socket.io';
 const server = Server.instance;
-let FIN:boolean = false;
+let FIN: boolean = false;
 //const Parametros = require('../models/Parametros');
 //const Ambiente = require('../models/Ambiente');
 function isParametro(object: any): object is ParametroInterface {
@@ -184,99 +184,101 @@ export default class EnsayoController {
     crearParametros = async (req: Request, res: Response) => {
         const { idEnsayo } = req.params;
         try {
-            const elEnsayo = await Ensayo.findOne({
-                where: {
-                    idEnsayo
-                },
-                raw: true
-            });
-            if (elEnsayo) {
-                let arreglosDM: arregloDM = {
-                    arregloDistancias: [],
-                    arregloMu: []
-                };
-                let velocidadActual: number = 0;
-                const horaDeInicio = (moment().format('HH:mm:ss'));
-                const hijoPFV = fork('../server/dist/serialport/Serialport.js', ['normal']);
-                hijoPFV.send(elEnsayo);
-                hijoPFV.on('message', (M: any) => {
-                    if (FIN != true) {
-                        if (server.consultarPausa() === false) {
-                            if (typeof (M) == "object") {
-                                if (isParametro(M) && M.vueltas !== undefined) {
-                                    const punto = {
-                                        distancia: (((M.vueltas) * (2 * Math.PI * elEnsayo.radioTrayectoria)).toFixed(2)).toString(),
-                                        mu: M.coeficienteRozamiento
-                                    };
-                                    console.log('DISTANCIA RECORRIDA ', punto.distancia);
-                                    arreglosDM.arregloDistancias.push(punto.distancia);
-                                    arreglosDM.arregloMu.push(punto.mu);
-                                    server.setearArray(arreglosDM);
-                                    if (M.tiempoActual != undefined) velocidadActual = parseFloat(punto.distancia) / M.tiempoActual;
-                                    server.io.emit('parametros', punto);
-                                } else {
-                                    M.horaInicio = horaDeInicio;
-                                    M.horaFin = (moment().format('HH:mm:ss'));
-                                    M.velocidad = velocidadActual;
-                                    console.log('Ambiente: ', M);
-                                    server.io.emit('ambiente', M);
+            if (server.consultarConectado()) {
+                const elEnsayo = await Ensayo.findOne({
+                    where: {
+                        idEnsayo
+                    },
+                    raw: true
+                });
+                if (elEnsayo) {
+                    let arreglosDM: arregloDM = {
+                        arregloDistancias: [],
+                        arregloMu: []
+                    };
+                    let velocidadActual: number = 0;
+                    const horaDeInicio = (moment().format('HH:mm:ss'));
+                    const hijoPFV = fork('../server/dist/serialport/Serialport.js', ['normal']);
+                    hijoPFV.send(elEnsayo);
+                    hijoPFV.on('message', (M: any) => {
+                        if (FIN != true) {
+                            if (server.consultarPausa() === false) {
+                                if (typeof (M) == "object") {
+                                    if (isParametro(M) && M.vueltas !== undefined) {
+                                        const punto = {
+                                            distancia: (((M.vueltas) * (2 * Math.PI * elEnsayo.radioTrayectoria)).toFixed(2)).toString(),
+                                            mu: M.coeficienteRozamiento
+                                        };
+                                        console.log('DISTANCIA RECORRIDA ', punto.distancia);
+                                        arreglosDM.arregloDistancias.push(punto.distancia);
+                                        arreglosDM.arregloMu.push(punto.mu);
+                                        server.setearArray(arreglosDM);
+                                        if (M.tiempoActual != undefined) velocidadActual = parseFloat(punto.distancia) / M.tiempoActual;
+                                        server.io.emit('parametros', punto);
+                                    } else {
+                                        M.horaInicio = horaDeInicio;
+                                        M.horaFin = (moment().format('HH:mm:ss'));
+                                        M.velocidad = velocidadActual;
+                                        console.log('Ambiente: ', M);
+                                        server.io.emit('ambiente', M);
+                                    }
                                 }
-                            }
-                            if (typeof (M) == "string") {
-                                if (M === 'PARAMETROS AGREGADOS') {
-                                    console.log('FIN PETICION');
-                                    hijoPFV.kill();
-                                    console.log('FIN PETICION 2');
-                                    server.setearEnsayo(-1);
-                                    server.io.emit('fin', 'FIN');
-                                    return res.json({
-                                        data: elEnsayo
-                                    });
-                                } if (M === 'CANCELADO') {
-                                    hijoPFV.kill();
-                                    console.log('FIN PETICION 2');
-                                    server.io.emit('fin', 'FIN');
-                                    return res.json({
-                                        data: 'Ensayo cancelado'
-                                    });
-                                }
+                                if (typeof (M) == "string") {
+                                    if (M === 'PARAMETROS AGREGADOS') {
+                                        console.log('FIN PETICION');
+                                        hijoPFV.kill();
+                                        console.log('FIN PETICION 2');
+                                        server.setearEnsayo(-1);
+                                        server.io.emit('fin', 'FIN');
+                                        return res.json({
+                                            data: elEnsayo
+                                        });
+                                    } if (M === 'CANCELADO') {
+                                        hijoPFV.kill();
+                                        console.log('FIN PETICION 2');
+                                        server.io.emit('fin', 'FIN');
+                                        return res.json({
+                                            data: 'Ensayo cancelado'
+                                        });
+                                    }
 
 
+                                }
+                            } else {
+                                console.log('¡¡¡RECIBIENDO PAUSA DEL CLIENTE!!!');
+                                hijoPFV.send('PAUSA');
+                                const cicloPausa = setInterval(() => {
+                                    if (server.consultarPausa() === false) {
+                                        console.log('¡¡¡RECIBIENDO REANUDAR DEL CLIENTE!!!');
+                                        hijoPFV.send('REANUDAR');
+                                        clearInterval(cicloPausa);
+                                    }
+                                    if (FIN === true) {
+                                        console.log('CANCELANDO DURANTE PAUSA');
+                                        server.pausar(false);
+                                        hijoPFV.send('REANUDAR');
+                                        clearInterval(cicloPausa);
+                                    }
+                                }, 500)
                             }
                         } else {
-                            console.log('¡¡¡RECIBIENDO PAUSA DEL CLIENTE!!!');
-                            hijoPFV.send('PAUSA');
-                            const cicloPausa = setInterval(() => {
-                                if (server.consultarPausa() === false) {
-                                    console.log('¡¡¡RECIBIENDO REANUDAR DEL CLIENTE!!!');
-                                    hijoPFV.send('REANUDAR');
-                                    clearInterval(cicloPausa);
-                                }
-                                if (FIN===true){
-                                    console.log('CANCELANDO DURANTE PAUSA');
-                                    server.pausar(false);
-                                    hijoPFV.send('REANUDAR');
-                                    clearInterval(cicloPausa);
-                                }
-                            }, 500)
+                            hijoPFV.send('CANCELAR');
+                            FIN = false;
+                            console.log('FIN PETICION');
+
                         }
-                    } else {
-                        hijoPFV.send('CANCELAR');
-                        FIN = false;
-                        console.log('FIN PETICION');
-
-                    }
 
 
-                    /* pausar = (cliente: Socket,io:SocketIO.Server)=>{
-                        cliente.on('PAUSAR',()=>{
-                            console.log('¡¡¡RECIBIENDO PAUSA DEL CLIENTE!!!');
-                            hijoPFV.send('PAUSA');
-                        })
-                    } */
+                        /* pausar = (cliente: Socket,io:SocketIO.Server)=>{
+                            cliente.on('PAUSAR',()=>{
+                                console.log('¡¡¡RECIBIENDO PAUSA DEL CLIENTE!!!');
+                                hijoPFV.send('PAUSA');
+                            })
+                        } */
 
 
-                })
+                    })
+                }
             }
 
         } catch (error) {
@@ -458,7 +460,47 @@ export default class EnsayoController {
 
     cancelar = async (req: Request, res: Response) => {
         try {
-            FIN=true;
+            FIN = true;
+        } catch (error) {
+            console.log(error);
+            return res.json({
+                error: 'The server has an error'
+            });
+        }
+    }
+
+    conectar = async (req: Request, res: Response) => {
+        try {
+            const childConn = fork('../server/dist/serialport/conectar.js', ['normal']);
+            childConn.on('message', (MP: number) => {
+                server.setearConexion(true);
+                console.log(server.consultarConectado());
+                if(server.consultarConectado()){
+                    return res.json({
+                        data: 'Connection established'
+                    });
+                }
+            })
+        } catch (error) {
+            console.log(error);
+            return res.json({
+                error: 'The server has an error'
+            });
+        }
+    }
+
+    desconectar = async (req: Request, res: Response) => {
+        try {
+            const childConn = fork('../server/dist/serialport/desconectar.js', ['normal']);
+            childConn.on('message', (MP: number) => {
+                server.setearConexion(false);
+                console.log(server.consultarConectado());
+                if(!server.consultarConectado()){
+                    return res.json({
+                        data: 'Connection finished'
+                    });
+                }
+            })
         } catch (error) {
             console.log(error);
             return res.json({

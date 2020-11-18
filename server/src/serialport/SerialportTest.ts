@@ -2,10 +2,10 @@ import SerialPort from "serialport";
 import { port } from '../interfaces/interfaces';
 
 const portControlador = new SerialPort(port.puertoControlador, {
-    //autoOpen:false,
+    autoOpen:false,
     baudRate: 9600
 });
-portControlador.write('<CONN>\n');
+portControlador.open();
 console.log('Testeando');
 portControlador.on('data',(data)=>{
     console.log(data.toString());

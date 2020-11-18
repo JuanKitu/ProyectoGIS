@@ -16,6 +16,7 @@ export default class Server {
     private arreglos:arregloDM;
     private ensayoActual:number;
     private pausado:boolean;
+    private conectado:boolean;
     private constructor(){
         this.app = express();
         //settings
@@ -32,6 +33,7 @@ export default class Server {
         };
         this.ensayoActual = -1;
         this.pausado = false;
+        this.conectado=false;
     }
 
     public static get instance(){
@@ -54,6 +56,14 @@ export default class Server {
 
     public consultarPausa(){
        return this.pausado;
+    }
+
+    public consultarConectado(){
+        return this.conectado;
+    }
+ 
+    public setearConexion(estado:boolean){
+        this.conectado=estado;
     }
 
     private escucharSockets() {
