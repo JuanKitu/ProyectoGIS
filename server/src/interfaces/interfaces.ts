@@ -1,8 +1,8 @@
 import { Optional } from 'sequelize';
 import Queue from '../classes/queue';
 export const port = {
-    "puertoControlador": "COM3",
-    "puertoCelda": "COM5"
+    "puertoControlador": "ttyACM0",
+    "puertoCelda": "ttyS0"
 }
 
 export const tiempoRespuesta = {
