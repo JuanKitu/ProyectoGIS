@@ -11,7 +11,8 @@ portControlador.on('readable', () => {
     const control = portControlador.read();
     if (control) {
         console.log(parseFloat(control.toString()));
-        portControlador.close();
-        (<any>process).send(parseFloat(control.toString()));
+        setTimeout(()=>{portControlador.close();(<any>process).send(parseFloat(control.toString()));},1000)
+        
+        
     };
 });
