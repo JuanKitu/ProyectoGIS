@@ -60,6 +60,9 @@ async function comenzarExperimeto(puerto: SerialPort, ensayo: Ensayo) {
                             console.log('PAUSADO EN SERIALPORT');
                         }
                         if (MV === "CANCELADO") {
+                            if(portControlador.isOpen){
+                                portControlador.close();
+                            }
                             console.log('RECIBIDO CANCELAR DE CHILD');
                             childFuerza.kill();
                             childVuelta.kill();
