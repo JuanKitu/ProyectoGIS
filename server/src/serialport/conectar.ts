@@ -7,8 +7,7 @@ let portControlador = new SerialPort(port.puertoControlador, {
 
 console.log('antes de control');
 portControlador.open();
-portControlador.write('<CONN>\n');
-portControlador.on('readable', () => {
+setTimeout(()=>{portControlador.on('readable', () => {
     const control = portControlador.read();
     console.log('despues de control');
     if (control) {
@@ -16,4 +15,5 @@ portControlador.on('readable', () => {
         portControlador.close();
         (<any>process).send(parseFloat(control.toString()));
     };
-});
+});},500)
+console.log(portControlador.write('<CONN>\n'));
