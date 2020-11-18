@@ -258,7 +258,13 @@ export default class EnsayoController {
                                         console.log('CANCELANDO DURANTE PAUSA');
                                         FIN=false;
                                         hijoPFV.send('CANCELAR');
-                                        setTimeout(()=>{server.pausar(false); hijoPFV.kill(); clearInterval(cicloPausa);},500)
+                                        setTimeout(()=>{
+                                            server.pausar(false); 
+                                            hijoPFV.kill(); 
+                                            clearInterval(cicloPausa);
+                                            console.log("Fin Peticion en PAUSA")
+                                            server.setearEnsayo(-1);
+                                        },500)
                                     }
                                 }, 500)
                             }
