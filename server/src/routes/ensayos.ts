@@ -7,6 +7,7 @@ import Server from '../classes/server';
 import { Observable, Subscriber } from 'rxjs';
 import { fork } from 'child_process';
 
+router.get('/consulta', controller.consulta);
 router.get('/desconectar', controller.desconectar);
 router.get('/conectar', controller.conectar);
 router.get('/test', controller.realizarTest);
