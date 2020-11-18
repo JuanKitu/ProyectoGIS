@@ -187,6 +187,7 @@ process.on('message', async (m) => {
         if (m === "CANCELAR") {
             portControlador.write('<STOP>\n');
             console.log('CANCELADO EN VUELTAS');
+            portControlador.close();
             (<any>process).send('CANCELADO');
         }
         if (m === "TEST") {
@@ -194,7 +195,7 @@ process.on('message', async (m) => {
             (<any>process).send('TEST');
         }
         if (m === "REANUDAR") {
-            setTimeout(() => { portControlador.write('<STAR>\n') }, 55);
+            portControlador.write('<STAR>\n');
             estadoScript = 1;
             console.log('REANUDANDO EN VUELTA');
             //(<any>process).send('REANUDAR');
