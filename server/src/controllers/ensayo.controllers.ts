@@ -12,6 +12,7 @@ import { any } from 'bluebird';
 import { arregloDM, EnsayoInterface, ParametroInterface } from '../interfaces/interfaces';
 import moment from 'moment';
 import { Socket } from 'socket.io';
+
 const server = Server.instance;
 let FIN: boolean = false;
 //const Parametros = require('../models/Parametros');
@@ -510,9 +511,15 @@ export default class EnsayoController {
 
     consulta = async (req: Request, res: Response) => {
         try {
+            
             console.log('CONECTADO: ',server.consultarConectado());
             console.log('PAUSA: ',server.consultarPausa());
             console.log('ENSAYO: ',server.enUso());
+            return res.json({
+                CONECTADO:server.consultarConectado(),
+                PAUSA: server.consultarPausa(),
+                ENSAYOOO:server.enUso()
+            })
         } catch (error) {
             console.log(error);
             return res.json({
