@@ -46,6 +46,6 @@ export interface DatosEnsayo{
 export interface ControlIdEnsayo{
     idEnsayo:number
 }
-const domIP= "192.168.1.103";
+const domIP= "192.168.1.105";
 export const urlSocket= `http://${domIP}:3000`;
 export const urlServices= `${urlSocket}/api/`;
