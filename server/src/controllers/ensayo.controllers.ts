@@ -508,4 +508,15 @@ export default class EnsayoController {
             });
         }
     }
+
+    consulta = async (req: Request, res: Response) => {
+        try {
+            console.log(server.consultarConectado());
+        } catch (error) {
+            console.log(error);
+            return res.json({
+                error: 'The server has an error'
+            });
+        }
+    }
 }

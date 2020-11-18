@@ -5,15 +5,13 @@ let portControlador = new SerialPort(port.puertoControlador, {
     baudRate: 9600,
 });
 
-console.log('antes de control');
-portControlador.open();
-setTimeout(()=>{portControlador.on('readable', () => {
+portControlador.open((error)=>{console.log(error)});
+portControlador.write('<CONN>\n');
+portControlador.on('readable', () => {
     const control = portControlador.read();
-    console.log('despues de control');
     if (control) {
         console.log(parseFloat(control.toString()));
         portControlador.close();
         (<any>process).send(parseFloat(control.toString()));
     };
-});},500)
-console.log(portControlador.write('<CONN>\n'));
+});
