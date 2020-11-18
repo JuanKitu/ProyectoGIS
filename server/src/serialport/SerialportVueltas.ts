@@ -16,6 +16,7 @@ let fin = false;
 let estadoScript: number = 1;
 
 const portControlador = new SerialPort(port.puertoControlador, {
+    autoOpen:false,
     baudRate: 9600
 });
 
@@ -45,6 +46,7 @@ let ensayo: EnsayoInterface;
 
 process.on('message', async (m) => {
     if (typeof (m) == "object") {
+        portControlador.open();
         ensayo = await m;
 
         const obserbableVueltas = new Observable(subscriberV => {
