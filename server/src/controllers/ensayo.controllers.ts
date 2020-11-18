@@ -256,10 +256,9 @@ export default class EnsayoController {
                                     }
                                     if (FIN === true) {
                                         console.log('CANCELANDO DURANTE PAUSA');
-                                        server.pausar(false);
                                         FIN=false;
                                         hijoPFV.send('CANCELAR');
-                                        setTimeout(()=>{hijoPFV.kill(); clearInterval(cicloPausa);},1000)
+                                        setTimeout(()=>{server.pausar(false); hijoPFV.kill(); clearInterval(cicloPausa);},500)
                                     }
                                 }, 500)
                             }
