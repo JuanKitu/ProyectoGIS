@@ -77,7 +77,11 @@ process.on('message', async (m) => {
                     clearInterval(intervalo);
                     subscriberV.complete();
                 } else {
-                    subscriberV.next(parseFloat(data.toString()));
+                    const arreglo: any = data.toString().match(/\n.*\n/);
+                    if (arreglo == null) {
+                        subscriberV.next(parseFloat(data.toString()));
+                    }
+                    
                 }
             });
 
@@ -191,7 +195,7 @@ process.on('message', async (m) => {
             setTimeout(() => { portControlador.write('<STAR>\n') }, 55);
             estadoScript = 1;
             console.log('REANUDANDO EN VUELTA');
-            (<any>process).send('REANUDAR');
+            //(<any>process).send('REANUDAR');
         }
     }
 
