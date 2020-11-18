@@ -69,4 +69,10 @@ export class EnsayoService {
   cancelarEnsayo(){
     return this.httpClient.get(`${this.ensayoURL}/cancelar`);
   };
+  conectarPuerto(){
+    return this.httpClient.get(`${this.ensayoURL}/conectar`);
+  };
+  desconectarPuerto(){
+    return this.httpClient.get(`${this.ensayoURL}/desconectar`);
+  };
 }

@@ -44,6 +44,7 @@ reanudarEnsayo(){
             //logica del aceptar
             console.log('Parando Ensayo');
             this.ensayoService.cancelarEnsayo().subscribe();
+            //this.ensayoService.desconectarPuerto().subscribe();
           }
         },
         {
