@@ -265,6 +265,7 @@ export default class EnsayoController {
                         } else {
                             hijoPFV.send('CANCELAR');
                             FIN = false;
+                            server.setearEnsayo(-1);
                             console.log('FIN PETICION');
 
                         }
