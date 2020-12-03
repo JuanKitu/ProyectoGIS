@@ -117,7 +117,8 @@ process.on('message', async (m) => {
             },
             () => {
                 fin = true;
-                console.log("finish vuelta");
+                console.log("FIN EXPERIMENTO");
+                (<any>process).send('FIN');
 
             }
         );
@@ -171,7 +172,7 @@ process.on('message', async (m) => {
             async () => {
                 await Ambiente.bulkCreate(arregloAmbientes);
                 console.log("finish ambiente");
-                (<any>process).send('FIN');
+                //(<any>process).send('FIN');
 
             }
         )
@@ -186,6 +187,7 @@ process.on('message', async (m) => {
         }
         if (m === "CANCELAR") {
             portControlador.write('<STOP>\n');
+            fin=true;
             console.log('CANCELADO EN VUELTAS');
             portControlador.close();
             (<any>process).send('CANCELADO');

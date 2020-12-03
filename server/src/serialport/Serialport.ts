@@ -53,7 +53,8 @@ async function comenzarExperimeto(puerto: SerialPort, ensayo: Ensayo) {
                     }
                     if (typeof (MV) == "string") {
                         if (MV === "FIN") {
-                            portControlador.close();
+                            console.log('Recibiendo fin de child vuelta')
+                            estadoScript=0;
                             childVuelta.kill();
                         }
                         if (MV === "PAUSADO") {
@@ -94,7 +95,7 @@ async function comenzarExperimeto(puerto: SerialPort, ensayo: Ensayo) {
                                 childParametros.send("PAUSA");
                             }
                             if (me === "CANCELAR") {
-                                childVuelta.send("CANCELAR");
+                                if(estadoScript===1) {childVuelta.send("CANCELAR");}
                                 childParametros.kill();
                             }
                             if (me === "TEST") {

@@ -234,16 +234,7 @@ export default class EnsayoController {
                                         return res.json({
                                             data: elEnsayo
                                         });
-                                    } /* if (M === 'CANCELADO') {
-                                        hijoPFV.kill();
-                                        console.log('FIN PETICION 2');
-                                        server.io.emit('fin', 'FIN');
-                                        return res.json({
-                                            data: 'Ensayo cancelado'
-                                        });
-                                    } */
-
-
+                                    }
                                 }
                             } else {
                                 console.log('¡¡¡RECIBIENDO PAUSA DEL CLIENTE!!!');
