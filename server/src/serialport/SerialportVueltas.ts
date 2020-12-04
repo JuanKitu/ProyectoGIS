@@ -16,7 +16,7 @@ let fin = false;
 let estadoScript: number = 1;
 
 const portControlador = new SerialPort(port.puertoControlador, {
-    autoOpen:false,
+    //autoOpen:false,
     baudRate: 9600
 });
 
@@ -46,7 +46,7 @@ let ensayo: EnsayoInterface;
 
 process.on('message', async (m) => {
     if (typeof (m) == "object") {
-        portControlador.open();
+        //portControlador.open();
         ensayo = await m;
 
         const obserbableVueltas = new Observable(subscriberV => {
@@ -79,8 +79,8 @@ process.on('message', async (m) => {
                     clearInterval(intervalo);
                     subscriberV.complete();
                 } else {
-                    const arreglo: any = data.toString().match(/\n.*\n/);
-                    if (arreglo == null) {
+                    const arreglo: any[] = data.toString().match(/\n.*\n/);
+                    if (arreglo.length === 0) {
                         subscriberV.next(parseFloat(data.toString()));
                     }
                     
