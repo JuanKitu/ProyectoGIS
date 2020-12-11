@@ -1,6 +1,6 @@
 import SerialPort from 'serialport';
 import Parametros from '../models/Parametros';
-import { ParametroInterface, colaDatos, port } from '../interfaces/interfaces';
+import { ParametroInterface, colaDatos, port, tiempoRespuesta } from '../interfaces/interfaces';
 import { any } from 'sequelize/types/lib/operators';
 import { reject, resolve } from 'bluebird';
 import { Primitive } from 'sequelize/types/lib/utils';
@@ -30,12 +30,16 @@ process.on('message', async (m) => {
 })
 
 const obserbableFuerza = new Observable(subscriber => {
-
-    portCelda.on('data', (data) => {
-        console.log('fuerza recibida: ',data.toString());
-        subscriber.next(parseFloat(data.toString().substring(8)));
-
-    });
+    setInterval(()=>{
+        portCelda.on('readable', () => {
+            const data = portCelda.read();
+            if(data){
+                console.log('fuerza recibida: ',data.toString());
+                subscriber.next(parseFloat(data.toString().substring(8)));
+            }
+        });
+    },tiempoRespuesta.tiempoMS+25)
+    
 })
 
 let i: number = 0

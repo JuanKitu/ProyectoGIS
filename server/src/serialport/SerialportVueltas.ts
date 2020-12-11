@@ -58,7 +58,7 @@ process.on('message', async (m) => {
             };
             const intervalo = setInterval(ciclo, tiempoRespuesta.tiempoMS);
             portControlador.on('readable', () => {
-                //setTimeout(() => {
+                setTimeout(() => {
                     const data = portControlador.read();
                     if (data) {
                         console.log('Data de serialport vuelta1: ', data.toString());
@@ -91,7 +91,7 @@ process.on('message', async (m) => {
                         }
                     }
 
-                //}, tiempoRespuesta.tiempoMS + 200)
+                }, tiempoRespuesta.tiempoMS + 425)
 
             });
 
@@ -146,7 +146,7 @@ process.on('message', async (m) => {
             const intervalo2 = setInterval(ciclo2, tiempoRespuesta.tiempoMS + 4713);
 
             portControlador.on('readable', () => {
-                //setTimeout(() => {
+                setTimeout(() => {
                     const data = portControlador.read();
                     if (data) {
                         console.log('Data de serialport vuelta2: ', data.toString());
@@ -158,7 +158,7 @@ process.on('message', async (m) => {
                         }
                     }
 
-                //}, tiempoRespuesta.tiempoMS + 200)
+                }, tiempoRespuesta.tiempoMS + 425)
 
             })
 
