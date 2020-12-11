@@ -83,7 +83,8 @@ process.on('message', async (m) => {
                             clearInterval(intervalo);
                             subscriberV.complete();
                         } else {
-                            const arreglo: any = data.toString().match(/\n.*\n/);
+                            //const arreglo: any = data.toString().match(/\n.*\n/);
+                            const arreglo: any = data.toString().match(/.*/);
                             if (arreglo === null) {
                                 subscriberV.next(parseFloat(data.toString()));
                             }
@@ -150,7 +151,8 @@ process.on('message', async (m) => {
                     const data = portControlador.read();
                     if (data) {
                         console.log('Data de serialport vuelta2: ', data.toString());
-                        const arreglo: any = data.toString().match(/\n.*\n/);
+                        //const arreglo: any = data.toString().match(/\n.*\n/);
+                        const arreglo: any = data.toString().match(/.*/);
                         if (arreglo != null) {
                             let cadena: string = data.toString();
                             const nuevoAmbiente = crearAmbiente(parseFloat(cadena.substring(0, cadena.indexOf('\n'))), parseFloat(cadena.substring(cadena.indexOf('\n'))), ensayo);
