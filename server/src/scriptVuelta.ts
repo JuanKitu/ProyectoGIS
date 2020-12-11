@@ -1,5 +1,5 @@
 import SerialPort from 'serialport';
-import { port } from './src/interfaces/interfaces';
+import { port } from './interfaces/interfaces';
 let portControlador = new SerialPort(port.puertoControlador, {
     baudRate: 9600,
 });
