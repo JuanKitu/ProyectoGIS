@@ -32,6 +32,7 @@ process.on('message', async (m) => {
 const obserbableFuerza = new Observable(subscriber => {
 
     portCelda.on('data', (data) => {
+        console.log('fuerza recibida: ',data.toString());
         subscriber.next(parseFloat(data.toString().substring(8)));
 
     });
@@ -89,7 +90,7 @@ const youtube: Subscription = obserbableFuerza.subscribe(data => {
                 console.log("An error occured while writing JSON Object to File.");
                 return console.log(err);
             }
-            //console.log("JSON file has been saved.");
+            console.log("JSON file has been saved.");
         });
     }
 })
