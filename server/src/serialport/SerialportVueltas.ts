@@ -57,36 +57,40 @@ process.on('message', async (m) => {
                 }
             };
             const intervalo = setInterval(ciclo, tiempoRespuesta.tiempoMS);
-            portControlador.on('data', (data) => {
+            portControlador.on('readable', () => {
                 setTimeout(() => {
-                    console.log('Data de serialport vuelta1: ', data.toString());
-                    if (parseFloat(data.toString()) === -1) {
-                        i++
-                        let unDato: colaDatos = {
-                            id: i,
-                            dato: -1
-                        };
-                        colaDato.enqueue(unDato);
-                        let datos = colaDato.print();
-                        let jsonObj = {
-                            data: datos
-                        }
-                        let jsonContent = JSON.stringify(jsonObj);
-                        fs.writeFile('vueltas.json', jsonContent, 'utf8', function (err: any) {
-                            if (err) {
-                                console.log("An error occured while writing JSON Object to File.");
-                                return console.log(err);
+                    const data = portControlador.read();
+                    if (data) {
+                        console.log('Data de serialport vuelta1: ', data.toString());
+                        if (parseFloat(data.toString()) === -1) {
+                            i++
+                            let unDato: colaDatos = {
+                                id: i,
+                                dato: -1
+                            };
+                            colaDato.enqueue(unDato);
+                            let datos = colaDato.print();
+                            let jsonObj = {
+                                data: datos
                             }
-                        });
-                        clearInterval(intervalo);
-                        subscriberV.complete();
-                    } else {
-                        const arreglo: any[] = data.toString().match(/\n.*\n/);
-                        if (arreglo === null) {
-                            subscriberV.next(parseFloat(data.toString()));
-                        }
+                            let jsonContent = JSON.stringify(jsonObj);
+                            fs.writeFile('vueltas.json', jsonContent, 'utf8', function (err: any) {
+                                if (err) {
+                                    console.log("An error occured while writing JSON Object to File.");
+                                    return console.log(err);
+                                }
+                            });
+                            clearInterval(intervalo);
+                            subscriberV.complete();
+                        } else {
+                            const arreglo: any = data.toString().match(/\n.*\n/);
+                            if (arreglo === null) {
+                                subscriberV.next(parseFloat(data.toString()));
+                            }
 
+                        }
                     }
+
                 }, tiempoRespuesta.tiempoMS + 200)
 
             });
@@ -141,15 +145,19 @@ process.on('message', async (m) => {
             };
             const intervalo2 = setInterval(ciclo2, tiempoRespuesta.tiempoMS + 4713);
 
-            portControlador.on('data', (data) => {
+            portControlador.on('readable', () => {
                 setTimeout(() => {
-                    console.log('Data de serialport vuelta2: ', data.toString());
-                    const arreglo: any = data.toString().match(/\n.*\n/);
-                    if (arreglo != null) {
-                        let cadena: string = data.toString();
-                        const nuevoAmbiente = crearAmbiente(parseFloat(cadena.substring(0, cadena.indexOf('\n'))), parseFloat(cadena.substring(cadena.indexOf('\n'))), ensayo);
-                        subscriberA.next(nuevoAmbiente);
+                    const data = portControlador.read();
+                    if (data) {
+                        console.log('Data de serialport vuelta2: ', data.toString());
+                        const arreglo: any = data.toString().match(/\n.*\n/);
+                        if (arreglo != null) {
+                            let cadena: string = data.toString();
+                            const nuevoAmbiente = crearAmbiente(parseFloat(cadena.substring(0, cadena.indexOf('\n'))), parseFloat(cadena.substring(cadena.indexOf('\n'))), ensayo);
+                            subscriberA.next(nuevoAmbiente);
+                        }
                     }
+
                 }, tiempoRespuesta.tiempoMS + 200)
 
             })
