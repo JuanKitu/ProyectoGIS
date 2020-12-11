@@ -11,7 +11,7 @@ setInterval(() => {
             if (control) {
                 console.log(control.toString());
             };
-        }, 400)
+        }, 500)
     
     });
 }, 400)
