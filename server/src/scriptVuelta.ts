@@ -3,14 +3,15 @@ import { port } from './interfaces/interfaces';
 let portControlador = new SerialPort(port.puertoControlador, {
     baudRate: 9600,
 });
-
-portControlador.write('<SEND>\n');
-
-portControlador.on('readable', () => {
-    setTimeout(()=>{
-        const control = portControlador.read();
-        if (control) {
-            console.log(control.toString());
-        };
-    },1000)
-});
+setInterval(() => {
+    portControlador.write('<SEND>\n');
+    portControlador.on('readable', () => {
+        setTimeout(() => {
+            const control = portControlador.read();
+            if (control) {
+                console.log(control.toString());
+            };
+        }, 400)
+    
+    });
+}, 400)
