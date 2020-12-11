@@ -81,7 +81,7 @@ process.on('message', async (m) => {
                     subscriberV.complete();
                 } else {
                     const arreglo: any[] = data.toString().match(/\n.*\n/);
-                    if (arreglo.length === 0) {
+                    if (arreglo === null) {
                         subscriberV.next(parseFloat(data.toString()));
                     }
                     
