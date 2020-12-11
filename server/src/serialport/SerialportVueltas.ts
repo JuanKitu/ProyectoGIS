@@ -58,6 +58,7 @@ process.on('message', async (m) => {
             };
             const intervalo = setInterval(ciclo, tiempoRespuesta.tiempoMS);
             portControlador.on('data', (data) => {
+                console.log('Data de serialport vuelta1: ',data.toString());
                 if (parseFloat(data.toString()) === -1) {
                     i++
                     let unDato: colaDatos = {
@@ -138,6 +139,7 @@ process.on('message', async (m) => {
             const intervalo2 = setInterval(ciclo2, tiempoRespuesta.tiempoMS + 4713);
 
             portControlador.on('data', (data) => {
+                console.log('Data de serialport vuelta2: ',data.toString());
                 const arreglo: any = data.toString().match(/\n.*\n/);
                 if (arreglo != null) {
                     let cadena: string = data.toString();
