@@ -57,41 +57,34 @@ process.on('message', async (m) => {
                 }
             };
             const intervalo = setInterval(ciclo, tiempoRespuesta.tiempoMS);
-            portControlador.on('readable', () => {
-                setTimeout(() => {
-                    const control = portControlador.read();
-                    console.log('Lo que sale de serialport vueltas1: ',control)
-                    if (control) {
-                        if (parseFloat(control.toString()) === -1) {
-                            i++
-                            let unDato: colaDatos = {
-                                id: i,
-                                dato: -1
-                            };
-                            colaDato.enqueue(unDato);
-                            let datos = colaDato.print();
-                            let jsonObj = {
-                                data: datos
-                            }
-                            let jsonContent = JSON.stringify(jsonObj);
-                            fs.writeFile('vueltas.json', jsonContent, 'utf8', function (err: any) {
-                                if (err) {
-                                    console.log("An error occured while writing JSON Object to File.");
-                                    return console.log(err);
-                                }
-                            });
-                            clearInterval(intervalo);
-                            subscriberV.complete();
-                        } else {
-                            const arreglo: any = control.toString().match(/\n.*\n/);
-                            if (arreglo === null) {
-                                subscriberV.next(parseFloat(control.toString()));
-                            }
-
-                        }
+            portControlador.on('data', (data) => {
+                if (parseFloat(data.toString()) === -1) {
+                    i++
+                    let unDato: colaDatos = {
+                        id: i,
+                        dato: -1
                     };
-                }, tiempoRespuesta.tiempoMS + 100)
-
+                    colaDato.enqueue(unDato);
+                    let datos = colaDato.print();
+                    let jsonObj = {
+                        data: datos
+                    }
+                    let jsonContent = JSON.stringify(jsonObj);
+                    fs.writeFile('vueltas.json', jsonContent, 'utf8', function (err: any) {
+                        if (err) {
+                            console.log("An error occured while writing JSON Object to File.");
+                            return console.log(err);
+                        }
+                    });
+                    clearInterval(intervalo);
+                    subscriberV.complete();
+                } else {
+                    const arreglo: any[] = data.toString().match(/\n.*\n/);
+                    if (arreglo.length === 0) {
+                        subscriberV.next(parseFloat(data.toString()));
+                    }
+                    
+                }
             });
 
         })
@@ -144,19 +137,13 @@ process.on('message', async (m) => {
             };
             const intervalo2 = setInterval(ciclo2, tiempoRespuesta.tiempoMS + 4713);
 
-            portControlador.on('readable', () => {
-                setTimeout(() => {
-                    const control = portControlador.read();
-                    console.log('Lo que sale de serialport vueltas2: ',control)
-                    if (control) {
-                        const arreglo: any = control.toString().match(/\n.*\n/);
-                        if (arreglo != null) {
-                            let cadena: string = control.toString();
-                            const nuevoAmbiente = crearAmbiente(parseFloat(cadena.substring(0, cadena.indexOf('\n'))), parseFloat(cadena.substring(cadena.indexOf('\n'))), ensayo);
-                            subscriberA.next(nuevoAmbiente);
-                        }
-                    };
-                }, tiempoRespuesta.tiempoMS+100)
+            portControlador.on('data', (data) => {
+                const arreglo: any = data.toString().match(/\n.*\n/);
+                if (arreglo != null) {
+                    let cadena: string = data.toString();
+                    const nuevoAmbiente = crearAmbiente(parseFloat(cadena.substring(0, cadena.indexOf('\n'))), parseFloat(cadena.substring(cadena.indexOf('\n'))), ensayo);
+                    subscriberA.next(nuevoAmbiente);
+                }
             })
 
 
@@ -200,7 +187,7 @@ process.on('message', async (m) => {
         }
         if (m === "CANCELAR") {
             portControlador.write('<STOP>\n');
-            fin = true;
+            fin=true;
             console.log('CANCELADO EN VUELTAS');
             portControlador.close();
             (<any>process).send('CANCELADO');
