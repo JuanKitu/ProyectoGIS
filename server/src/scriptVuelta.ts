@@ -5,9 +5,12 @@ let portControlador = new SerialPort(port.puertoControlador, {
 });
 
 portControlador.write('<SEND>\n');
+
 portControlador.on('readable', () => {
-    const control = portControlador.read();
-    if (control) {
-        console.log(control.toString());
-    };
+    setTimeout(()=>{
+        const control = portControlador.read();
+        if (control) {
+            console.log(control.toString());
+        };
+    },1000)
 });
