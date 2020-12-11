@@ -60,6 +60,7 @@ process.on('message', async (m) => {
             portControlador.on('readable', () => {
                 setTimeout(() => {
                     const control = portControlador.read();
+                    console.log('Lo que sale de serialport vueltas1: ',control)
                     if (control) {
                         if (parseFloat(control.toString()) === -1) {
                             i++
@@ -146,6 +147,7 @@ process.on('message', async (m) => {
             portControlador.on('readable', () => {
                 setTimeout(() => {
                     const control = portControlador.read();
+                    console.log('Lo que sale de serialport vueltas2: ',control)
                     if (control) {
                         const arreglo: any = control.toString().match(/\n.*\n/);
                         if (arreglo != null) {
