@@ -48,7 +48,7 @@ const obserbableFuerza = new Observable(subscriber => {
 let i: number = 0
 const youtube: Subscription = obserbableFuerza.subscribe(data => {
 
-    if (data == -1) {
+    /* if (data == -1) {
         i++
         let unDato: colaDatos = {
             id: i,
@@ -77,7 +77,9 @@ const youtube: Subscription = obserbableFuerza.subscribe(data => {
 
         youtube.unsubscribe();
 
-    } if (estadoScript === 1) {
+    } */ 
+    console.log(estadoScript);
+    if (estadoScript === 1) {
         i++
         let unDato: colaDatos = {
             id: i,
