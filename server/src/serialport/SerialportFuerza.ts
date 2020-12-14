@@ -32,21 +32,24 @@ process.on('message', async (m) => {
 })
 
 const obserbableFuerza = new Observable(subscriber => {
-    setInterval(()=>{
+    console.log("comenzando obsebavle")
+    setInterval(() => {
         portCelda.on('readable', () => {
             const data = portCelda.read();
-            console.log("DATA FUERZA:",data);
-            if(data){
-                console.log('fuerza recibida: ',data.toString());
+            console.log("DATA FUERZA:", data);
+            if (data) {
+                console.log('fuerza recibida: ', data.toString());
                 subscriber.next(parseFloat(data.toString().substring(8)));
             }
         });
-    },tiempoRespuesta.tiempoMS+25)
-    
+    }, tiempoRespuesta.tiempoMS + 25)
+
 })
 
 let i: number = 0
-/* const youtube: Subscription = */ obserbableFuerza.subscribe(data => {
+console.log("linea antes de obserbavle")
+/* const youtube: Subscription = */
+obserbableFuerza.subscribe(data => {
 
     /* if (data == -1) {
         i++
@@ -77,7 +80,8 @@ let i: number = 0
 
         youtube.unsubscribe();
 
-    } */ 
+    } */
+    console.log("asd")
     console.log(estadoScript);
     if (estadoScript === 1) {
         i++
