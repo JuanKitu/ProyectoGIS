@@ -50,7 +50,7 @@ process.on('message', async (m) => {
         //portControlador.open();
         ensayo = await m;
         process.on('message', async (v) => {
-            if (typeof (m) == "number") {
+            if (typeof (v) == "number") {
                 vueltas = await v;
                 const vueltasEnsayo = vueltas;
                 const obserbableVueltas = new Observable(subscriberV => {
