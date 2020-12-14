@@ -72,8 +72,8 @@ process.on('message', async (m) => {
                     let unaFuerza = colaFuerzas.peek();
                     let unaVuelta = colaVueltas.peek();
                     //condicion de parada
-                    console.log(colaVueltas);
-                    console.log(unaVuelta);
+                    console.log("COLA VUELTAS: ",colaVueltas);
+                    console.log("UNA VUELTA: ",unaVuelta);
                     if (unaVuelta.dato == -1) {
                         clearInterval(intervalo);
                         subscriber.complete();
