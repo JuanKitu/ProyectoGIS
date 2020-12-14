@@ -63,10 +63,10 @@ process.on('message', async (m) => {
             colaFuerzas.copy(leerJson('fuerzas.json'));
             const ciclo = () => {
                 if (estadoScript === 1) {
-                    if (colaFuerzas.isEmpty()) {
+                    if (colaFuerzas.size()==1) {
                         colaFuerzas.copy(leerJson('fuerzas.json').filter(fuerza => fuerza.id >= contador));
                     };
-                    if (colaVueltas.isEmpty()) {
+                    if (colaFuerzas.size()==1) {
                         colaVueltas.copy(leerJson('vueltas.json').filter(vuelta => vuelta.id >= contador));
                     }
                     let unaFuerza = colaFuerzas.peek();
