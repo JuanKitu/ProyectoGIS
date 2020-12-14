@@ -35,6 +35,7 @@ const obserbableFuerza = new Observable(subscriber => {
     setInterval(()=>{
         portCelda.on('readable', () => {
             const data = portCelda.read();
+            console.log("DATA FUERZA:",data);
             if(data){
                 console.log('fuerza recibida: ',data.toString());
                 subscriber.next(parseFloat(data.toString().substring(8)));
