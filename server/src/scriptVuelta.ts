@@ -10,6 +10,7 @@ setInterval(() => {
             const control = portControlador.read();
             if (control) {
                 const arreglo: any = control.toString().match(/.*/);
+                console.log(arreglo);
                 if(arreglo!=null)    console.log(control.toString());
             };
         }, 500)
