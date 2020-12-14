@@ -62,6 +62,7 @@ process.on('message', async (m) => {
                     const data = portControlador.read();
                     if (data) {
                         const arreglo: any = data.toString().match(/.*/);
+                        console.log("EL ARREGLO: ",arreglo);
                         if (arreglo === null) {
                             console.log('Data de serialport vuelta1: ', data.toString());
                             if (ensayo.distanciaTotal && ensayo.radioTrayectoria) {

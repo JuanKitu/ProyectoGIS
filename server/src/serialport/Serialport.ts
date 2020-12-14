@@ -48,7 +48,6 @@ async function comenzarExperimeto(puerto: SerialPort, ensayo: Ensayo) {
                 const childFuerza = fork('dist/serialport/SerialportFuerza.js');
                 const childVuelta = fork('dist/serialport/SerialportVueltas.js');
                 childVuelta.send(ensayo);
-                setTimeout(()=>{childVuelta.send(vueltas);},200);
                 childVuelta.on('message', (MV: any) => {
                     if (typeof (MV) == "object") {
                         (<any>process).send(MV);
