@@ -5,6 +5,12 @@ let portCelda = new SerialPort(port.puertoCelda, {
 });
 setInterval(() => {
     portCelda.on('readable', () => {
-        console.log(portCelda.read()?.toString());
+        let data=portCelda.read();
+        if(data){
+            console.log(data.toString());
+        }else{
+            console.log("NULLL")
+        }
+        
     });
 }, 400)
