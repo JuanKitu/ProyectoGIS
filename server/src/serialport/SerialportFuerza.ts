@@ -12,6 +12,8 @@ const fs = require('fs');
 const colaDato = new Queue();
 let estadoScript: number = 1;
 
+
+console.log("INICIANDO HIJO FUERZAS");
 const portCelda = new SerialPort(port.puertoCelda, {
     baudRate: 9600
 });
@@ -80,6 +82,7 @@ const youtube: Subscription = obserbableFuerza.subscribe(data => {
             id: i,
             dato: data
         };
+        console.log("CREANDO FUERZAS.JSON");
         colaDato.enqueue(unDato);
         let datos = colaDato.print();
         let jsonObj = {
