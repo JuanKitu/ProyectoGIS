@@ -46,7 +46,7 @@ const obserbableFuerza = new Observable(subscriber => {
 })
 
 let i: number = 0
-const youtube: Subscription = obserbableFuerza.subscribe(data => {
+/* const youtube: Subscription = */ obserbableFuerza.subscribe(data => {
 
     /* if (data == -1) {
         i++
