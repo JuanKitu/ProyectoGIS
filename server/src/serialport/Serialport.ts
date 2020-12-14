@@ -108,6 +108,9 @@ async function comenzarExperimeto(puerto: SerialPort, ensayo: Ensayo) {
                                 childParametros.send("REANUDAR");
                                 childFuerza.send("REANUDAR");
                             }
+                            if(me === "FINAL"){
+                                childVuelta.send("FINAL");
+                            }
                         }
                     });
                 }, 1000);
