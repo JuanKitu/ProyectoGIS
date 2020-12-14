@@ -49,9 +49,11 @@ process.on('message', async (m) => {
     if (typeof (m) == "object") {
         //portControlador.open();
         ensayo = await m;
+        console.log('RECIBIENDO ENSAYO');
         process.on('message', async (v) => {
             if (typeof (v) == "number") {
                 vueltas = await v;
+                console.log('RECIBIENDO VUELTAS');
                 const vueltasEnsayo = vueltas;
                 const obserbableVueltas = new Observable(subscriberV => {
 
@@ -89,6 +91,7 @@ process.on('message', async (m) => {
                                         clearInterval(intervalo);
                                         subscriberV.complete();
                                     } else {
+                                        console.log('SIGUIENTE');
                                         //const arreglo: any = data.toString().match(/\n.*\n/);
                                         subscriberV.next(parseFloat(data.toString()));
 
