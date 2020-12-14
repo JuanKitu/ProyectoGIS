@@ -63,14 +63,14 @@ process.on('message', async (m) => {
             colaFuerzas.copy(leerJson('fuerzas.json'));
             const ciclo = () => {
                 if (estadoScript === 1) {
-                    if (colaFuerzas.isEmpty()) {
-                        colaFuerzas.copy(leerJson('fuerzas.json').filter(fuerza => fuerza.id >= contador));
-                    };
-                    if (colaVueltas.isEmpty()) {
-                        colaVueltas.copy(leerJson('vueltas.json').filter(vuelta => vuelta.id >= contador));
-                    }
                     let unaFuerza = colaFuerzas.peek();
                     let unaVuelta = colaVueltas.peek();
+                    if (unaFuerza == undefined) {
+                        colaFuerzas.copy(leerJson('fuerzas.json').filter(fuerza => fuerza.id >= contador));
+                    };
+                    if (unaVuelta == undefined) {
+                        colaVueltas.copy(leerJson('vueltas.json').filter(vuelta => vuelta.id >= contador));
+                    }
                     //condicion de parada
                     if (unaVuelta.dato == -1) {
                         clearInterval(intervalo);
