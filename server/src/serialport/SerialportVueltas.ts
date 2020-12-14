@@ -118,6 +118,7 @@ process.on('message', async (m) => {
                         let jsonObj = {
                             data: datos
                         }
+                        console.log('Escribiendo JSON');
                         let jsonContent = JSON.stringify(jsonObj);
                         fs.writeFile('vueltas.json', jsonContent, 'utf8', function (err: any) {
                             if (err) {

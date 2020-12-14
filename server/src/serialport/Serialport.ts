@@ -3,6 +3,7 @@ const { fork } = require('child_process');
 import Ensayo from '../models/Ensayo'
 import { port } from '../interfaces/interfaces';
 import Server from '../classes/server';
+const fs = require('fs');
 
 
 let servidor: Server = Server.instance;
@@ -43,6 +44,8 @@ async function comenzarExperimeto(puerto: SerialPort, ensayo: Ensayo) {
         console.log('Vueltas', vueltas, puerto.isOpen);
             iniciar(unRadio, vueltas, puerto).then(data2 => {
                 estadoScript = 1;
+                fs.unlink('vueltas.json');
+                fs.unlink('fuerzas.json');
                 console.log('Vueltas2');
                 const childFuerza = fork('dist/serialport/SerialportFuerza.js');
                 const childVuelta = fork('dist/serialport/SerialportVueltas.js');
