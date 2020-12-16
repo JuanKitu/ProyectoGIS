@@ -7,7 +7,7 @@ let portCelda = new SerialPort(port.puertoCelda, {
 });
 portCelda.pipe(parser)
 parser.on('data', (data:any) => {
-    //console.log(data);
+    console.log(data);
     if (data) {
         data.toString().length;
         let arreglo:any = data.toString().match(/\./);
