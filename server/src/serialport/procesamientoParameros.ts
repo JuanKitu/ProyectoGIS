@@ -49,8 +49,10 @@ process.on('message', async (m) => {
         };
 
         function leerJson(ruta: string): colaDatos[] {
+            console.log('Lectura de copy1: ', )
             let datos = fs.readFileSync(ruta, 'utf8');
             datos = JSON.parse(datos)["data"];
+            console.log('Lectura de copy1: ', datos);
             return datos;
         };
 
@@ -63,10 +65,13 @@ process.on('message', async (m) => {
             colaFuerzas.copy(leerJson('fuerzas.json'));
             const ciclo = () => {
                 if (estadoScript === 1) {
+                    console.log('TAMAÑO COLA FUERZA: ',colaFuerzas.size());
+                    console.log('TAMAÑO COLA VUELTA: ',colaVueltas.size());
                     if (colaFuerzas.size()==1) {
                         colaFuerzas.copy(leerJson('fuerzas.json').filter(fuerza => fuerza.id >= contador));
                     };
                     if (colaFuerzas.size()==1) {
+                        console.log(leerJson('vueltas.json').filter(vuelta => vuelta.id >= contador));
                         colaVueltas.copy(leerJson('vueltas.json').filter(vuelta => vuelta.id >= contador));
                     }
                     let unaFuerza = colaFuerzas.peek();
