@@ -81,8 +81,6 @@ obserbableFuerza.subscribe(data => {
         youtube.unsubscribe();
 
     } */
-    console.log("asd")
-    console.log(estadoScript);
     if (estadoScript === 1) {
         i++
         let unDato: colaDatos = {
