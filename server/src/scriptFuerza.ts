@@ -10,11 +10,11 @@ parser.on('data', (data:any) => {
     console.log(data);
     if (data) {
         data.toString().length;
-        let arreglo:any = data.toString().match(/\./);
+        let arreglo:any = data.match(/\./);
         if(arreglo!=null){
             data.toString().length;
-            console.log(data.toString().substring(3,8));
-            console.log(parseFloat(data.toString().substring(3,8)));
+            console.log(data.substring(3,9));
+            console.log(parseFloat(data.substring(3,9)));
         }
         
     } else {
