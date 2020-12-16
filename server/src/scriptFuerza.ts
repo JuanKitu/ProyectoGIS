@@ -1,11 +1,13 @@
 import SerialPort from 'serialport';
 import { port } from './interfaces/interfaces';
+const Readline = require('@serialport/parser-readline');
+const parser = new Readline()
 let portCelda = new SerialPort(port.puertoCelda, {
     baudRate: 9600,
 });
-portCelda.on('readable', () => {
+portCelda.pipe(parser)
+parser.on('data', (data:any) => {
     //console.log(data);
-    const data = portCelda.read();
     if (data) {
         data.toString().length;
         let arreglo:any = data.toString().match(/\./);
