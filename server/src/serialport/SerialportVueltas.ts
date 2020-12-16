@@ -1,16 +1,12 @@
 import SerialPort from 'serialport';
 import { ParametroInterface, colaDatos, EnsayoInterface, AmbienteInterface, objetoDatos, port, tiempoRespuesta } from '../interfaces/interfaces';
-import { any } from 'sequelize/types/lib/operators';
-import { reject, resolve } from 'bluebird';
-import { Primitive } from 'sequelize/types/lib/utils';
 import Queue from '../classes/queue';
 import { Observable, Subscription, async } from 'rxjs';
-import clc from 'cli-color';
-import { time } from 'console';
 import Ambiente from '../models/Ambiente';
 const fs = require('fs');
 import moment from 'moment'
-import { type } from 'os';
+const Readline = require('@serialport/parser-readline');
+const parser = new Readline()
 const colaDato = new Queue();
 let fin = false;
 let estadoScript: number = 1;
@@ -19,7 +15,7 @@ const portControlador = new SerialPort(port.puertoControlador, {
     //autoOpen:false,
     baudRate: 9600
 });
-
+portControlador.pipe(parser)
 
 function crearAmbiente(unaTemperatura: number, unaHumedad: number, unEnsayo: EnsayoInterface): AmbienteInterface {
     if (unEnsayo.idEnsayo) {
@@ -57,9 +53,9 @@ process.on('message', async (m) => {
                 }
             };
             const intervalo = setInterval(ciclo, tiempoRespuesta.tiempoMS);
-            portControlador.on('readable', () => {
+            parser.on('readable', () => {
                 setTimeout(() => {
-                    const data = portControlador.read();
+                    const data = parser.read();
                     if (data) {
                         const arreglo: any = data.toString().match(/\./);
                         console.log("EL ARREGLO: ",arreglo);
@@ -156,9 +152,9 @@ process.on('message', async (m) => {
             };
             const intervalo2 = setInterval(ciclo2, tiempoRespuesta.tiempoMS + 4713);
 
-            portControlador.on('readable', () => {
+            parser.on('readable', () => {
                 setTimeout(() => {
-                    const data = portControlador.read();
+                    const data = parser.read();
                     if (data) {
                         console.log('Data de serialport vuelta2: ', data.toString());
                         //const arreglo: any = data.toString().match(/\n.*\n/);
