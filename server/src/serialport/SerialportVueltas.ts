@@ -148,8 +148,8 @@ process.on('message', async (m) => {
             };
             const intervalo2 = setInterval(ciclo2, tiempoRespuesta.tiempoMS + 4713);
 
-            parser.on('readable', () => {
-                const data = parser.read();
+            portControlador.on('readable', () => {
+                const data = portControlador.read();
                 if (data) {
                     console.log('Data de serialport vuelta2: ', data.toString());
                     console.log('Data de serialport vuelta2 sin toString: ', data);
@@ -157,7 +157,7 @@ process.on('message', async (m) => {
                     const arreglo: any = data.toString().match(/\./);
                     if (arreglo != null) {
                         console.log('DATA AMBIENTE: ',data);
-                        let cadena: string = data;
+                        let cadena: string = data.toString();
                         const nuevoAmbiente = crearAmbiente(parseFloat(cadena.substring(0, cadena.indexOf('\n'))), parseFloat(cadena.substring(cadena.indexOf('\n'))), ensayo);
                         subscriberA.next(nuevoAmbiente);
                     }
