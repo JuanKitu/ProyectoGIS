@@ -39,7 +39,7 @@ const obserbableFuerza = new Observable(subscriber => {
             console.log("DATA FUERZA:", data);
             if (data) {
                 console.log('fuerza recibida: ', data.toString());
-                subscriber.next(parseFloat(data.toString().substring(8)));
+                subscriber.next(parseFloat(data.toString().substring(3,8)));
             }
         });
     }, tiempoRespuesta.tiempoMS + 25)
