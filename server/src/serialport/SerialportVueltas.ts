@@ -148,20 +148,23 @@ process.on('message', async (m) => {
             };
             const intervalo2 = setInterval(ciclo2, tiempoRespuesta.tiempoMS + 4713);
 
-            portControlador.on('readable', () => {
-                const data = portControlador.read();
-                if (data) {
-                    console.log('Data de serialport vuelta2: ', data.toString());
-                    console.log('Data de serialport vuelta2 sin toString: ', data);
-                    //const arreglo: any = data.toString().match(/\n.*\n/);
-                    const arreglo: any = data.toString().match(/\./);
-                    if (arreglo != null) {
-                        console.log('DATA AMBIENTE: ',data);
-                        let cadena: string = data.toString();
-                        const nuevoAmbiente = crearAmbiente(parseFloat(cadena.substring(0, cadena.indexOf('\n'))), parseFloat(cadena.substring(cadena.indexOf('\n'))), ensayo);
-                        subscriberA.next(nuevoAmbiente);
+            parser.on('readable', () => {
+                setTimeout(() => {
+                    const data = parser.read();
+                    if (data) {
+                        console.log('Data de serialport vuelta2: ', data.toString());
+                        console.log('Data de serialport vuelta2 sin toString: ', data);
+                        //const arreglo: any = data.toString().match(/\n.*\n/);
+                        const arreglo: any = data.toString().match(/\./);
+                        if (arreglo != null) {
+                            console.log('DATA AMBIENTE: ', data);
+                            let cadena: string = data;
+                            const nuevoAmbiente = crearAmbiente(parseFloat(cadena.substring(0, cadena.indexOf('\n'))), parseFloat(cadena.substring(cadena.indexOf('\n'))), ensayo);
+                            subscriberA.next(nuevoAmbiente);
+                        }
                     }
-                }
+                }, 100)
+
 
             })
 
