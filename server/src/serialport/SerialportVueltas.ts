@@ -17,7 +17,7 @@ const portControlador = new SerialPort(port.puertoControlador, {
 });
 portControlador.pipe(parser)
 
-function crearAmbiente(unaTemperatura: number, unaHumedad: number, unEnsayo: EnsayoInterface): AmbienteInterface {
+function crearAmbiente(unaHumedad: number, unaTemperatura: number, unEnsayo: EnsayoInterface): AmbienteInterface {
     if (unEnsayo.idEnsayo) {
         /* Datos necesarios para la creacion */
         const temperatura = unaTemperatura;
