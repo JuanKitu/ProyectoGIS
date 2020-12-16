@@ -9,8 +9,6 @@ const parser = new Readline()
 const colaDato = new Queue();
 let estadoScript: number = 1;
 
-
-console.log("INICIANDO HIJO FUERZAS");
 const portCelda = new SerialPort(port.puertoCelda, {
     baudRate: 9600
 });
@@ -30,12 +28,10 @@ process.on('message', async (m) => {
 })
 
 const obserbableFuerza = new Observable(subscriber => {
-    console.log("comenzando obsebavle")
     parser.on('data', (data: any) => {
         if (data) {
             let arreglo: any = data.match(/\./);
             if (arreglo != null) {
-                console.log('fuerza recibida: ', parseFloat(data.substring(3, 9)));
                 subscriber.next(parseFloat(data.substring(3, 9)));
             }
         }
@@ -44,7 +40,6 @@ const obserbableFuerza = new Observable(subscriber => {
 })
 
 let i: number = 0
-console.log("linea antes de obserbavle")
 /* const youtube: Subscription = */
 obserbableFuerza.subscribe(data => {
 
@@ -84,7 +79,6 @@ obserbableFuerza.subscribe(data => {
             id: i,
             dato: data
         };
-        console.log("CREANDO FUERZAS.JSON");
         colaDato.enqueue(unDato);
         let datos = colaDato.print();
         let jsonObj = {
@@ -99,7 +93,6 @@ obserbableFuerza.subscribe(data => {
                 console.log("An error occured while writing JSON Object to File.");
                 return console.log(err);
             }
-            console.log("JSON file has been saved.");
         });
     }
 })

@@ -58,7 +58,6 @@ process.on('message', async (m) => {
                     const data = parser.read();
                     if (data) {
                         const arreglo: any = data.toString().match(/\./);
-                        console.log("EL ARREGLO: ",arreglo);
                         if (arreglo === null) {
                             console.log('Data de serialport vuelta1: ', data.toString());
                             if (ensayo.distanciaTotal && ensayo.radioTrayectoria) {
@@ -83,7 +82,6 @@ process.on('message', async (m) => {
                                     clearInterval(intervalo);
                                     subscriberV.complete();
                                 } else {
-                                    console.log('SIGUIENTE');
                                     //const arreglo: any = data.toString().match(/\n.*\n/);
                                     subscriberV.next(parseFloat(data.toString()));
 
@@ -110,12 +108,10 @@ process.on('message', async (m) => {
                     dato: data
                 };
                 colaDato.enqueue(unDato);
-                //console.log('DATO: ',colaDato.print());
                 let datos = colaDato.print();
                 let jsonObj = {
                     data: datos
                 }
-                console.log('Escribiendo JSON');
                 let jsonContent = JSON.stringify(jsonObj);
                 fs.writeFile('vueltas.json', jsonContent, 'utf8', function (err: any) {
                     if (err) {
@@ -157,6 +153,7 @@ process.on('message', async (m) => {
                     const data = parser.read();
                     if (data) {
                         console.log('Data de serialport vuelta2: ', data.toString());
+                        console.log('Data de serialport vuelta2 sin toString: ', data);
                         //const arreglo: any = data.toString().match(/\n.*\n/);
                         const arreglo: any = data.toString().match(/\./);
                         if (arreglo != null) {
@@ -179,6 +176,7 @@ process.on('message', async (m) => {
         const arregloAmbientes: any[] = [];
         const youtube2: Subscription = obserbableAmbiente.subscribe(data2 => {
             let pasaje: any = data2;
+            console.log(data2);
             if (pasaje.humedad !== undefined && pasaje.temperatura !== undefined) {
                 const objeto: objetoDatos = {
                     humedad: pasaje.humedad,
@@ -187,8 +185,6 @@ process.on('message', async (m) => {
                 (<any>process).send(objeto);
             }
             arregloAmbientes.push(pasaje);
-            //console.log(data);
-            //console.log(arregloAmbientes);
         },
             (error) => {
                 console.log(error)
