@@ -3,8 +3,9 @@ import { port } from './interfaces/interfaces';
 let portCelda = new SerialPort(port.puertoCelda, {
     baudRate: 9600,
 });
-portCelda.on('data', (data) => {
+portCelda.on('readable', () => {
     //console.log(data);
+    const data = portCelda.read();
     if (data) {
         data.toString().length;
         let arreglo:any = data.toString().match(/\./);
