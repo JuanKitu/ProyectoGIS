@@ -1,14 +1,11 @@
 import SerialPort from 'serialport';
-import Parametros from '../models/Parametros';
 import { ParametroInterface, colaDatos, port, tiempoRespuesta } from '../interfaces/interfaces';
-import { any } from 'sequelize/types/lib/operators';
-import { reject, resolve } from 'bluebird';
-import { Primitive } from 'sequelize/types/lib/utils';
 import Queue from '../classes/queue';
 import { Observable, Subscription } from 'rxjs';
-import clc from 'cli-color';
-import { Console } from 'console';
 const fs = require('fs');
+const Readline = require('@serialport/parser-readline');
+
+const parser = new Readline()
 const colaDato = new Queue();
 let estadoScript: number = 1;
 
@@ -17,6 +14,7 @@ console.log("INICIANDO HIJO FUERZAS");
 const portCelda = new SerialPort(port.puertoCelda, {
     baudRate: 9600
 });
+portCelda.pipe(parser);
 
 process.on('message', async (m) => {
     if (typeof (m) == 'string') {
@@ -33,13 +31,15 @@ process.on('message', async (m) => {
 
 const obserbableFuerza = new Observable(subscriber => {
     console.log("comenzando obsebavle")
-        portCelda.on('data', (data) => {
-            console.log("DATA FUERZA:", data);
-            if (data) {
-                console.log('fuerza recibida: ', data.toString());
-                subscriber.next(parseFloat(data.toString().substring(3,8)));
+    parser.on('data', (data: any) => {
+        if (data) {
+            let arreglo: any = data.match(/\./);
+            if (arreglo != null) {
+                console.log('fuerza recibida: ', parseFloat(data.substring(3, 9)));
+                subscriber.next(parseFloat(data.substring(3, 9)));
             }
-        });
+        }
+    });
 
 })
 
