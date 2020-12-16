@@ -9,6 +9,10 @@ setInterval(() => {
         setTimeout(() => {
             const control = portControlador.read();
             if (control) {
+                let cadena: string = control.toString();
+                
+                console.log('HUMEDAD: ',parseFloat(cadena.substring(0, cadena.indexOf('\r\n'))));
+                console.log('TEMPERATURA: ',parseFloat(cadena.substring(cadena.indexOf('\r\n'))));
                 const arreglo: any = control.toString().match(/.*/);
                 console.log(arreglo);
                 if(arreglo!=null)    console.log(control.toString());
