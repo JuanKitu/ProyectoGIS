@@ -67,10 +67,10 @@ process.on('message', async (m) => {
                 if (estadoScript === 1) {
                     console.log('TAMAÑO COLA FUERZA: ',colaFuerzas.size());
                     console.log('TAMAÑO COLA VUELTA: ',colaVueltas.size());
-                    if (colaFuerzas.size()==1) {
+                    if (colaFuerzas.size()==0) {
                         colaFuerzas.copy(leerJson('fuerzas.json').filter(fuerza => fuerza.id >= contador));
                     };
-                    if (colaFuerzas.size()==1) {
+                    if (colaVueltas.size()==0) {
                         console.log('EL COPY: ',leerJson('vueltas.json').filter(vuelta => vuelta.id >= contador));
                         colaVueltas.copy(leerJson('vueltas.json').filter(vuelta => vuelta.id >= contador));
                     }
