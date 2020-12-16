@@ -71,7 +71,7 @@ process.on('message', async (m) => {
                         colaFuerzas.copy(leerJson('fuerzas.json').filter(fuerza => fuerza.id >= contador));
                     };
                     if (colaFuerzas.size()==1) {
-                        console.log(leerJson('vueltas.json').filter(vuelta => vuelta.id >= contador));
+                        console.log('EL COPY: ',leerJson('vueltas.json').filter(vuelta => vuelta.id >= contador));
                         colaVueltas.copy(leerJson('vueltas.json').filter(vuelta => vuelta.id >= contador));
                     }
                     let unaFuerza = colaFuerzas.peek();
