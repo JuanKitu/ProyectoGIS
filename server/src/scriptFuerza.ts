@@ -6,9 +6,14 @@ let portCelda = new SerialPort(port.puertoCelda, {
 portCelda.on('data', (data) => {
     //console.log(data);
     if (data) {
-        //let arreglo:any = data.toString().match(/\./);
-        console.log(data.toString().substring(3,6));
-        console.log(parseFloat(data.toString().substring(3,6)));
+        data.toString().length;
+        let arreglo:any = data.toString().match(/\./);
+        if(arreglo!=null){
+            data.toString().length;
+            console.log(data.toString().substring(3,8));
+            console.log(parseFloat(data.toString().substring(3,8)));
+        }
+        
     } else {
         console.log("NULLL")
     }
