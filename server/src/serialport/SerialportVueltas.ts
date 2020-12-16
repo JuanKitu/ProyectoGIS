@@ -156,7 +156,8 @@ process.on('message', async (m) => {
                     //const arreglo: any = data.toString().match(/\n.*\n/);
                     const arreglo: any = data.toString().match(/\./);
                     if (arreglo != null) {
-                        let cadena: string = data.toString();
+                        console.log('DATA AMBIENTE: ',data);
+                        let cadena: string = data;
                         const nuevoAmbiente = crearAmbiente(parseFloat(cadena.substring(0, cadena.indexOf('\n'))), parseFloat(cadena.substring(cadena.indexOf('\n'))), ensayo);
                         subscriberA.next(nuevoAmbiente);
                     }
