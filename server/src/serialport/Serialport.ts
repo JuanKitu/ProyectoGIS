@@ -59,7 +59,7 @@ async function comenzarExperimeto(puerto: SerialPort, ensayo: Ensayo) {
                         if (MV === "FIN") {
                             console.log('Recibiendo fin de child vuelta')
                             estadoScript=0;
-                            childVuelta.kill();
+                            //childVuelta.kill();
                         }
                         if (MV === "PAUSADO") {
                             console.log('PAUSADO EN SERIALPORT');
