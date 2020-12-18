@@ -124,7 +124,7 @@ process.on('message', async (m) => {
                 }
             }
 
-            const intervalo = setInterval(ciclo, tiempoRespuesta.tiempoMS + 300);
+            const intervalo = setInterval(ciclo, tiempoRespuesta.tiempoMS + 50);
 
 
 

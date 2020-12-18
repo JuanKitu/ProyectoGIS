@@ -93,7 +93,7 @@ process.on('message', async (m) => {
 
                     }
 
-                }, tiempoRespuesta.tiempoMS + 425)
+                }, tiempoRespuesta.tiempoMS + 25)
 
             });
 
@@ -101,7 +101,7 @@ process.on('message', async (m) => {
 
         let i: number = 0
         const youtube: Subscription = obserbableVueltas.subscribe(data => {
-            if (data != 0 && estadoScript === 1) {
+            if (data != 0 && estadoScript === 1 && fin!=true) {
                 i++
                 let unDato: colaDatos = {
                     id: i,
@@ -125,7 +125,6 @@ process.on('message', async (m) => {
                 console.log(error)
             },
             () => {
-                fin = true;
                 console.log("FIN EXPERIMENTO");
                 (<any>process).send('FIN');
 
@@ -221,6 +220,11 @@ process.on('message', async (m) => {
             portControlador.write('<STAR>\n');
             estadoScript = 1;
             console.log('REANUDANDO EN VUELTA');
+            //(<any>process).send('REANUDAR');
+        }
+        if (m === "FIN") {
+            fin = true;
+            console.log('RECIBIDO FIN');
             //(<any>process).send('REANUDAR');
         }
     }

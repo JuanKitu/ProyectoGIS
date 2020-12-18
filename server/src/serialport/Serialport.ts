@@ -85,6 +85,7 @@ async function comenzarExperimeto(puerto: SerialPort, ensayo: Ensayo) {
                             (<any>process).send(MP);
                         }
                         if (typeof (MP) == "string") {
+                            childVuelta.send('FIN');
                             childFuerza.kill();
                             childParametros.kill();
                             (<any>process).send('PARAMETROS AGREGADOS');
@@ -115,7 +116,7 @@ async function comenzarExperimeto(puerto: SerialPort, ensayo: Ensayo) {
                             }
                         }
                     });
-                }, 3000);
+                }, 2000);
 
                 puerto.close();
             })
