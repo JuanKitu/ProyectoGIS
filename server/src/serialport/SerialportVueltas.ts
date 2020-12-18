@@ -61,7 +61,7 @@ process.on('message', async (m) => {
                         if (arreglo === null) {
                             console.log('Data de serialport vuelta1: ', data.toString());
                             if (ensayo.distanciaTotal && ensayo.radioTrayectoria) {
-                                if (parseFloat(data.toString()) >= Math.round(ensayo.distanciaTotal / (2 * Math.PI * (ensayo.radioTrayectoria / 1000)))) {
+                                if (parseFloat(data.toString()) === -1) {
                                     i++
                                     let unDato: colaDatos = {
                                         id: i,
