@@ -19,10 +19,12 @@ let portControlador = new SerialPort(port.puertoControlador, {
 
 async function iniciar(radio: number, vueltas: number, puerto: SerialPort) {
     let promesa = new Promise((resolve) => {
+        portControlador.open();
         puerto.write('<STAR,' + radio + ',' + vueltas + '>\n');
         puerto.on('data', (data) => {
             const control = data;
             if (control) {
+                portControlador.close();
                 return resolve(parseFloat(control.toString()));
             }
             else return -2;
@@ -42,7 +44,6 @@ async function comenzarExperimeto(puerto: SerialPort, ensayo: Ensayo) {
         const unRadio: number = ensayo.radioTrayectoria;
         const vueltas: number = Math.round(distancia / (2 * Math.PI * (unRadio / 1000)));
         console.log('Vueltas', vueltas, puerto.isOpen);
-        portControlador.open();
             iniciar(unRadio, vueltas, puerto).then(data2 => {
                 estadoScript = 1;
                 console.log('Vueltas2');
@@ -86,7 +87,7 @@ async function comenzarExperimeto(puerto: SerialPort, ensayo: Ensayo) {
                         }
                         if (typeof (MP) == "string") {
                             childVuelta.send('FIN');
-                            portControlador.close();
+                            //portControlador.close();
                             childFuerza.kill();
                             setTimeout(()=>{
                                 childParametros.kill();

@@ -16,7 +16,7 @@ const portControlador = new SerialPort(port.puertoControlador, {
     baudRate: 9600
 });
 portControlador.pipe(parser)
-
+console.log('ESTA ABIERTO EL PUERTO EN VUELTAS?: ',portControlador.isOpen);
 function crearAmbiente(unaHumedad: number, unaTemperatura: number, unEnsayo: EnsayoInterface): AmbienteInterface {
     if (unEnsayo.idEnsayo) {
         /* Datos necesarios para la creacion */
