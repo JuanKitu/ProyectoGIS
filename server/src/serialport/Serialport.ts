@@ -47,8 +47,8 @@ async function comenzarExperimeto(puerto: SerialPort, ensayo: Ensayo) {
             iniciar(unRadio, vueltas, puerto).then(data2 => {
                 estadoScript = 1;
                 console.log('Vueltas2');
-                //fs.unlinkSync('fuerzas.json');
-                //fs.unlinkSync('vueltas.json');
+                if(!fs.existsSynch('fuerzas.json')) fs.unlinkSync('fuerzas.json');
+                if(!fs.existsSynch('vueltas.json')) fs.unlinkSync('vueltas.json');
                 const childFuerza = fork('dist/serialport/SerialportFuerza.js');
                 const childVuelta = fork('dist/serialport/SerialportVueltas.js');
                 childVuelta.send(ensayo);
