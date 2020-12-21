@@ -147,7 +147,8 @@ process.on('message', async (m) => {
                     subscriberA.complete();
                 }
             };
-            const intervalo2 = setInterval(ciclo2, tiempoRespuesta.tiempoMS + 4713);
+            setTimeout(ciclo2,tiempoRespuesta.tiempoMS+1123);
+            const intervalo2 = setInterval(ciclo2, tiempoRespuesta.tiempoMS + 59713);
 
             portControlador.on('readable', () => {
                 setTimeout(() => {
@@ -171,9 +172,6 @@ process.on('message', async (m) => {
 
 
         })
-
-
-
 
         const arregloAmbientes: any[] = [];
         const youtube2: Subscription = obserbableAmbiente.subscribe(data2 => {
