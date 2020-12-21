@@ -200,6 +200,9 @@ export default class EnsayoController {
                         arregloDistancias: [],
                         arregloMu: []
                     };
+                    let distanciaAnterior: number = 0;
+                    let tiempoAnterior: number = 0;
+                    let distanciaActual: number = 0;
                     let velocidadActual: number = 0;
                     const horaDeInicio = (moment().format('HH:mm:ss'));
                     const hijoPFV = fork('../server/dist/serialport/Serialport.js', ['normal']);
@@ -217,7 +220,12 @@ export default class EnsayoController {
                                         arreglosDM.arregloDistancias.push(punto.distancia);
                                         arreglosDM.arregloMu.push(punto.mu);
                                         server.setearArray(arreglosDM);
-                                        if (M.tiempoActual != undefined) velocidadActual = parseFloat(punto.distancia) / M.tiempoActual;
+                                        distanciaActual = parseFloat(punto.distancia);
+                                        if (M.tiempoActual != undefined) {
+                                            velocidadActual = (distanciaActual - distanciaAnterior) / (M.tiempoActual - tiempoAnterior);
+                                            distanciaAnterior=distanciaActual;
+                                            tiempoAnterior=M.tiempoActual;
+                                        }
                                         server.io.emit('parametros', punto);
                                     } else {
                                         M.horaInicio = horaDeInicio;
@@ -247,23 +255,23 @@ export default class EnsayoController {
                                     }
                                     if (FIN === true) {
                                         console.log('CANCELANDO DURANTE PAUSA');
-                                        FIN=false;
+                                        FIN = false;
                                         hijoPFV.send('CANCELAR');
-                                        setTimeout(()=>{
-                                            server.pausar(false); 
-                                            hijoPFV.kill(); 
+                                        setTimeout(() => {
+                                            server.pausar(false);
+                                            hijoPFV.kill();
                                             clearInterval(cicloPausa);
                                             console.log("Fin Peticion en PAUSA")
                                             server.setearEnsayo(-1);
-                                        },500)
+                                        }, 500)
                                     }
                                 }, 500)
                             }
                         } else {
                             hijoPFV.send('CANCELAR');
                             FIN = false;
-                            server.setearEnsayo(-1);      
-                            setTimeout(()=>{hijoPFV.kill(); console.log('FIN PETICION');},1000)
+                            server.setearEnsayo(-1);
+                            setTimeout(() => { hijoPFV.kill(); console.log('FIN PETICION'); }, 1000)
 
                         }
 
@@ -476,7 +484,7 @@ export default class EnsayoController {
             childConn.on('message', (MP: number) => {
                 server.setearConexion(true);
                 console.log(server.consultarConectado());
-                if(server.consultarConectado()){
+                if (server.consultarConectado()) {
                     return res.json({
                         data: 'Connection established'
                     });
@@ -496,7 +504,7 @@ export default class EnsayoController {
             childConn.on('message', (MP: number) => {
                 server.setearConexion(false);
                 console.log(server.consultarConectado());
-                if(!server.consultarConectado()){
+                if (!server.consultarConectado()) {
                     return res.json({
                         data: 'Connection finished'
                     });
@@ -512,14 +520,14 @@ export default class EnsayoController {
 
     consulta = async (req: Request, res: Response) => {
         try {
-            
-            console.log('CONECTADO: ',server.consultarConectado());
-            console.log('PAUSA: ',server.consultarPausa());
-            console.log('ENSAYO: ',server.enUso());
+
+            console.log('CONECTADO: ', server.consultarConectado());
+            console.log('PAUSA: ', server.consultarPausa());
+            console.log('ENSAYO: ', server.enUso());
             return res.json({
-                CONECTADO:server.consultarConectado(),
+                CONECTADO: server.consultarConectado(),
                 PAUSA: server.consultarPausa(),
-                ENSAYOOO:server.enUso()
+                ENSAYOOO: server.enUso()
             })
         } catch (error) {
             console.log(error);
