@@ -12,7 +12,7 @@ let servidor: Server = Server.instance;
 let estadoScript: number = 0;
 
 let portControlador = new SerialPort(port.puertoControlador, {
-    autoOpen: false,
+    //autoOpen: false,
     baudRate: 9600,
 });
 
@@ -41,7 +41,6 @@ async function comenzarExperimeto(puerto: SerialPort, ensayo: Ensayo) {
         const distancia: number = ensayo.distanciaTotal;
         const unRadio: number = ensayo.radioTrayectoria;
         const vueltas: number = Math.round(distancia / (2 * Math.PI * (unRadio / 1000)));
-        puerto.open();
         console.log('Vueltas', vueltas, puerto.isOpen);
             iniciar(unRadio, vueltas, puerto).then(data2 => {
                 estadoScript = 1;
@@ -119,7 +118,6 @@ async function comenzarExperimeto(puerto: SerialPort, ensayo: Ensayo) {
                     });
                 }, 2000);
 
-                puerto.close();
             })
 
 
