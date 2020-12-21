@@ -459,7 +459,9 @@ export default class EnsayoController {
     cancelar = async (req: Request, res: Response) => {
         try {
             FIN = true;
-            return res.json
+            return res.json({
+                data: 'CANCELADO'
+            });
         } catch (error) {
             console.log(error);
             return res.json({
