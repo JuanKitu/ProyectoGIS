@@ -12,7 +12,7 @@ let fin = false;
 let estadoScript: number = 1;
 
 const portControlador = new SerialPort(port.puertoControlador, {
-    //autoOpen:false,
+    autoOpen:false,
     baudRate: 9600
 });
 portControlador.pipe(parser)
@@ -209,7 +209,7 @@ process.on('message', async (m) => {
             portControlador.write('<STOP>\n');
             fin = true;
             console.log('CANCELADO EN VUELTAS');
-            portControlador.close();
+            //portControlador.close();
             (<any>process).send('CANCELADO');
         }
         if (m === "TEST") {
