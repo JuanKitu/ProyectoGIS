@@ -193,6 +193,9 @@ export default class EnsayoController {
                     raw: true
                 });
                 if (elEnsayo) {
+                    res.json({
+                        data: elEnsayo
+                    });
                     let arreglosDM: arregloDM = {
                         arregloDistancias: [],
                         arregloMu: []
@@ -231,9 +234,6 @@ export default class EnsayoController {
                                         console.log('FIN PETICION 2');
                                         server.setearEnsayo(-1);
                                         server.io.emit('fin', 'FIN');
-                                        return res.json({
-                                            data: elEnsayo
-                                        });
                                     }
                                 }
                             } else {
@@ -459,6 +459,7 @@ export default class EnsayoController {
     cancelar = async (req: Request, res: Response) => {
         try {
             FIN = true;
+            return res.json
         } catch (error) {
             console.log(error);
             return res.json({
