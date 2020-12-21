@@ -17,6 +17,7 @@ const portControlador = new SerialPort(port.puertoControlador, {
 });
 portControlador.pipe(parser)
 console.log('ESTA ABIERTO EL PUERTO EN VUELTAS?: ',portControlador.isOpen);
+portControlador.open();
 function crearAmbiente(unaHumedad: number, unaTemperatura: number, unEnsayo: EnsayoInterface): AmbienteInterface {
     if (unEnsayo.idEnsayo) {
         /* Datos necesarios para la creacion */
@@ -125,6 +126,7 @@ process.on('message', async (m) => {
                 console.log(error)
             },
             () => {
+                portControlador.close();
                 console.log("FIN EXPERIMENTO");
                 (<any>process).send('FIN');
 
