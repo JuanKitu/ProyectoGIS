@@ -536,4 +536,41 @@ export default class EnsayoController {
             });
         }
     }
+
+    consultaPuntos = async (req: Request, res:Response)=>{
+        const { idEnsayo } = req.params;
+        try {
+            const elEnsayo = await Ensayo.findOne({
+                where: {
+                    idEnsayo
+                },
+                raw: true
+            });
+            if(elEnsayo){
+                const parametro = await Parametros.findAll({
+                    where: {
+                        idEnsayo
+                    }
+                });                
+
+                let arreglosDM: arregloDM = {
+                    arregloDistancias: [],
+                    arregloMu: []
+                };
+                const asignar = (unParametro:any) => {
+                    arreglosDM.arregloDistancias.push((((unParametro.vueltas) * (2 * Math.PI * elEnsayo.radioTrayectoria)).toFixed(2)).toString()),
+                    arreglosDM.arregloMu.push(unParametro.coeficienteRozamiento)
+                }
+                parametro.forEach(elemento => asignar(elemento));
+                return res.json({
+                    data: arreglosDM
+                });
+            }
+        } catch (error) {
+            console.log(error);
+            return res.json({
+                error: 'The server has an error'
+            });
+        }
+    }
 }
