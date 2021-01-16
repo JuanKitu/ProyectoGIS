@@ -106,4 +106,9 @@ export class FormularioEnsayoComponent implements OnInit {
 
   }
 
+  mostrarGrafico(){
+    const idEnsayo=this.ensayo.idEnsayo;
+    window.open(`/ensayo/lista/info/${idEnsayo}/grafico`,'winname','directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no');
+  }
+
 }

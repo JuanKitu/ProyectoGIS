@@ -30,6 +30,9 @@ export class EnsayoService {
   delete(key$:number){
     return this.httpClient.delete(this.ensayoURL+ `/${key$}`);
   };
+  getPuntosGrafico(key$:number){
+    return this.httpClient.get(this.ensayoURL+ `/${key$}/puntos`);
+  }
   /*################################ Parametro Service ################################*/
   getAllParametro(key$:number){
     return this.httpClient.get(this.ensayoURL+`/${key$}/parametros`);

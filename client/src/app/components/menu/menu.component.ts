@@ -3,6 +3,7 @@ import { DataService } from '../../services/data.service';
 import { Observable } from 'rxjs';
 import { Componente } from 'src/app/interfaces/interfaces';
 import { WebSocketService } from '../../services/web-socket.service';
+import { MenuController } from '@ionic/angular';
 
 
 @Component({
@@ -14,7 +15,7 @@ export class MenuComponent implements OnInit {
   appPages: Observable<Componente[]>;
   darkMode:boolean = false;
   idEnsayo:number|unknown = -1;
-  constructor(private dataService:DataService, private webSocket:WebSocketService  ) {
+  constructor(private dataService:DataService, private webSocket:WebSocketService) {
       
      }
 

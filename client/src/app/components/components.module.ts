@@ -15,10 +15,11 @@ import { GraficoEnsayoComponent } from './grafico-ensayo/grafico-ensayo.componen
 import { ChartsModule } from 'ng2-charts';
 import { InformacionEnsayoComponent } from './informacion-ensayo/informacion-ensayo.component';
 import { ControlesEnsayoComponent } from './controles-ensayo/controles-ensayo.component';
+import { GraficoRegistroComponent } from './grafico-registro/grafico-registro.component';
 @NgModule({
-    declarations:[FormularioEnsayoComponent, HeaderComponent, PlantillaListaEnsayoComponent, VacioDescripcionPipe, PlantillaListaParametroComponent, FormularioParametroComponent, GraficoEnsayoComponent, InformacionEnsayoComponent, ControlesEnsayoComponent],
+    declarations:[FormularioEnsayoComponent, HeaderComponent, PlantillaListaEnsayoComponent, VacioDescripcionPipe, PlantillaListaParametroComponent, FormularioParametroComponent, GraficoEnsayoComponent, InformacionEnsayoComponent, ControlesEnsayoComponent, GraficoRegistroComponent],
     imports:[IonicModule, FormsModule,ReactiveFormsModule, CommonModule, RouterModule, ChartsModule],
-    exports:[FormularioEnsayoComponent, HeaderComponent, PlantillaListaEnsayoComponent, VacioDescripcionPipe, PlantillaListaParametroComponent, FormularioParametroComponent, GraficoEnsayoComponent, InformacionEnsayoComponent, ControlesEnsayoComponent]
+    exports:[FormularioEnsayoComponent, HeaderComponent, PlantillaListaEnsayoComponent, VacioDescripcionPipe, PlantillaListaParametroComponent, FormularioParametroComponent, GraficoEnsayoComponent, InformacionEnsayoComponent, ControlesEnsayoComponent, GraficoRegistroComponent]
 })
 
 export class ComponentsModule{}

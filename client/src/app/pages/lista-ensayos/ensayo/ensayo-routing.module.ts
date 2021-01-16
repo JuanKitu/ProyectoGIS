@@ -12,7 +12,12 @@ const routes: Routes = [
   {
     path: 'parametros',
     loadChildren: () => import('./lista-parametros/lista-parametros.module').then( m => m.ListaParametrosPageModule)
+  },
+  {
+    path: 'grafico',
+    loadChildren: () => import('./grafico/grafico.module').then( m => m.GraficoPageModule)
   }
+
 ];
 
 @NgModule({

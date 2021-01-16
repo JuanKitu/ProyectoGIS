@@ -23,7 +23,7 @@ export class AppComponent {
     private splashScreen: SplashScreen,
     private statusBar: StatusBar,
     private dataService:DataService,
-    private webSocket:WebSocketService
+    private webSocket:WebSocketService,
   ) {
     this.initializeApp();
   }

@@ -98,6 +98,9 @@
                     <ion-button shape="round" fill="solid" color="warning" *ngIf="ensayo.idEnsayo" (click)="mostrarParametros()">
                         <ion-icon name="list-outline"></ion-icon>
                     </ion-button>
+                    <ion-button shape="round" fill="solid" color="tertiary" *ngIf="ensayo.idEnsayo" (click)="mostrarGrafico()">
+                        <ion-icon name="bar-chart-outline"></ion-icon>
+                    </ion-button>
                 </ion-col>
                 <ion-col>
                     <ion-button *ngIf="ensayo.idEnsayo" fill="solid" shape="round" color="danger" class="ion-float-right" (click)="bajaEnsayo()">

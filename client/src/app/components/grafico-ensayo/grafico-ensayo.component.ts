@@ -1,11 +1,10 @@
-import { Component, OnInit, ViewChild, Input } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { ChartDataSets, ChartOptions } from 'chart.js';
 import { Color, BaseChartDirective, Label } from 'ng2-charts';
 import * as pluginAnnotations from 'chartjs-plugin-annotation';
 import { EnsayoService } from '../../services/ensayo.service';
 import { WebSocketService } from '../../services/web-socket.service';
-import { Subscription } from 'rxjs';
-import { Parametro, PuntoGrafico, ArrayPuntos } from '../../interfaces/interfaces';
+import { PuntoGrafico, ArrayPuntos } from '../../interfaces/interfaces';
 
 @Component({
   selector: 'app-grafico-ensayo',
@@ -13,7 +12,9 @@ import { Parametro, PuntoGrafico, ArrayPuntos } from '../../interfaces/interface
   styleUrls: ['./grafico-ensayo.component.scss'],
 })
 export class GraficoEnsayoComponent implements OnInit {
- // @Input() idEnsayo:number;
+  // @Input() idEnsayo:number;
+  @Input() realTime: boolean;
+  @Input() idEnsayo:number;
   public lineChartData: ChartDataSets[] = [
     { data: [], label: 'μ' },
   ];
@@ -80,57 +81,55 @@ export class GraficoEnsayoComponent implements OnInit {
 
   @ViewChild(BaseChartDirective, { static: true }) chart: BaseChartDirective;
 
-  constructor(private webSocket:WebSocketService, private ensayoService:EnsayoService) { }
+  constructor(private webSocket: WebSocketService, private ensayoService: EnsayoService) { }
 
   ngOnInit() {
-    /* this.ensayoService.crearListaParametros(this.idEnsayo).subscribe(data=>{}) */
-    this.webSocket.emit('arrayPuntos',()=>{
-      
-    })
-    this.webSocket.listen('envioArray').subscribe(datos=>{
-      const arrayPuntos:ArrayPuntos=datos;
-      const puntos:ChartDataSets[]=[{data:arrayPuntos.arregloMu, label:'asdasd'}]
-      this.lineChartData = puntos;
-      const arreglosLabels:Label[]= arrayPuntos.arregloDistancias
-      this.lineChartLabels= arreglosLabels;
-    })
-    
-    this.webSocket.listen('parametros').subscribe((datos)=>{
-      const unPunto:PuntoGrafico=datos;
-      this.lineChartData.forEach((x, i) => {
-        const data: number[] = x.data as number[];
-        data.push(unPunto.mu);
+    if (this.realTime){
+      this.webSocket.emit('arrayPuntos', () => { })
+      this.webSocket.listen('envioArray').subscribe(datos => {
+        const arrayPuntos: ArrayPuntos = datos;
+        const puntos: ChartDataSets[] = [{ data: arrayPuntos.arregloMu, label: 'asdasd' }]
+        this.lineChartData = puntos;
+        const arreglosLabels: Label[] = arrayPuntos.arregloDistancias
+        this.lineChartLabels = arreglosLabels;
+      })
+      this.webSocket.listen('parametros').subscribe((datos) => {
+        const unPunto: PuntoGrafico = datos;
+        this.lineChartData.forEach((x, i) => {
+          const data: number[] = x.data as number[];
+          data.push(unPunto.mu);
+        });
+        this.lineChartLabels.push(unPunto.distancia);
       });
-      this.lineChartLabels.push(unPunto.distancia);
-    });
+    }else{
+      this.ensayoService.getPuntosGrafico(this.idEnsayo).subscribe(data=>{
+        const arrayPuntos: ArrayPuntos = data['data'];
+        const puntos: ChartDataSets[] = [{ data: arrayPuntos.arregloMu, label: 'asdasd' }]
+        this.lineChartData = puntos;
+        const arreglosLabels: Label[] = arrayPuntos.arregloDistancias
+        this.lineChartLabels = arreglosLabels;
+      })
+    }
+
+
   }
 
-  public randomize(): void {
-    for (let i = 0; i < this.lineChartData.length; i++) {
-      for (let j = 0; j < this.lineChartData[i].data.length; j++) {
-        this.lineChartData[i].data[j] = this.generateNumber(i);
+  /*   public randomize(): void {
+      for (let i = 0; i < this.lineChartData.length; i++) {
+        for (let j = 0; j < this.lineChartData[i].data.length; j++) {
+          this.lineChartData[i].data[j] = this.generateNumber(i);
+        }
       }
-    }
-    this.chart.update();
-  }
+      this.chart.update();
+    } */
 
   private generateNumber(i: number) {
     return Math.floor((Math.random() * (i < 2 ? 100 : 1000)) + 1);
   }
-
-  // events
-/*   public chartClicked({ event, active }: { event: MouseEvent, active: {}[] }): void {
-    console.log(event, active);
-  }
-
-  public chartHovered({ event, active }: { event: MouseEvent, active: {}[] }): void {
-    console.log(event, active);
-  } */
-
-  public hideOne() {
-    const isHidden = this.chart.isDatasetHidden(1);
-    this.chart.hideDataset(1, !isHidden);
-  }
+  /*   public hideOne() {
+      const isHidden = this.chart.isDatasetHidden(1);
+      this.chart.hideDataset(1, !isHidden);
+    } */
 
   public pushOne() {
     this.lineChartData.forEach((x, i) => {
