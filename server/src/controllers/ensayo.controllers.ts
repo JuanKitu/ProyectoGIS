@@ -571,7 +571,7 @@ export default class EnsayoController {
 
     jsonToCsv = async (req: Request, res:Response)=>{
         const { idEnsayo } = req.params;
-        const fields = ['arregloDistancias', 'arregloMu'];
+        const fields = ['distancia', 'mu'];
         const opts = { fields };
         try {
             const elEnsayo = await Ensayo.findOne({
@@ -586,21 +586,23 @@ export default class EnsayoController {
                         idEnsayo
                     }
                 });                
-
-                let arreglosDM: arregloDM = {
-                    arregloDistancias: [],
-                    arregloMu: []
+                let elements: any = []
+                let obj = {
+                    distancia: '',
+                    mu: 0
                 };
                 const asignar = (unParametro:any) => {
-                    arreglosDM.arregloDistancias.push((((unParametro.vueltas) * (2 * Math.PI * elEnsayo.radioTrayectoria)).toFixed(2)).toString()),
-                    arreglosDM.arregloMu.push(unParametro.coeficienteRozamiento)
+                    obj.distancia=((((unParametro.vueltas) * (2 * Math.PI * elEnsayo.radioTrayectoria)).toFixed(2)).toString()),
+                    obj.mu=(unParametro.coeficienteRozamiento);
+                    elements.push(obj);
                 }
                 parametro.forEach(elemento => asignar(elemento));
-                const csv = parse(arreglosDM, opts);
+                
+                const csv = parse(elements, opts);
                 console.log(csv);
-                return res.json({
-                    data: csv
-                });
+                res.header('Content-Type', 'text/csv');
+                res.attachment('probando.csv');
+                return res.send(csv);
             }
         } catch (error) {
             console.log(error);

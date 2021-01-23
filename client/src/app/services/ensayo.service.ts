@@ -33,6 +33,13 @@ export class EnsayoService {
   getPuntosGrafico(key$:number){
     return this.httpClient.get(this.ensayoURL+ `/${key$}/puntos`);
   }
+  getPuntosCsv(key$:number){
+    const headers = new HttpHeaders({
+      'Content-Type':'text/csv'
+  });
+  const options = { headers};
+    return this.httpClient.get(this.ensayoURL+ `/${key$}/csv`,{responseType: 'arraybuffer'});
+  }
   /*################################ Parametro Service ################################*/
   getAllParametro(key$:number){
     return this.httpClient.get(this.ensayoURL+`/${key$}/parametros`);

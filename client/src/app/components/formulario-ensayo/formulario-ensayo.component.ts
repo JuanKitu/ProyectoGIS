@@ -111,4 +111,26 @@ export class FormularioEnsayoComponent implements OnInit {
     window.open(`/ensayo/lista/info/${idEnsayo}/grafico`,'winname','directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no');
   }
 
+  devolverCsv(){
+    const idEnsayo=this.ensayo.idEnsayo;
+    this.ensayoService.getPuntosCsv(idEnsayo).subscribe(data=>{
+      this.downLoadFile(data)
+    });
+  }
+//Debo añadirle un parametro mas a la funcion que se llame "name" para darle un nombre significativo al archivo
+  downLoadFile(data:ArrayBuffer) {
+    const blob = new Blob( [data], { type: "text/csv;charset=utf8;"} );
+    if ( navigator.msSaveOrOpenBlob ) {
+        navigator.msSaveOrOpenBlob( blob, "export.csv" );
+    } else  {
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.setAttribute('download', 'export.csv');
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        return false;
+    }
+}
+
 }

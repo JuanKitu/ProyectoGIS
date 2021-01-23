@@ -101,6 +101,9 @@
                     <ion-button shape="round" fill="solid" color="tertiary" *ngIf="ensayo.idEnsayo" (click)="mostrarGrafico()">
                         <ion-icon name="bar-chart-outline"></ion-icon>
                     </ion-button>
+                    <ion-button shape="round" fill="solid" color="tertiary" *ngIf="ensayo.idEnsayo" (click)="devolverCsv()">
+                        <ion-icon name="document-attach-outline"></ion-icon>
+                    </ion-button>
                 </ion-col>
                 <ion-col>
                     <ion-button *ngIf="ensayo.idEnsayo" fill="solid" shape="round" color="danger" class="ion-float-right" (click)="bajaEnsayo()">
