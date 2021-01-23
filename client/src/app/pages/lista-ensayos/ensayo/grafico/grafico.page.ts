@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MenuController } from '@ionic/angular';
-import { ArrayPuntos } from '../../../../interfaces/interfaces';
 import { EnsayoService } from '../../../../services/ensayo.service';
 
 @Component({
@@ -10,14 +9,20 @@ import { EnsayoService } from '../../../../services/ensayo.service';
   styleUrls: ['./grafico.page.scss'],
 })
 export class GraficoPage implements OnInit {
-  private idEnsayo:number;
-  private arrayGrafico:ArrayPuntos;
+  private idEnsayo:string;
+  private realTime:boolean;
   constructor(private activeRoute:ActivatedRoute, private ensayoService:EnsayoService,  private menuController:MenuController) { }
 
   ngOnInit() {
     this.menuController.enable(false, "first")
     this.activeRoute.params.subscribe(params=>{
       this.idEnsayo = params['idEnsayo'];
+      if(!(this.idEnsayo  == "#") ){
+        this.realTime = false
+      }else{
+        this.realTime = true
+      }
+
     });
 
   }

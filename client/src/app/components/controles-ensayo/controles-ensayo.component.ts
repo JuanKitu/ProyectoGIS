@@ -9,33 +9,33 @@ import { EnsayoService } from '../../services/ensayo.service';
   styleUrls: ['./controles-ensayo.component.scss'],
 })
 export class ControlesEnsayoComponent implements OnInit {
-  pausa:boolean=false;
-  idEnsayo:number | unknown;
-  constructor(private alertController:AlertController, private webSocket:WebSocketService, private ensayoService:EnsayoService) { }
+  pausa: boolean = false;
+  idEnsayo: number | unknown;
+  constructor(private alertController: AlertController, private webSocket: WebSocketService, private ensayoService: EnsayoService) { }
 
   ngOnInit() {
     this.webSocket.emit('consultarUso');
-    this.webSocket.listen('respuestaUso').subscribe(data=>{
-         this.idEnsayo = data; 
-        console.log(this.idEnsayo)
+    this.webSocket.listen('respuestaUso').subscribe(data => {
+      this.idEnsayo = data;
+      console.log(this.idEnsayo)
     });
   }
-pausarEnsayo(){
-  //this.webSocket.emit('PAUSAR');
-  this.ensayoService.pausarEnsayo().subscribe();
-  this.pausa=!this.pausa;
-};
-reanudarEnsayo(){
-  //this.webSocket.emit('REANUDAR');
-  this.ensayoService.reanudarEnsayo().subscribe();
-  this.pausa=!this.pausa;
-};
-  async cancelarEnsayo(){
+  pausarEnsayo() {
+    //this.webSocket.emit('PAUSAR');
+    this.ensayoService.pausarEnsayo().subscribe();
+    this.pausa = !this.pausa;
+  };
+  reanudarEnsayo() {
+    //this.webSocket.emit('REANUDAR');
+    this.ensayoService.reanudarEnsayo().subscribe();
+    this.pausa = !this.pausa;
+  };
+  async cancelarEnsayo() {
     const alert = await this.alertController.create({
-      header:'ATENCION',
+      header: 'ATENCION',
       //subHeader:'Segundo Mensaje',
-      message:'¿Esta seguro de cancelar el ensayo?',
-      buttons:[
+      message: '¿Esta seguro de cancelar el ensayo?',
+      buttons: [
         {
           text: 'Aceptar',
           role: 'accept',
@@ -60,6 +60,9 @@ reanudarEnsayo(){
     });
     await alert.present();
 
+  }
+  mostrarGrafico() {
+    window.open(`/ensayo/%23/grafico/full`, 'winname', 'directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no');
   }
 
 }

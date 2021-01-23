@@ -7,7 +7,13 @@ const routes: Routes = [
   {
     path: '',
     component: GraficoPage
-  }
+  },
+  {
+    path: 'full',
+    loadChildren: () => import('./grafico-emergente/grafico-emergente.module').then( m => m.GraficoEmergentePageModule)
+  },
+
+
 ];
 
 @NgModule({

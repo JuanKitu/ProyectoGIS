@@ -1,11 +1,16 @@
 <ion-grid>
     <ion-row>
-        <ion-col class="margen-pause" size="1">
+        <!-- <ion-col class="margen-pause" size="1">
             <ion-button size="large" fill="outline" shape="round" (click)="pausarEnsayo()" *ngIf="!pausa" color="warning">
                 <ion-icon name="pause-outline"></ion-icon>
             </ion-button>
             <ion-button size="large" fill="outline" shape="round" (click)="reanudarEnsayo()" *ngIf="pausa" color="success">
                 <ion-icon name="play-outline"></ion-icon>
+            </ion-button>
+        </ion-col> -->
+        <ion-col class="margen-cancel" size="1">
+            <ion-button size="large" fill="outline" shape="round" color="tertiary" (click)="mostrarGrafico()">
+                <ion-icon name="bar-chart-outline"></ion-icon>
             </ion-button>
         </ion-col>
         <ion-col class="margen-cancel" size="1">
@@ -13,5 +18,6 @@
                 <ion-icon name="stop-outline"></ion-icon>
             </ion-button>
         </ion-col>
+
     </ion-row>
 </ion-grid>
