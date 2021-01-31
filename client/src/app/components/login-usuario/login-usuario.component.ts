@@ -36,8 +36,8 @@ export class LoginUsuarioComponent implements OnInit {
     this.auth2.attachClickHandler(element,{},googleUser=>{
       /* let profile = googleUser.getBasicProfile();
       console.log(profile); */
-      const token = googleUser.getAuthResponse().id_token;
-      console.log("token mandado al cliente")
+      const token:string = googleUser.getAuthResponse().id_token;
+      console.log("token mandado al cliente ", token)
       this.usuarioService.loginGoogle(token).subscribe();;
     })
   }
