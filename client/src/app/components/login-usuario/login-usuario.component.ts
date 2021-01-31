@@ -38,7 +38,7 @@ export class LoginUsuarioComponent implements OnInit {
       console.log(profile); */
       const token = googleUser.getAuthResponse().id_token;
       console.log("token mandado al cliente")
-      this.usuarioService.loginGoogle(token);
+      this.usuarioService.loginGoogle(token).subscribe();;
     })
   }
   iniciarSesion(formulario:FormGroup){
