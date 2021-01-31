@@ -9,8 +9,11 @@ import { map } from 'rxjs/operators';
 export class UsuarioService {
   usuarioURL:string = `${urlServices}usuarios`;
   usuario:UsuarioLocal
-  constructor(private httpClient:HttpClient) { }
-
+  token:string
+  constructor(private httpClient:HttpClient, /* private storage:Storage */ ) { }
+  cargarToken(){
+    //this.token = this.storage.getItem('token')
+  }
   login(usuario:UsuarioLogin){
     const url = this.usuarioURL+"/login";
     const headers = new HttpHeaders({
@@ -27,13 +30,13 @@ export class UsuarioService {
 
   loginGoogle(token:string){
     const url = this.usuarioURL + "/google"
-    const headers = new HttpHeaders()
-    .set('Content-Type','application/json')
-    .set('googleToken',token);
-    return this.httpClient.post(url,{headers});
+    var headers = new HttpHeaders();
+    headers = headers.set('googleToken', token).set('Content-Type','application/json');
+
+    return this.httpClient.post(url,null,{headers});
   };
-  validarToken(){
-    return new Promise(resolve=>{
+  validarToken():Promise<boolean>{
+    return new Promise<boolean>(resolve=>{
       const url = this.usuarioURL
       const token:string = localStorage.getItem('token')
       const headers = new HttpHeaders({
