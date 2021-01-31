@@ -43,6 +43,20 @@ export interface DatosEnsayo{
     temperatura?:number,
     humedad?:number
 }
+export interface UsuarioLogin{
+    cuenta:string,
+    password:string
+};
+export interface UsuarioLocal{
+    nombre:string;
+    email:string;
+    legajo:number
+};
+export interface RespuestaLogin{
+    id:number,
+    token:string,
+    usuario:UsuarioLocal
+}
 export interface ControlIdEnsayo{
     idEnsayo:number
 }

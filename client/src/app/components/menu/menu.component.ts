@@ -15,11 +15,13 @@ export class MenuComponent implements OnInit {
   appPages: Observable<Componente[]>;
   darkMode:boolean = false;
   idEnsayo:number|unknown = -1;
+  
   constructor(private dataService:DataService, private webSocket:WebSocketService) {
       
      }
 
   ngOnInit() {
+    
     this.appPages = this.dataService.getMenuOpciones();
     this.webSocket.emit('consultarUso');
     this.webSocket.listen('respuestaUso').subscribe(async data=>{

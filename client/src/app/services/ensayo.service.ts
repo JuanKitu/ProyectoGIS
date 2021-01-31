@@ -15,7 +15,7 @@ export class EnsayoService {
     return this.httpClient.post(this.ensayoURL,unEnsayo,{headers});
   };
   getAll(){
-    return this.httpClient.get(this.ensayoURL);
+    return this.httpClient.get(this.ensayoURL)
   };
   getOne(key$:number){
     return this.httpClient.get(this.ensayoURL+`/${key$}`);
