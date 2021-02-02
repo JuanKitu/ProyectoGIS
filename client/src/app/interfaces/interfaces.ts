@@ -54,11 +54,17 @@ export interface UsuarioLocal{
 };
 export interface RespuestaLogin{
     id:number,
+    ok:boolean,
     token:string,
     usuario:UsuarioLocal
 }
 export interface ControlIdEnsayo{
     idEnsayo:number
+}
+export interface UsuarioRegister{
+    legajo:number,
+    email:string,
+    password:string,
 }
 const domIP= "localhost";
 export const urlSocket= `http://${domIP}:3000`;

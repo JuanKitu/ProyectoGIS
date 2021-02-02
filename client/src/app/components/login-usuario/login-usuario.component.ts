@@ -50,9 +50,7 @@ export class LoginUsuarioComponent implements OnInit {
         cuenta:formulario.value.cuenta,
         password:formulario.value.password
       };
-      this.usuarioService.login(usuario).subscribe(data=>{
-
-      })
+      this.usuarioService.login(usuario);
     };
   
   }

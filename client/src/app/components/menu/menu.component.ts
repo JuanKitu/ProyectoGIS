@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { DataService } from '../../services/data.service';
-import { Observable } from 'rxjs';
+import { Observable, Subscriber } from 'rxjs';
 import { Componente } from 'src/app/interfaces/interfaces';
 import { WebSocketService } from '../../services/web-socket.service';
 import { MenuController } from '@ionic/angular';
+import { UsuarioService } from '../../services/usuario.service';
 
 
 @Component({
@@ -16,7 +17,7 @@ export class MenuComponent implements OnInit {
   darkMode:boolean = false;
   idEnsayo:number|unknown = -1;
   
-  constructor(private dataService:DataService, private webSocket:WebSocketService) {
+  constructor(private dataService:DataService, private webSocket:WebSocketService, private usuarioService:UsuarioService) {
       
      }
 
@@ -34,6 +35,8 @@ export class MenuComponent implements OnInit {
     console.log(this.darkMode);
 
       document.body.classList.toggle('dark');
-
   }
+  logout(){
+    this.usuarioService.logout();
+  };
 }

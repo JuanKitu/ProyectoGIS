@@ -1,16 +1,19 @@
 import { NgModule } from '@angular/core';
-import { PreloadAllModules, RouterModule, Routes, CanActivate } from '@angular/router';
+import { PreloadAllModules, RouterModule, Routes, CanLoad } from '@angular/router';
 import { LoginGuard } from './services/guards/login-guard.guard';
 
 const routes: Routes = [
   { 
-    canActivate:[LoginGuard],
-    path: '', redirectTo: 'home', pathMatch: 'full' },
-  { path: 'home', loadChildren: () => import('./pages/home/home.module').then( m => m.HomePageModule)},
+    path: '', redirectTo: 'home', pathMatch: 'full',
+   },
+  { 
+    /* canLoad:[LoginGuard], */
+    path: 'home', loadChildren: () => import('./pages/home/home.module').then( m => m.HomePageModule)},
   {
-    canActivate:[LoginGuard],
+  
     path: 'ensayo',
-    loadChildren: () => import('./pages/ensayo/ensayo.module').then( m => m.EnsayoPageModule)
+    loadChildren: () => import('./pages/ensayo/ensayo.module').then( m => m.EnsayoPageModule),
+    /* canLoad:[LoginGuard] */
   },
   {
     
@@ -22,6 +25,7 @@ const routes: Routes = [
     loadChildren: () => import('./pages/ensayos-archivados/ensayos-archivados.module').then( m => m.EnsayosArchivadosPageModule)
   },
   {
+    /* canLoad:[LoginGuard], */
     path: 'usuarios',
     loadChildren: () => import('./pages/usuarios/usuarios.module').then( m => m.UsuariosPageModule)
   },

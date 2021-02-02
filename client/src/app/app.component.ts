@@ -7,6 +7,7 @@ import { Observable } from 'rxjs';
 import { Componente } from './interfaces/interfaces';
 import { DataService } from './services/data.service';
 import { WebSocketService } from './services/web-socket.service';
+import { UsuarioService } from './services/usuario.service';
 
 @Component({
   selector: 'app-root',
@@ -24,6 +25,7 @@ export class AppComponent {
     private statusBar: StatusBar,
     private dataService:DataService,
     private webSocket:WebSocketService,
+    private usuarioService:UsuarioService
   ) {
     this.initializeApp();
   }
@@ -45,5 +47,9 @@ export class AppComponent {
  
       document.body.classList.toggle('dark');
 
-  }
+  };
+
+  logout(){
+    this.usuarioService.logout();
+  };
 }

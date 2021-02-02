@@ -32,7 +32,8 @@
                             <ion-label>Opciones</ion-label>
                         </ion-item>
                     </ion-menu-toggle>
-                    <ion-item href="#" lines="none">
+
+                    <ion-item (click)="logout()" button="true" lines="none">
                         <ion-icon slot="start" ios="log-out-outline" md="log-out-outline"></ion-icon>
                         <ion-label>Cerrar Sesion</ion-label>
                     </ion-item>
