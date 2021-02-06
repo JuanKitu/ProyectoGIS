@@ -3,7 +3,14 @@ import { sequelize } from '../database/database';
 import {UsuarioInterface} from '../interfaces/interfaces'
 //El creation Attributes es primordia para que ande el .create en los controladores
 interface UsuarioCreationAttributes extends Optional<UsuarioInterface, "idUsuario">{};
-export default class Usuario extends Model<UsuarioInterface,UsuarioCreationAttributes>{};
+export default class Usuario extends Model<UsuarioInterface,UsuarioCreationAttributes> implements UsuarioInterface{
+    public idUsuario!: number;
+    public nombreUsuario!: string;
+    public legajo!: number;
+    public hash!: string;
+    public salt!: string;
+    public email!: string;
+};
 
 Usuario.init({
     idUsuario: {
@@ -12,9 +19,13 @@ Usuario.init({
         autoIncrement: true,
         allowNull: false
     },
+    nombreUsuario: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
     legajo: {
         type: DataTypes.INTEGER,
-        allowNull: false
+        allowNull: true
     },
     salt: {
         type: DataTypes.STRING,
@@ -23,6 +34,10 @@ Usuario.init({
     hash: {
         type: DataTypes.STRING,
         allowNull: false
+    },
+    email: {
+        type: DataTypes.STRING,
+        allowNull: true
     }
 
 }, {

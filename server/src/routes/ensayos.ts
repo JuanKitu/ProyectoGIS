@@ -2,10 +2,6 @@ import { Router } from 'express';
 import EnsayoController from '../controllers/ensayo.controllers';
 const router = Router();
 const controller = new EnsayoController();
-import net from 'net'
-import Server from '../classes/server';
-import { Observable, Subscriber } from 'rxjs';
-import { fork } from 'child_process';
 
 router.get('/:idEnsayo/csv',controller.jsonToCsv);
 router.get('/:idEnsayo/puntos', controller.consultaPuntos);

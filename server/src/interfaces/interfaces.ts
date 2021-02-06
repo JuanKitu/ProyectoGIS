@@ -43,9 +43,11 @@ export interface ParametroInterface{
 };
 export interface UsuarioInterface{
     idUsuario:number,
-    legajo:number,
+    nombreUsuario?:string,
+    legajo?:number,
     salt:string,
-    hash:string
+    hash:string,
+    email?:string
 }
 export interface colaDatos{
     id:number,
@@ -69,4 +71,16 @@ export interface objetoDatos{
     humedad?:number
 }
 
+export interface UsuarioTokenInterface {
+    idUsuario?: number,
+    nombreUsuario?:string,
+    email?:string,
+    img?:string,
+    google?:boolean
+};
+
+export interface CifradoInterface{
+    hash:string,
+    salt:string,
+}
 export interface EnsayoCreationAttributes extends Optional<EnsayoInterface, "idEnsayo"|"operador"|"fecha"|"distanciaTotal">{};
