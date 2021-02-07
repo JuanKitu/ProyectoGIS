@@ -154,6 +154,7 @@ export default class UsuarioController {
         const password = req.body.password;
         let respuestaLogin = {
             id: 0,
+            ok: false,
             token: "",
             usuario: {}
         }
@@ -195,6 +196,7 @@ export default class UsuarioController {
                             usuarioSimple.legajo = newUsuario.legajo
                             usuarioSimple.email = newUsuario.email
                             respuestaLogin.id = newUsuario.idUsuario;
+                            respuestaLogin.ok = true;
                             respuestaLogin.token = token;
                             respuestaLogin.usuario = usuarioSimple;
                             return res.json({
