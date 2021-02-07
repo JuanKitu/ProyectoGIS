@@ -65,7 +65,7 @@ export default class UsuarioController {
     //Query an Usuario
     getAll = async (req: Request, res: Response) => {
         try {
-            const Usuarios = await Usuario.findAll();
+            const Usuarios = await Usuario.findAll({ attributes: ['idUsuario', 'nombreUsuario', 'legajo', 'email'] });
             return res.json({
                 data: Usuarios
             });
@@ -80,12 +80,12 @@ export default class UsuarioController {
     //Edit an Usuario
     change = async (req: Request, res: Response) => {
         const { idUsuario } = req.params;
-        const { hash, salt, legajo } = req.body;
+        const { nombreUsuario, legajo, email } = req.body;
         try {
             await Usuario.update({
-                hash,
-                salt,
-                legajo
+                nombreUsuario,
+                legajo,
+                email
             },
                 {
                     where: {
@@ -136,7 +136,7 @@ export default class UsuarioController {
             const usuario = await Usuario.findOne({
                 where: {
                     idUsuario
-                }
+                }, attributes: ['idUsuario', 'nombreUsuario', 'legajo', 'email']
             });
             return res.json({
                 data: usuario
