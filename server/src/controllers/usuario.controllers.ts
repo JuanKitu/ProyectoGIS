@@ -159,75 +159,72 @@ export default class UsuarioController {
             usuario: {}
         }
         try {
-            //if (cuenta.includes('@')) {
-            console.log(cuenta);
-            //const legajo=-1;
-            const newUsuario = await Usuario.findOne({
-                where: {
-                    [Op.or]: [
-                        { email: cuenta },
-                        { legajo: cuenta }
-                    ]
-                }
-            });
-            if (!newUsuario) {
-                return res.status(400).json({
-                    ok: false,
-                    err: {
-                        message: '(Usuario) o contraseña incorrectos'
-                    }
-                });
-            }
-            else {
-                console.log(newUsuario);
-                verificarPassword(password, newUsuario.salt).then(hashCreado => {
-                    if (hashCreado == newUsuario.hash) {
-                        const token = createToken(newUsuario);
-                        if (token) {
-                            res.set("token", [token]);
-                            let usuarioSimple = {
-                                idUsuario: 0,
-                                nombreUsuario: "",
-                                legajo: 0,
-                                email: ""
-
-                            }
-                            usuarioSimple.idUsuario = newUsuario.idUsuario
-                            usuarioSimple.nombreUsuario = newUsuario.nombreUsuario
-                            usuarioSimple.legajo = newUsuario.legajo
-                            usuarioSimple.email = newUsuario.email
-                            respuestaLogin.id = newUsuario.idUsuario;
-                            respuestaLogin.ok = true;
-                            respuestaLogin.token = token;
-                            respuestaLogin.usuario = usuarioSimple;
-                            return res.json({
-                                "ok": respuestaLogin.ok,
-                                "id": respuestaLogin.id,
-                                "token": respuestaLogin.token,
-                                "usuario": respuestaLogin.usuario
-                            })
-                        }
-                    } else {
-                        return res.send({
-                            message: 'Usuario o (contraseña) incorrectos',
-                            err: true
-                        });
-                    }
-                }).catch(err => {
-                    console.error(err);
-                    res.json({
-                        error: err,
-                        err: true
-                    });
-                })
-            }
-
-            /*}  else {
+            if (/^[0-9]*$/.test(cuenta)) {
+                console.log(cuenta);
                 const legajo = cuenta;
-                console.log(legajo);
                 const newUsuario = await Usuario.findOne({
                     where: {
                         legajo
+                    }
+                });
+                if (!newUsuario) {
+                    return res.status(400).json({
+                        ok: false,
+                        err: {
+                            message: '(Usuario) o contraseña incorrectos'
+                        }
+                    });
+                }
+                else {
+                    console.log(newUsuario);
+                    verificarPassword(password, newUsuario.salt).then(hashCreado => {
+                        if (hashCreado == newUsuario.hash) {
+                            const token = createToken(newUsuario);
+                            if (token) {
+                                res.set("token", [token]);
+                                let usuarioSimple = {
+                                    idUsuario: 0,
+                                    nombreUsuario: "",
+                                    legajo: 0,
+                                    email: ""
+
+                                }
+                                usuarioSimple.idUsuario = newUsuario.idUsuario
+                                usuarioSimple.nombreUsuario = newUsuario.nombreUsuario
+                                usuarioSimple.legajo = newUsuario.legajo
+                                usuarioSimple.email = newUsuario.email
+                                respuestaLogin.id = newUsuario.idUsuario;
+                                respuestaLogin.ok = true;
+                                respuestaLogin.token = token;
+                                respuestaLogin.usuario = usuarioSimple;
+                                return res.json({
+                                    "ok": respuestaLogin.ok,
+                                    "id": respuestaLogin.id,
+                                    "token": respuestaLogin.token,
+                                    "usuario": respuestaLogin.usuario
+                                })
+                            }
+                        } else {
+                            return res.send({
+                                message: 'Usuario o (contraseña) incorrectos',
+                                err: true
+                            });
+                        }
+                    }).catch(err => {
+                        console.error(err);
+                        res.json({
+                            error: err,
+                            err: true
+                        });
+                    })
+                }
+
+            } else {
+                const email = cuenta;
+                console.log(email);
+                const newUsuario = await Usuario.findOne({
+                    where: {
+                        email
                     }
                 });
                 if (!newUsuario) {
@@ -250,17 +247,20 @@ export default class UsuarioController {
                                     email: ""
 
                                 }
-                                usuarioSimple.idUsuario= newUsuario.idUsuario
-                                usuarioSimple.nombreUsuario= newUsuario.nombreUsuario
-                                usuarioSimple.legajo= newUsuario.legajo
-                                usuarioSimple.email= newUsuario.email
+                                usuarioSimple.idUsuario = newUsuario.idUsuario
+                                usuarioSimple.nombreUsuario = newUsuario.nombreUsuario
+                                usuarioSimple.legajo = newUsuario.legajo
+                                usuarioSimple.email = newUsuario.email
                                 respuestaLogin.id = newUsuario.idUsuario;
                                 respuestaLogin.token = token;
                                 respuestaLogin.usuario = usuarioSimple;
                                 res.set("token", [token]);
                                 return res.json({
-                                    respuestaLogin
-                                });
+                                    "ok": respuestaLogin.ok,
+                                    "id": respuestaLogin.id,
+                                    "token": respuestaLogin.token,
+                                    "usuario": respuestaLogin.usuario
+                                })
                             }
                         } else {
                             return res.send({
@@ -277,7 +277,7 @@ export default class UsuarioController {
                     })
                 }
 
-            } */
+            }
 
 
         } catch (error) {
