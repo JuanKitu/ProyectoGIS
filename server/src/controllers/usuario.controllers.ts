@@ -179,6 +179,7 @@ export default class UsuarioController {
                 });
             }
             else {
+                console.log(newUsuario);
                 verificarPassword(password, newUsuario.salt).then(hashCreado => {
                     if (hashCreado == newUsuario.hash) {
                         const token = createToken(newUsuario);
@@ -200,8 +201,11 @@ export default class UsuarioController {
                             respuestaLogin.token = token;
                             respuestaLogin.usuario = usuarioSimple;
                             return res.json({
-                                respuestaLogin
-                            });
+                                "ok": respuestaLogin.ok,
+                                "id": respuestaLogin.id,
+                                "token": respuestaLogin.token,
+                                "usuario": respuestaLogin.usuario
+                            })
                         }
                     } else {
                         return res.send({
