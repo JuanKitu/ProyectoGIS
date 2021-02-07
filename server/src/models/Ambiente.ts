@@ -3,7 +3,13 @@ import { sequelize } from '../database/database';
 import {AmbienteInterface} from '../interfaces/interfaces'
 //El creation Attributes es primordia para que ande el .create en los controladores
 interface AmbienteCreationAttributes extends Optional<AmbienteInterface, "idAmbiente">{};
-export default class Ambiente extends Model<AmbienteInterface,AmbienteCreationAttributes>{};
+export default class Ambiente extends Model<AmbienteInterface,AmbienteCreationAttributes> implements AmbienteInterface{
+    public temperatura!:number;
+    public humedad!:number;
+    public horaActual!:Date;
+    public idAmbiente!:number;
+    public idEnsayo!:number;
+};
 
 Ambiente.init({
     temperatura: {

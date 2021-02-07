@@ -4,9 +4,11 @@ import Parametros from '../models/Parametros';
 import Ambiente from '../models/Ambiente';
 import { fork } from 'child_process';
 import Server from '../classes/server';
-import { arregloDM, ParametroInterface } from '../interfaces/interfaces';
+import { AmbienteInterface, arregloDM, ParametroInterface } from '../interfaces/interfaces';
 import moment from 'moment';
-import {parse} from 'json2csv';
+import { parse } from 'json2csv';
+import { TableHints } from 'sequelize/types';
+import fs from "fs";
 
 const server = Server.instance;
 let FIN: boolean = false;
@@ -218,8 +220,8 @@ export default class EnsayoController {
                                         distanciaActual = parseFloat(punto.distancia);
                                         if (M.tiempoActual != undefined) {
                                             velocidadActual = (distanciaActual - distanciaAnterior) / (M.tiempoActual - tiempoAnterior);
-                                            distanciaAnterior=distanciaActual;
-                                            tiempoAnterior=M.tiempoActual;
+                                            distanciaAnterior = distanciaActual;
+                                            tiempoAnterior = M.tiempoActual;
                                         }
                                         server.io.emit('parametros', punto);
                                     } else {
@@ -532,7 +534,7 @@ export default class EnsayoController {
         }
     }
 
-    consultaPuntos = async (req: Request, res:Response)=>{
+    consultaPuntos = async (req: Request, res: Response) => {
         const { idEnsayo } = req.params;
         try {
             const elEnsayo = await Ensayo.findOne({
@@ -541,20 +543,20 @@ export default class EnsayoController {
                 },
                 raw: true
             });
-            if(elEnsayo){
+            if (elEnsayo) {
                 const parametro = await Parametros.findAll({
                     where: {
                         idEnsayo
                     }
-                });                
+                });
 
                 let arreglosDM: arregloDM = {
                     arregloDistancias: [],
                     arregloMu: []
                 };
-                const asignar = (unParametro:any) => {
+                const asignar = (unParametro: any) => {
                     arreglosDM.arregloDistancias.push((((unParametro.vueltas) * (2 * Math.PI * elEnsayo.radioTrayectoria)).toFixed(2)).toString()),
-                    arreglosDM.arregloMu.push(unParametro.coeficienteRozamiento)
+                        arreglosDM.arregloMu.push(unParametro.coeficienteRozamiento)
                 }
                 parametro.forEach(elemento => asignar(elemento));
                 return res.json({
@@ -569,7 +571,7 @@ export default class EnsayoController {
         }
     }
 
-    jsonToCsv = async (req: Request, res:Response)=>{
+    saveAsTxt = async (req: Request, res: Response) => {
         const { idEnsayo } = req.params;
         const fields = ['distancia', 'mu'];
         const opts = { fields };
@@ -580,29 +582,73 @@ export default class EnsayoController {
                 },
                 raw: true
             });
-            if(elEnsayo){
+            if (elEnsayo) {
                 const parametro = await Parametros.findAll({
                     where: {
                         idEnsayo
                     }
-                });                
+                });
+                const ambiente = await Ambiente.findAll({
+                    where: {
+                        idEnsayo
+                    }
+                });
                 let elements: any = []
                 let obj = {
                     distancia: '',
                     mu: 0
                 };
-                const asignar = (unParametro:any) => {
-                    obj.distancia=((((unParametro.vueltas) * (2 * Math.PI * elEnsayo.radioTrayectoria)).toFixed(2)).toString()),
-                    obj.mu=(unParametro.coeficienteRozamiento);
-                    elements.push(obj);
+                const TAB = '\t';
+                const LJ = "\n";
+                let timer = 150; //Numero de iteraciones para que se cambie al siguiente ambiente 
+                //ya que como los ambientes se toman cada 60s y los parametros cada 0.4s
+                //entonces a cada ambiente le corresponden 150 parametros
+                let numeroDeAmbiente = 1;
+                let txtCompleto = '';
+                let renglonDatosConPuntos = '';
+                let renglonDatosConComa = '';
+                const renglonesEstandar = 'Fecha' + TAB + elEnsayo.fecha + TAB + ambiente[1].horaActual + LJ +
+                    'Operador' + TAB + elEnsayo.operador + LJ +
+                    'Probeta' + TAB + elEnsayo.codigoProbeta + LJ +
+                    'Material' + TAB + elEnsayo.materialProbeta + LJ +
+                    'Dureza' + TAB + elEnsayo.durezaProbeta + LJ +
+                    'Tratamiento' + TAB + elEnsayo.tratamientoProbeta + LJ +
+                    'Radio' + TAB + elEnsayo.radioTrayectoria + LJ +
+                    'Distancia' + TAB + elEnsayo.distanciaTotal + LJ +
+                    'Carga' + TAB + elEnsayo.carga + LJ +
+                    'Bolilla' + TAB + elEnsayo.materialBola + LJ +
+                    'Diametro' + TAB + elEnsayo.diametroBola + LJ +
+                    'fuerza[kg]' + TAB + 'distancia[m]' + TAB + 'tiempo[s]' + TAB + 'temperatura[°C]' + TAB + 'humedad[%]' + LJ;
+                txtCompleto=renglonesEstandar;
+                const asignar = (unParametro: ParametroInterface) => {
+                    if (unParametro.fuerzaRozamiento && unParametro.vueltas && unParametro.tiempoActual) {
+                        let fuerza = unParametro.fuerzaRozamiento;
+                        let distancia = ((((unParametro.vueltas) * (2 * Math.PI * elEnsayo.radioTrayectoria)).toFixed(2)));
+                        let tiempo = unParametro.tiempoActual;
+                        let temperatura = ambiente[numeroDeAmbiente].temperatura;
+                        let humedad = ambiente[numeroDeAmbiente].humedad;
+                        renglonDatosConPuntos=fuerza.toString()+TAB+distancia.toString()+TAB+tiempo.toString()+TAB+temperatura.toString()+TAB+humedad.toString()+LJ;
+                        renglonDatosConComa=renglonDatosConPuntos.replace(/\./g, ',');
+                        txtCompleto=txtCompleto+renglonDatosConComa;
+                        timer = timer - 1;
+                        if (timer === 0) {
+                            timer = 150;
+                            numeroDeAmbiente = numeroDeAmbiente + 1;
+                        }
+                    }
                 }
                 parametro.forEach(elemento => asignar(elemento));
-                
-                const csv = parse(elements, opts);
-                console.log(csv);
+                fs.writeFile('result.txt', txtCompleto, 'utf8', function (err: any) {
+                    if (err) {
+                        console.log("An error occured while writing JSON Object to File.");
+                        return console.log(err);
+                    }
+                });
+                const txt = parse(elements, opts);
+                console.log(txt);
                 res.header('Content-Type', 'text/csv');
-                res.attachment('probando.csv');
-                return res.send(csv);
+                res.attachment('probando.txt');
+                return res.send(txt);
             }
         } catch (error) {
             console.log(error);
