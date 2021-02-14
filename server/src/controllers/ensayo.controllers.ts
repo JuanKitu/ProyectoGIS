@@ -9,6 +9,7 @@ import moment from 'moment';
 import { parse } from 'json2csv';
 import { TableHints } from 'sequelize/types';
 import fs from "fs";
+import util from 'util';
 
 const server = Server.instance;
 let FIN: boolean = false;
@@ -619,7 +620,7 @@ export default class EnsayoController {
                     'Bolilla' + TAB + elEnsayo.materialBola + LJ +
                     'Diametro' + TAB + elEnsayo.diametroBola + LJ +
                     'fuerza[kg]' + TAB + 'distancia[m]' + TAB + 'tiempo[s]' + TAB + 'temperatura[°C]' + TAB + 'humedad[%]' + LJ;
-                txtCompleto=renglonesEstandar;
+                txtCompleto = renglonesEstandar;
                 const asignar = (unParametro: ParametroInterface) => {
                     if (unParametro.fuerzaRozamiento && unParametro.vueltas && unParametro.tiempoActual) {
                         let fuerza = unParametro.fuerzaRozamiento;
@@ -627,9 +628,9 @@ export default class EnsayoController {
                         let tiempo = unParametro.tiempoActual;
                         let temperatura = ambiente[numeroDeAmbiente].temperatura;
                         let humedad = ambiente[numeroDeAmbiente].humedad;
-                        renglonDatosConPuntos=fuerza.toString()+TAB+distancia.toString()+TAB+tiempo.toString()+TAB+temperatura.toString()+TAB+humedad.toString()+LJ;
-                        renglonDatosConComa=renglonDatosConPuntos.replace(/\./g, ',');
-                        txtCompleto=txtCompleto+renglonDatosConComa;
+                        renglonDatosConPuntos = fuerza.toString() + TAB + distancia.toString() + TAB + tiempo.toString() + TAB + temperatura.toString() + TAB + humedad.toString() + LJ;
+                        renglonDatosConComa = renglonDatosConPuntos.replace(/\./g, ',');
+                        txtCompleto = txtCompleto + renglonDatosConComa;
                         timer = timer - 1;
                         if (timer === 0) {
                             timer = 150;
@@ -638,17 +639,26 @@ export default class EnsayoController {
                     }
                 }
                 parametro.forEach(elemento => asignar(elemento));
-                fs.writeFile('result.txt', txtCompleto, 'utf8', function (err: any) {
+                const titulo = 'Ensayo - ' + elEnsayo.fecha + '.txt';
+                fs.writeFile(titulo, txtCompleto, 'utf8', function (err: any) {
                     if (err) {
                         console.log("An error occured while writing JSON Object to File.");
                         return console.log(err);
                     }
+                    let txt:any = '';
+                    fs.readFile(titulo, 'utf8',function (err,data) {
+                        if (err) {
+                            console.log(err);
+                            process.exit(1);
+                        }
+                        txt = util.format(data);
+                    });
+                    console.log(txt);
+                    res.header('Content-Type', 'text/csv');
+                    res.attachment(titulo);
+                    return res.send(txt);
                 });
-                const txt = parse(elements, opts);
-                console.log(txt);
-                res.header('Content-Type', 'text/csv');
-                res.attachment('probando.txt');
-                return res.send(txt);
+                
             }
         } catch (error) {
             console.log(error);
