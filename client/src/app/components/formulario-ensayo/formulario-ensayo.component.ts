@@ -37,6 +37,7 @@ export class FormularioEnsayoComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.ensayoService.conectarPuerto().subscribe();
     if(this.archivado){
       this.formularioEnsayo.disable();
     }

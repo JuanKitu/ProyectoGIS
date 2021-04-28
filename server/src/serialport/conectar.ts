@@ -5,7 +5,7 @@ let portControlador = new SerialPort(port.puertoControlador, {
     baudRate: 9600,
 });
 
-portControlador.open((error)=>{console.log(error)});
+portControlador.open();
 portControlador.write('<CONN>\n');
 portControlador.on('readable', () => {
     

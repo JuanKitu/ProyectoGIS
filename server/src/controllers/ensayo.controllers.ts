@@ -185,6 +185,7 @@ export default class EnsayoController {
         try {
             console.log('Iniciando consulta de creacion de parametros');
             if (server.consultarConectado()) {
+                console.log('SERVER: ', server.consultarConectado());
                 const elEnsayo = await Ensayo.findOne({
                     where: {
                         idEnsayo
@@ -491,6 +492,7 @@ export default class EnsayoController {
                 server.setearConexion(true);
                 console.log(server.consultarConectado());
                 if (server.consultarConectado()) {
+                    childConn.kill();
                     return res.json({
                         data: 'Connection established'
                     });
