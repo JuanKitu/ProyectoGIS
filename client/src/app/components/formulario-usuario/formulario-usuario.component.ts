@@ -1,5 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { UsuarioService } from '../../services/usuario.service';
+import { UsuarioLocal, UsuarioRegister } from '../../interfaces/interfaces';
+
 
 @Component({
   selector: 'app-formulario-usuario',
@@ -8,10 +12,11 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 })
 export class FormularioUsuarioComponent implements OnInit {
   private formularioUsuario:FormGroup;
-  constructor() { }
-
-  ngOnInit() {
+  @Input() usuario: UsuarioRegister;
+  constructor(private usuarioService:UsuarioService, private router:Router) { 
     this.formularioUsuario = new FormGroup({
+      'idUsuario': new FormControl(),
+      'nombreUsuario': new FormControl(),
       'legajo': new FormControl('', Validators.required),
       'email': new FormControl('', [Validators.required, Validators.email]),
       'password': new FormControl('', Validators.required),
@@ -20,8 +25,33 @@ export class FormularioUsuarioComponent implements OnInit {
       validators: this.verificarPassword('password','repassword')
     });
   }
+
+  ngOnInit() {
+    if(this.usuario.idUsuario){
+        this.usuarioService.getOne(this.usuario.idUsuario).subscribe(async data=>{
+          //console.log(data)
+          this.usuario=await data['data'];
+          this.usuario.password=null;
+          this.usuario.repassword=null;
+          await this.formularioUsuario.setValue(this.usuario);
+        });
+    }
+  };
   crearUsuario(){
-    
+    if(this.usuario.idUsuario){
+      //este bloque es para editar el usuario
+      const key$=this.usuario.idUsuario;
+      this.usuario = this.formularioUsuario.value;
+      this.usuario.idUsuario=key$;
+      /* this.usuarioService.change(this.usuario,this.usuario.idUsuario).subscribe(data=>{
+        this.router.navigate(['/usuario','lista']);
+      }); */
+    }else{
+      //este bloque es para un alta usuario
+      const data:UsuarioRegister = this.formularioUsuario.value;
+      this.usuarioService.register(data);
+      this.router.navigate(['/home']);
+    }
   }
   verificarPassword(pass1:string, pass2:string){
     return (group:FormGroup)=>{

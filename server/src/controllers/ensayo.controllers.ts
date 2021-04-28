@@ -183,6 +183,7 @@ export default class EnsayoController {
     crearParametros = async (req: Request, res: Response) => {
         const { idEnsayo } = req.params;
         try {
+            console.log('Iniciando consulta de creacion de parametros');
             if (server.consultarConectado()) {
                 const elEnsayo = await Ensayo.findOne({
                     where: {
@@ -191,9 +192,7 @@ export default class EnsayoController {
                     raw: true
                 });
                 if (elEnsayo) {
-                    res.json({
-                        data: elEnsayo
-                    });
+                    console.log('Ensayo a usar: ', elEnsayo);
                     let arreglosDM: arregloDM = {
                         arregloDistancias: [],
                         arregloMu: []
@@ -239,6 +238,9 @@ export default class EnsayoController {
                                         hijoPFV.kill();
                                         console.log('FIN PETICION 2');
                                         server.setearEnsayo(-1);
+                                        res.json({
+                                            data: 'Parametros agregados'
+                                        });
                                         server.io.emit('fin', 'FIN');
                                     }
                                 }
@@ -269,7 +271,13 @@ export default class EnsayoController {
                             hijoPFV.send('CANCELAR');
                             FIN = false;
                             server.setearEnsayo(-1);
-                            setTimeout(() => { hijoPFV.kill(); console.log('FIN PETICION'); }, 1000)
+                            setTimeout(() => { 
+                                hijoPFV.kill(); 
+                                console.log('FIN PETICION'); 
+                                res.json({
+                                    data: 'Cancelado'
+                                }); 
+                            }, 1000)
 
                         }
 

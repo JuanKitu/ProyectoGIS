@@ -88,7 +88,7 @@ export class GraficoEnsayoComponent implements OnInit {
       this.webSocket.emit('arrayPuntos', () => { })
       this.webSocket.listen('envioArray').subscribe(datos => {
         const arrayPuntos: ArrayPuntos = datos;
-        const puntos: ChartDataSets[] = [{ data: arrayPuntos.arregloMu, label: 'asdasd' }]
+        const puntos: ChartDataSets[] = [{ data: arrayPuntos.arregloMu, label: 'Fuerza de rozamiento' }]
         this.lineChartData = puntos;
         const arreglosLabels: Label[] = arrayPuntos.arregloDistancias
         this.lineChartLabels = arreglosLabels;
@@ -104,7 +104,7 @@ export class GraficoEnsayoComponent implements OnInit {
     }else{
       this.ensayoService.getPuntosGrafico(this.idEnsayo).subscribe(data=>{
         const arrayPuntos: ArrayPuntos = data['data'];
-        const puntos: ChartDataSets[] = [{ data: arrayPuntos.arregloMu, label: 'asdasd' }]
+        const puntos: ChartDataSets[] = [{ data: arrayPuntos.arregloMu, label: 'Fuerza de rozamiento' }]
         this.lineChartData = puntos;
         const arreglosLabels: Label[] = arrayPuntos.arregloDistancias
         this.lineChartLabels = arreglosLabels;

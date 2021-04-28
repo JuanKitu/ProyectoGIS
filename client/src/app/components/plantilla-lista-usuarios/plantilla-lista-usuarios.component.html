@@ -1,0 +1,23 @@
+<ion-content [fullscreen]="true">
+
+    <!--Refresher-->
+    <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+        <ion-refresher-content></ion-refresher-content>
+    </ion-refresher>
+    <!--List-->
+    <ion-list>
+        <div *ngFor="let usuario of usuarios; let i = index">
+            <ion-item (click)="selectedIndex = i" routerDirection="forward" [routerLink]="['info',usuario.idUsuario]" [class.selected]="selectedIndex == i">
+                <ion-avatar slot="start">
+                    <img src="../../assets/img/probeta-1.png">
+                </ion-avatar>
+                <ion-label>
+                    <h2 class="tituloListaEnsayo">{{usuario.nombreUsuario}}</h2>
+                    <h3>E-Mail: {{usuario.email}}</h3>
+                    <p>Legajo: {{usuario.legajo}}</p>
+                </ion-label>
+            </ion-item>
+        </div>
+
+    </ion-list>
+</ion-content>

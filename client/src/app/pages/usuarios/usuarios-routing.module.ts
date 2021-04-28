@@ -7,7 +7,12 @@ const routes: Routes = [
   {
     path: '',
     component: UsuariosPage
+  },
+  {
+    path: 'info/:idUsuario',
+    loadChildren: () => import('./perfil/perfil.module').then( m => m.PerfilPageModule)
   }
+
 ];
 
 @NgModule({

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { UsuarioService } from '../../services/usuario.service';
 import { UsuarioLogin } from '../../interfaces/interfaces';
+import { NavController } from '@ionic/angular';
 declare const gapi:any;
 @Component({
   selector: 'app-login-usuario',
@@ -11,7 +12,7 @@ declare const gapi:any;
 export class LoginUsuarioComponent implements OnInit {
   auth2:any
   private formularioSesion:FormGroup;
-  constructor(private usuarioService:UsuarioService) {
+  constructor(private usuarioService:UsuarioService, private navCtrl: NavController) {
     this.formularioSesion = new FormGroup({
       'cuenta': new FormControl('', Validators.required),
       'password': new FormControl('', Validators.required),
@@ -38,7 +39,11 @@ export class LoginUsuarioComponent implements OnInit {
       console.log(profile); */
       const token:string = googleUser.getAuthResponse().id_token;
       console.log("token mandado al cliente ", token)
-      this.usuarioService.loginGoogle(token).subscribe();;
+      this.usuarioService.loginGoogle(token).subscribe(data=>{
+        if(data['ok']){
+          this.navCtrl.navigateRoot('home');
+        }
+      });
     })
   }
   iniciarSesion(formulario:FormGroup){
@@ -50,7 +55,11 @@ export class LoginUsuarioComponent implements OnInit {
         cuenta:formulario.value.cuenta,
         password:formulario.value.password
       };
-      this.usuarioService.login(usuario);
+      this.usuarioService.login(usuario).then(ok=>{
+        if(ok){
+          this.navCtrl.navigateRoot('home');
+        }
+      })
     };
   
   }

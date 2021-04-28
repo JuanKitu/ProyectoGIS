@@ -48,9 +48,10 @@ export interface UsuarioLogin{
     password:string
 };
 export interface UsuarioLocal{
-    nombre:string;
-    email:string;
-    legajo:number
+    idUsuario?:number,
+    nombreUsuario?:string,
+    email?:string,
+    legajo?:number
 };
 export interface RespuestaLogin{
     id:number,
@@ -62,10 +63,13 @@ export interface ControlIdEnsayo{
     idEnsayo:number
 }
 export interface UsuarioRegister{
-    legajo:number,
-    email:string,
-    password:string,
+    idUsuario?:number,
+    legajo?:number,
+    email?:string,
+    password?:string,
+    repassword?:string
+    nombreUsuario?:string
 }
-const domIP= "localhost";
+const domIP= "192.168.1.102";
 export const urlSocket= `http://${domIP}:3000`;
 export const urlServices= `${urlSocket}/api/`;

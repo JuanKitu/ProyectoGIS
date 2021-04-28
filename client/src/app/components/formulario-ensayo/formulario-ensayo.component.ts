@@ -71,8 +71,11 @@ export class FormularioEnsayoComponent implements OnInit {
       });
     }else{
       const data:Ensayo = this.formularioEnsayo.value;
+      console.log("valores del formulario", data);
       this.ensayoService.new(data).subscribe(data=>{
         const idEnsayo = data['data'].idEnsayo;
+        console.log("Este es el data",data);
+        console.log("este es el id obtenido", idEnsayo);
         //el state es muy importante, es para mandar el id del ensayo
         this.ensayoService.crearListaParametros(idEnsayo).subscribe(data=>{})
         this.router.navigate(['/ensayo','#','grafico']);

@@ -18,6 +18,9 @@ export class ListaEnsayosPage implements OnInit {
    };
 
   ngOnInit() {
+    this.ensayoService.getSiniestro().subscribe(data=>{
+      console.log("probando de otro cliente: ", data['data'])
+    })
     //El route.paramMar es primordial para que la lista se vuelva a actualizar cada vez que se va a la componente hija
     this.route.paramMap.subscribe(()=>{
       this.ensayoService.getAll().subscribe(data=>{

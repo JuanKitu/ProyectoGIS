@@ -18,10 +18,11 @@ import { ControlesEnsayoComponent } from './controles-ensayo/controles-ensayo.co
 import { GraficoRegistroComponent } from './grafico-registro/grafico-registro.component';
 import { FormularioUsuarioComponent } from './formulario-usuario/formulario-usuario.component';
 import { LoginUsuarioComponent } from './login-usuario/login-usuario.component';
+import { PlantillaListaUsuariosComponent } from './plantilla-lista-usuarios/plantilla-lista-usuarios.component';
 @NgModule({
-    declarations:[FormularioEnsayoComponent, HeaderComponent, PlantillaListaEnsayoComponent, VacioDescripcionPipe, PlantillaListaParametroComponent, FormularioParametroComponent, GraficoEnsayoComponent, InformacionEnsayoComponent, ControlesEnsayoComponent, GraficoRegistroComponent, FormularioUsuarioComponent, LoginUsuarioComponent],
+    declarations:[FormularioEnsayoComponent, HeaderComponent, PlantillaListaEnsayoComponent, VacioDescripcionPipe, PlantillaListaParametroComponent, FormularioParametroComponent, GraficoEnsayoComponent, InformacionEnsayoComponent, ControlesEnsayoComponent, GraficoRegistroComponent, FormularioUsuarioComponent, LoginUsuarioComponent, PlantillaListaUsuariosComponent],
     imports:[IonicModule, FormsModule,ReactiveFormsModule, CommonModule, RouterModule, ChartsModule],
-    exports:[FormularioEnsayoComponent, HeaderComponent, PlantillaListaEnsayoComponent, VacioDescripcionPipe, PlantillaListaParametroComponent, FormularioParametroComponent, GraficoEnsayoComponent, InformacionEnsayoComponent, ControlesEnsayoComponent, GraficoRegistroComponent, FormularioUsuarioComponent, LoginUsuarioComponent]
+    exports:[FormularioEnsayoComponent, HeaderComponent, PlantillaListaEnsayoComponent, VacioDescripcionPipe, PlantillaListaParametroComponent, FormularioParametroComponent, GraficoEnsayoComponent, InformacionEnsayoComponent, ControlesEnsayoComponent, GraficoRegistroComponent, FormularioUsuarioComponent, LoginUsuarioComponent, PlantillaListaUsuariosComponent]
 })
 
 export class ComponentsModule{}

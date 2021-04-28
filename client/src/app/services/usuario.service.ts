@@ -26,7 +26,7 @@ export class UsuarioService {
     localStorage.removeItem('id');
   }
   register(usuario:UsuarioRegister){
-    const url = this.usuarioURL+"/registrar";
+    const url = this.usuarioURL;
     let headers = new HttpHeaders();
     headers = headers.set('Content-Type','application/json')
     return new Promise<boolean>(resolve=>{
@@ -55,7 +55,11 @@ export class UsuarioService {
     })) */
     return new Promise<boolean>(resolve=>{
       this.httpClient.post(url,usuario,{headers}).subscribe(async (res:RespuestaLogin)=>{
+        console.log("respuesta del login:", res);
+        console.log("respuesta del ok:", res.ok);
+
         if(res.ok){
+          console.log("Dentro del if: ")
           await this.guardarToken(res.token);
           localStorage.setItem('id',res.id.toString());
           localStorage.setItem('usuario',JSON.stringify(res.usuario));
@@ -102,13 +106,21 @@ export class UsuarioService {
       })
     })
   };
+
   
   logout(){
     this.usuario = null;
     this.token=null;
     this.limpiarStorage();
     this.navCtrl.navigateRoot('/login', {animated:true});
-  }
+  };
+
+  getAll(){
+    return this.httpClient.get(this.usuarioURL)
+  };
+  getOne(key$:number){
+    return this.httpClient.get(this.usuarioURL+`/${key$}`);
+  };
 
 
 }
