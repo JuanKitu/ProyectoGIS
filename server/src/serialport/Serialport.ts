@@ -59,8 +59,15 @@ async function comenzarExperimeto(puerto: SerialPort, ensayo: Ensayo) {
                     if (typeof (MV) == "string") {
                         if (MV === "FIN") {
                             console.log('Recibiendo fin de child vuelta')
-                            estadoScript=0;
+                            //estadoScript=0;
                             //childVuelta.kill();
+                        }
+                        if (MV === "FIN AMBIENTE") {
+                            console.log('Recibiendo fin de los ambientes')
+                            estadoScript=0;
+                            childVuelta.kill();
+                            (<any>process).send('PARAMETROS AGREGADOS');
+                            
                         }
                         if (MV === "PAUSADO") {
                             console.log('PAUSADO EN SERIALPORT');
@@ -89,10 +96,11 @@ async function comenzarExperimeto(puerto: SerialPort, ensayo: Ensayo) {
                             childVuelta.send('FIN');
                             //portControlador.close();
                             childFuerza.kill();
-                            setTimeout(()=>{
+                            childParametros.kill();
+                            /* setTimeout(()=>{
                                 childParametros.kill();
-                                (<any>process).send('PARAMETROS AGREGADOS');
-                            },1000)
+                                //(<any>process).send('PARAMETROS AGREGADOS');
+                            },1000) */
                             
                         }
 

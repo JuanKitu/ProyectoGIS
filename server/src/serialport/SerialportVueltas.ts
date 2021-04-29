@@ -53,14 +53,14 @@ process.on('message', async (m) => {
                 if (estadoScript === 1) {
                     portControlador.write('<SEND>\n');
                 }
+                if(parada){
+                    console.log('FINALIZANDO SUSCRIBE');
+                    clearInterval(intervalo);
+                    subscriberV.complete();
+                }
             };
             const intervalo = setInterval(ciclo, tiempoRespuesta.tiempoMS);
             console.log('VALOR PARADA1: ',parada);
-            if(parada){
-                console.log('FINALIZANDO SUSCRIBE');
-                clearInterval(intervalo);
-                subscriberV.complete();
-            }
             parser.on('readable', () => {
                 //setTimeout(() => {
                     const data = parser.read();
