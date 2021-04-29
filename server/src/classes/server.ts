@@ -5,14 +5,7 @@ import * as socket from '../socket/socket';
 //import {pausar} from '../controllers/ensayo.controllers'
 import { arregloDM, EnsayoInterface } from '../interfaces/interfaces';
 import { any } from 'bluebird';
-//Creacion del puerto del conrolador para conectar la maquina
-import SerialPort from 'serialport';
-import { port } from '../interfaces/interfaces';
 import { fork } from 'child_process';
-let portControlador = new SerialPort(port.puertoControlador, {
-    baudRate: 9600,
-});
-
 
 //Aca habria que importar el archivos de sockets personalizado
 
