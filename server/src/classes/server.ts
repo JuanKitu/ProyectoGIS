@@ -33,6 +33,8 @@ export default class Server {
         //configurando el socket
         this.httpServer = new http.Server(this.app);
         this.io = socketIO(this.httpServer);
+        //Conectando a la maquina
+        this.conectar();
         //escuchando propiedades del socket
         this.escucharSockets();
         this.arreglos = {
