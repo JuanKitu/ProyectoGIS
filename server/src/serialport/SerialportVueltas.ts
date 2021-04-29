@@ -55,7 +55,7 @@ process.on('message', async (m) => {
             };
             const intervalo = setInterval(ciclo, tiempoRespuesta.tiempoMS);
             parser.on('readable', () => {
-                setTimeout(() => {
+                //setTimeout(() => {
                     const data = parser.read();
                     if (data) {
                         const arreglo: any = data.toString().match(/\./);
@@ -94,7 +94,7 @@ process.on('message', async (m) => {
 
                     }
 
-                }, tiempoRespuesta.tiempoMS + 25)
+                //}, tiempoRespuesta.tiempoMS + 25)
 
             });
 
