@@ -110,6 +110,7 @@ process.on('message', async (m) => {
                     dato: data
                 };
                 if (estadoScript != 1) {
+                    console.log('AGREGADO -1 A LA COLA');
                     unDato.id = i;
                     unDato.dato = -1
                     colaDato.enqueue(unDato);

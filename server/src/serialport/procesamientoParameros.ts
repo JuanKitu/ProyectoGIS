@@ -59,12 +59,12 @@ process.on('message', async (m) => {
             let tiempo: number = 0;
             let colaVueltas: Queue = new Queue();
             let colaFuerzas: Queue = new Queue();
-            console.log('COLA DE VUELTAS: ',colaVueltas.print());
-            console.log('COLA DE FUERZAS: ',colaFuerzas.print());
             colaVueltas.copy(leerJson('vueltas.json'));
             colaFuerzas.copy(leerJson('fuerzas.json'));
             const ciclo = () => {
                 if (estadoScript === 1) {
+                    console.log('COLA DE VUELTAS: ',colaVueltas.print());
+                    console.log('COLA DE FUERZAS: ',colaFuerzas.print());
                     if (colaFuerzas.size()==0) {
                         colaFuerzas.copy(leerJson('fuerzas.json').filter(fuerza => fuerza.id >= contador));
                     };
