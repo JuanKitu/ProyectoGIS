@@ -41,7 +41,7 @@ function crearAmbiente(unaHumedad: number, unaTemperatura: number, unEnsayo: Ens
 };
 
 let ensayo: EnsayoInterface;
-
+let parada:boolean=false;
 process.on('message', async (m) => {
     if (typeof (m) == "object") {
         //portControlador.open();
@@ -55,7 +55,6 @@ process.on('message', async (m) => {
                 }
             };
             const intervalo = setInterval(ciclo, tiempoRespuesta.tiempoMS);
-            let parada:boolean=false;
             if(parada){
                 console.log('FINALIZANDO SUSCRIBE');
                 clearInterval(intervalo);
