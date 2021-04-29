@@ -55,6 +55,7 @@ process.on('message', async (m) => {
                 }
             };
             const intervalo = setInterval(ciclo, tiempoRespuesta.tiempoMS);
+            console.log('VALOR PARADA1: ',parada);
             if(parada){
                 console.log('FINALIZANDO SUSCRIBE');
                 clearInterval(intervalo);
@@ -67,6 +68,7 @@ process.on('message', async (m) => {
                         const arreglo: any = data.toString().match(/\./);
                         if (arreglo === null) {
                             console.log('Data de serialport vuelta1: ', data.toString());
+                            console.log('VALOR PARADA2: ',parada);
                             const arreglo2: any = data.toString().match(/\-/);
                             if (arreglo2 != null) {
                                 console.log('INTERPRETANDO -1');
