@@ -12,11 +12,11 @@ let fin = false;
 let estadoScript: number = 1;
 
 const portControlador = new SerialPort(port.puertoControlador, {
-    autoOpen:false,
+    autoOpen: false,
     baudRate: 9600
 });
 portControlador.pipe(parser)
-console.log('ESTA ABIERTO EL PUERTO EN VUELTAS?: ',portControlador.isOpen);
+console.log('ESTA ABIERTO EL PUERTO EN VUELTAS?: ', portControlador.isOpen);
 portControlador.open();
 function crearAmbiente(unaHumedad: number, unaTemperatura: number, unEnsayo: EnsayoInterface): AmbienteInterface {
     if (unEnsayo.idEnsayo) {
@@ -61,34 +61,32 @@ process.on('message', async (m) => {
                         const arreglo: any = data.toString().match(/\./);
                         if (arreglo === null) {
                             console.log('Data de serialport vuelta1: ', data.toString());
-                            if (ensayo.distanciaTotal && ensayo.radioTrayectoria) {
-                                if (parseFloat(data.toString()) === -1) {
-                                    console.log('INTERPRETANDO -1');
-                                    estadoScript = 0;
-                                    /* i++
-                                    let unDato: colaDatos = {
-                                        id: i,
-                                        dato: -1
-                                    };
-                                    colaDato.enqueue(unDato);
-                                    let datos = colaDato.print();
-                                    let jsonObj = {
-                                        data: datos
-                                    }
-                                    let jsonContent = JSON.stringify(jsonObj);
-                                    fs.writeFile('vueltas.json', jsonContent, 'utf8', function (err: any) {
-                                        if (err) {
-                                            console.log("An error occured while writing JSON Object to File.");
-                                            return console.log(err);
-                                        }
-                                    }); */
-                                    clearInterval(intervalo);
-                                    subscriberV.complete();
-                                } else {
-                                    //const arreglo: any = data.toString().match(/\n.*\n/);
-                                    subscriberV.next(parseFloat(data.toString()));
-
+                            if (parseFloat(data.toString()) === -1) {
+                                console.log('INTERPRETANDO -1');
+                                estadoScript = 0;
+                                /* i++
+                                let unDato: colaDatos = {
+                                    id: i,
+                                    dato: -1
+                                };
+                                colaDato.enqueue(unDato);
+                                let datos = colaDato.print();
+                                let jsonObj = {
+                                    data: datos
                                 }
+                                let jsonContent = JSON.stringify(jsonObj);
+                                fs.writeFile('vueltas.json', jsonContent, 'utf8', function (err: any) {
+                                    if (err) {
+                                        console.log("An error occured while writing JSON Object to File.");
+                                        return console.log(err);
+                                    }
+                                }); */
+                                clearInterval(intervalo);
+                                subscriberV.complete();
+                            } else {
+                                //const arreglo: any = data.toString().match(/\n.*\n/);
+                                subscriberV.next(parseFloat(data.toString()));
+
                             }
 
                         }
@@ -104,17 +102,17 @@ process.on('message', async (m) => {
 
         let i: number = 0
         const youtube: Subscription = obserbableVueltas.subscribe(data => {
-            if (data != 0 && fin!=true) {
+            if (data != 0 && fin != true) {
                 i++
                 let unDato: colaDatos = {
                     id: i,
                     dato: data
                 };
-                if(estadoScript!=1){
-                    unDato.id=i;
-                    unDato.dato=-1
+                if (estadoScript != 1) {
+                    unDato.id = i;
+                    unDato.dato = -1
                     colaDato.enqueue(unDato);
-                }else{
+                } else {
                     colaDato.enqueue(unDato);
                 }
                 let datos = colaDato.print();
@@ -155,7 +153,7 @@ process.on('message', async (m) => {
                     subscriberA.complete();
                 }
             };
-            setTimeout(ciclo2,tiempoRespuesta.tiempoMS+1123);
+            setTimeout(ciclo2, tiempoRespuesta.tiempoMS + 1123);
             const intervalo2 = setInterval(ciclo2, tiempoRespuesta.tiempoMS + 59713);
 
             portControlador.on('readable', () => {
