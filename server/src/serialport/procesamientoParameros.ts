@@ -59,8 +59,8 @@ process.on('message', async (m) => {
             let tiempo: number = 0;
             let colaVueltas: Queue = new Queue();
             let colaFuerzas: Queue = new Queue();
-            console.log('COLA DE VUELTAS: ',colaVueltas);
-            console.log('COLA DE FUERZAS: ',colaFuerzas);
+            console.log('COLA DE VUELTAS: ',colaVueltas.print());
+            console.log('COLA DE FUERZAS: ',colaFuerzas.print());
             colaVueltas.copy(leerJson('vueltas.json'));
             colaFuerzas.copy(leerJson('fuerzas.json'));
             const ciclo = () => {

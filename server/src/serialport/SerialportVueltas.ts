@@ -106,17 +106,15 @@ process.on('message', async (m) => {
         const youtube: Subscription = obserbableVueltas.subscribe(data => {
             if (data != 0 && fin!=true) {
                 i++
+                let unDato: colaDatos = {
+                    id: i,
+                    dato: data
+                };
                 if(estadoScript!=1){
-                    let unDato: colaDatos = {
-                        id: i,
-                        dato: -1
-                    };
+                    unDato.id=i;
+                    unDato.dato=-1
                     colaDato.enqueue(unDato);
-                } else {
-                    let unDato: colaDatos = {
-                        id: i,
-                        dato: data
-                    };
+                }else{
                     colaDato.enqueue(unDato);
                 }
                 let datos = colaDato.print();
