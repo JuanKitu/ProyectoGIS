@@ -5,6 +5,7 @@ import { Observable, Subscription, async } from 'rxjs';
 import Ambiente from '../models/Ambiente';
 const fs = require('fs');
 import moment from 'moment'
+import { parse } from 'json2csv';
 const Readline = require('@serialport/parser-readline');
 const parser = new Readline()
 const colaDato = new Queue();
@@ -57,6 +58,11 @@ process.on('message', async (m) => {
             parser.on('readable', () => {
                 //setTimeout(() => {
                     const data = parser.read();
+                    let parada:boolean=false;
+                    if(parada){
+                        clearInterval(intervalo);
+                        subscriberV.complete();
+                    }
                     if (data) {
                         const arreglo: any = data.toString().match(/\./);
                         if (arreglo === null) {
@@ -82,8 +88,10 @@ process.on('message', async (m) => {
                                         return console.log(err);
                                     }
                                 }); */
-                                clearInterval(intervalo);
-                                subscriberV.complete();
+                                /* clearInterval(intervalo);
+                                subscriberV.complete(); */
+                                subscriberV.next(-1);
+                                parada=true;
                             } else {
                                 //const arreglo: any = data.toString().match(/\n.*\n/);
                                 subscriberV.next(parseFloat(data.toString()));
