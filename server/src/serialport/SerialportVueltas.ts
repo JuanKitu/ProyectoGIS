@@ -57,6 +57,7 @@ process.on('message', async (m) => {
             const intervalo = setInterval(ciclo, tiempoRespuesta.tiempoMS);
             let parada:boolean=false;
             if(parada){
+                console.log('FINALIZANDO SUSCRIBE');
                 clearInterval(intervalo);
                 subscriberV.complete();
             }
@@ -142,7 +143,7 @@ process.on('message', async (m) => {
                 console.log(error)
             },
             () => {
-                portControlador.close();
+                //portControlador.close();
                 console.log("FIN EXPERIMENTO");
                 (<any>process).send('FIN');
 
@@ -154,10 +155,10 @@ process.on('message', async (m) => {
         const obserbableAmbiente = new Observable(subscriberA => {
             const ciclo2 = () => {
                 if (!fin) {
-                    if (estadoScript === 1) {
+                    //if (estadoScript === 1) {
                         console.log('Ejecutando Ambiente');
                         portControlador.write('<TMHM>\n');
-                    }
+                   // }
                 } else {
                     clearInterval(intervalo2);
                     subscriberA.complete();
@@ -208,7 +209,7 @@ process.on('message', async (m) => {
             async () => {
                 await Ambiente.bulkCreate(arregloAmbientes);
                 console.log("finish ambiente");
-                //(<any>process).send('FIN');
+                (<any>process).send('FIN AMBIENTE');
 
             }
         )
