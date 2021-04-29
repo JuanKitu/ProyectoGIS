@@ -61,7 +61,8 @@ process.on('message', async (m) => {
                         const arreglo: any = data.toString().match(/\./);
                         if (arreglo === null) {
                             console.log('Data de serialport vuelta1: ', data.toString());
-                            if (parseFloat(data.toString()) === -1) {
+                            const arreglo2: any = data.toString().match(/\-/);
+                            if (arreglo2 != null) {
                                 console.log('INTERPRETANDO -1');
                                 estadoScript = 0;
                                 /* i++
