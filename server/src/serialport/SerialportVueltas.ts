@@ -55,14 +55,14 @@ process.on('message', async (m) => {
                 }
             };
             const intervalo = setInterval(ciclo, tiempoRespuesta.tiempoMS);
+            let parada:boolean=false;
+            if(parada){
+                clearInterval(intervalo);
+                subscriberV.complete();
+            }
             parser.on('readable', () => {
                 //setTimeout(() => {
                     const data = parser.read();
-                    let parada:boolean=false;
-                    if(parada){
-                        clearInterval(intervalo);
-                        subscriberV.complete();
-                    }
                     if (data) {
                         const arreglo: any = data.toString().match(/\./);
                         if (arreglo === null) {
