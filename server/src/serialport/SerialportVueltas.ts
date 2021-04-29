@@ -63,6 +63,7 @@ process.on('message', async (m) => {
                             console.log('Data de serialport vuelta1: ', data.toString());
                             if (ensayo.distanciaTotal && ensayo.radioTrayectoria) {
                                 if (parseFloat(data.toString()) === -1) {
+                                    console.log('INTERPRETANDO -1');
                                     estadoScript = 0;
                                     /* i++
                                     let unDato: colaDatos = {
