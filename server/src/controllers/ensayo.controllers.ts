@@ -221,12 +221,16 @@ export default class EnsayoController {
                                         server.setearArray(arreglosDM);
                                         distanciaActual = parseFloat(punto.distancia);
                                         if (M.tiempoActual != undefined) {
+                                            console.log('DISTANCIA ANTERIOR: ',distanciaAnterior);
+                                            console.log('TIEMPO ANTERIOR: ',tiempoAnterior);
+                                            console.log('TIEMPO ACTUAL: ',M.tiempoActual);
                                             velocidadActual = (distanciaActual - distanciaAnterior) / (M.tiempoActual - tiempoAnterior);
                                             distanciaAnterior = distanciaActual;
                                             tiempoAnterior = M.tiempoActual;
                                         }
                                         server.io.emit('parametros', punto);
                                     } else {
+                                        console.log('AMBIENTE A MANDAR: ',M)
                                         M.horaInicio = horaDeInicio;
                                         M.horaFin = (moment().format('HH:mm:ss'));
                                         M.velocidad = velocidadActual;
@@ -236,14 +240,16 @@ export default class EnsayoController {
                                 }
                                 if (typeof (M) == "string") {
                                     if (M === 'PARAMETROS AGREGADOS') {
-                                        console.log('FIN PETICION');
-                                        hijoPFV.kill();
-                                        console.log('FIN PETICION 2');
-                                        server.setearEnsayo(-1);
-                                        res.json({
-                                            data: 'Parametros agregados'
-                                        });
-                                        server.io.emit('fin', 'FIN');
+                                        setTimeout(() => {
+                                            console.log('FIN PETICION');
+                                            hijoPFV.kill();
+                                            console.log('FIN PETICION 2');
+                                            server.setearEnsayo(-1);
+                                            res.json({
+                                                data: 'Parametros agregados'
+                                            });
+                                            server.io.emit('fin', 'FIN')
+                                        }, 1000);
                                     }
                                 }
                             } else {
@@ -273,12 +279,12 @@ export default class EnsayoController {
                             hijoPFV.send('CANCELAR');
                             FIN = false;
                             server.setearEnsayo(-1);
-                            setTimeout(() => { 
-                                hijoPFV.kill(); 
-                                console.log('FIN PETICION'); 
+                            setTimeout(() => {
+                                hijoPFV.kill();
+                                console.log('FIN PETICION');
                                 res.json({
                                     data: 'Cancelado'
-                                }); 
+                                });
                             }, 1000)
 
                         }
@@ -656,8 +662,8 @@ export default class EnsayoController {
                         console.log("An error occured while writing JSON Object to File.");
                         return console.log(err);
                     }
-                    let txt:any = '';
-                    fs.readFile(titulo, 'utf8',function (err,data) {
+                    let txt: any = '';
+                    fs.readFile(titulo, 'utf8', function (err, data) {
                         if (err) {
                             console.log(err);
                             process.exit(1);
@@ -669,7 +675,7 @@ export default class EnsayoController {
                     res.attachment(titulo);
                     return res.send(txt);
                 });
-                
+
             }
         } catch (error) {
             console.log(error);
