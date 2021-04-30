@@ -41,7 +41,7 @@ function crearAmbiente(unaHumedad: number, unaTemperatura: number, unEnsayo: Ens
 };
 
 let ensayo: EnsayoInterface;
-let parada:boolean=false;
+let parada: boolean = false;
 process.on('message', async (m) => {
     if (typeof (m) == "object") {
         //portControlador.open();
@@ -53,58 +53,58 @@ process.on('message', async (m) => {
                 if (estadoScript === 1) {
                     portControlador.write('<SEND>\n');
                 }
-                if(parada){
+                if (parada) {
                     console.log('FINALIZANDO SUSCRIBE');
                     clearInterval(intervalo);
                     subscriberV.complete();
                 }
             };
             const intervalo = setInterval(ciclo, tiempoRespuesta.tiempoMS);
-            console.log('VALOR PARADA1: ',parada);
+            console.log('VALOR PARADA1: ', parada);
             console.log('ESTA ABIERTO EL PUERTO EN VUELTAS? 2: ', portControlador.isOpen);
             parser.on('readable', () => {
                 //setTimeout(() => {
-                    const data = parser.read();
-                    if (data) {
-                        const arreglo: any = data.toString().match(/\./);
-                        if (arreglo === null) {
-                            console.log('Data de serialport vuelta1: ', data.toString());
-                            console.log('VALOR PARADA2: ',parada);
-                            const arreglo2: any = data.toString().match(/\-/);
-                            if (arreglo2 != null) {
-                                console.log('INTERPRETANDO -1');
-                                estadoScript = 0;
-                                /* i++
-                                let unDato: colaDatos = {
-                                    id: i,
-                                    dato: -1
-                                };
-                                colaDato.enqueue(unDato);
-                                let datos = colaDato.print();
-                                let jsonObj = {
-                                    data: datos
-                                }
-                                let jsonContent = JSON.stringify(jsonObj);
-                                fs.writeFile('vueltas.json', jsonContent, 'utf8', function (err: any) {
-                                    if (err) {
-                                        console.log("An error occured while writing JSON Object to File.");
-                                        return console.log(err);
-                                    }
-                                }); */
-                                /* clearInterval(intervalo);
-                                subscriberV.complete(); */
-                                subscriberV.next(-1);
-                                parada=true;
-                            } else {
-                                //const arreglo: any = data.toString().match(/\n.*\n/);
-                                subscriberV.next(parseFloat(data.toString()));
-
+                const data = parser.read();
+                if (data) {
+                    const arreglo: any = data.toString().match(/\./);
+                    if (arreglo === null) {
+                        console.log('Data de serialport vuelta1: ', data.toString());
+                        console.log('VALOR PARADA2: ', parada);
+                        const arreglo2: any = data.toString().match(/\-/);
+                        if (arreglo2 != null) {
+                            console.log('INTERPRETANDO -1');
+                            estadoScript = 0;
+                            /* i++
+                            let unDato: colaDatos = {
+                                id: i,
+                                dato: -1
+                            };
+                            colaDato.enqueue(unDato);
+                            let datos = colaDato.print();
+                            let jsonObj = {
+                                data: datos
                             }
+                            let jsonContent = JSON.stringify(jsonObj);
+                            fs.writeFile('vueltas.json', jsonContent, 'utf8', function (err: any) {
+                                if (err) {
+                                    console.log("An error occured while writing JSON Object to File.");
+                                    return console.log(err);
+                                }
+                            }); */
+                            /* clearInterval(intervalo);
+                            subscriberV.complete(); */
+                            subscriberV.next(-1);
+                            parada = true;
+                        } else {
+                            //const arreglo: any = data.toString().match(/\n.*\n/);
+                            subscriberV.next(parseFloat(data.toString()));
 
                         }
 
-
                     }
+
+
+                }
 
                 //}, tiempoRespuesta.tiempoMS + 25)
 
@@ -133,7 +133,7 @@ process.on('message', async (m) => {
                     data: datos
                 }
                 let jsonContent = JSON.stringify(jsonObj);
-                console.log('CONTENIDO ANTES DE GRABAR: ',jsonContent);
+                console.log('CONTENIDO ANTES DE GRABAR: ', jsonContent);
                 fs.writeFile('vueltas.json', jsonContent, 'utf8', function (err: any) {
                     if (err) {
                         console.log("An error occured while writing JSON Object to File.");
@@ -159,17 +159,23 @@ process.on('message', async (m) => {
             const ciclo2 = () => {
                 if (!fin) {
                     //if (estadoScript === 1) {
-                        console.log('Ejecutando Ambiente');
-                        portControlador.write('<TMHM>\n');
-                   // }
+                    console.log('Ejecutando Ambiente');
+                    portControlador.write('<TMHM>\n');
+                    // }
                 } else {
+                    clearInterval(intervalo2);
+                    subscriberA.complete();
+                }
+            };
+            const ciclo3 = () => {
+                if (fin) {
                     clearInterval(intervalo2);
                     subscriberA.complete();
                 }
             };
             setTimeout(ciclo2, tiempoRespuesta.tiempoMS + 1123);
             const intervalo2 = setInterval(ciclo2, tiempoRespuesta.tiempoMS + 59713);
-
+            const intervalo3 = setInterval(ciclo3, tiempoRespuesta.tiempoMS + 600);
             portControlador.on('readable', () => {
                 setTimeout(() => {
                     const data = portControlador.read();
