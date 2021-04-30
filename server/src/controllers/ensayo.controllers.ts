@@ -12,6 +12,7 @@ import fs from "fs";
 import util from 'util';
 
 const server = Server.instance;
+server.conectar();
 let FIN: boolean = false;
 //const Parametros = require('../models/Parametros');
 //const Ambiente = require('../models/Ambiente');

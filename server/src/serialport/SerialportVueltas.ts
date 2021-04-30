@@ -18,7 +18,7 @@ const portControlador = new SerialPort(port.puertoControlador, {
 });
 portControlador.pipe(parser)
 console.log('ESTA ABIERTO EL PUERTO EN VUELTAS?: ', portControlador.isOpen);
-//portControlador.open();
+portControlador.open();
 function crearAmbiente(unaHumedad: number, unaTemperatura: number, unEnsayo: EnsayoInterface): AmbienteInterface {
     if (unEnsayo.idEnsayo) {
         /* Datos necesarios para la creacion */
@@ -44,7 +44,7 @@ let ensayo: EnsayoInterface;
 let parada:boolean=false;
 process.on('message', async (m) => {
     if (typeof (m) == "object") {
-        portControlador.open();
+        //portControlador.open();
         ensayo = await m;
         console.log('RECIBIENDO ENSAYO');
         const obserbableVueltas = new Observable(subscriberV => {

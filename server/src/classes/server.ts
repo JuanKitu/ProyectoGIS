@@ -27,7 +27,7 @@ export default class Server {
         this.httpServer = new http.Server(this.app);
         this.io = socketIO(this.httpServer);
         //Conectando a la maquina
-        this.conectar();
+        //this.conectar();
         //escuchando propiedades del socket
         this.escucharSockets();
         this.arreglos = {
@@ -69,6 +69,17 @@ export default class Server {
         this.conectado = estado;
     }
 
+    public conectar() {
+        const childConn = fork('../server/dist/serialport/conectar.js', ['normal']);
+            childConn.on('message', (MP: number) => {
+                this.setearConexion(true);
+                console.log(this.consultarConectado());
+                if (this.consultarConectado()) {
+                    childConn.kill();
+                }
+            })
+    }
+
     private escucharSockets() {
 
         console.log('escuchando conexiones - sockets');
@@ -102,16 +113,6 @@ export default class Server {
 
     }
 
-    private conectar() {
-        const childConn = fork('../server/dist/serialport/conectar.js', ['normal']);
-            childConn.on('message', (MP: number) => {
-                this.setearConexion(true);
-                console.log(this.consultarConectado());
-                if (this.consultarConectado()) {
-                    childConn.kill();
-                }
-            })
-    }
 
     start(callback: Function, ip?: string) {
 

@@ -8,19 +8,19 @@ let portControlador = new SerialPort(port.puertoControlador, {
 portControlador.open();
 portControlador.write('<CONN>\n');
 portControlador.on('readable', () => {
-    
+
     const control = portControlador.read();
     if (control) {
         console.log(parseFloat(control.toString()));
 
-         setTimeout(()=>{
-             console.log("Puerto abierto: ", portControlador.isOpen);
-             if(portControlador.isOpen){
+        setTimeout(() => {
+            console.log("Puerto abierto: ", portControlador.isOpen);
+            if (portControlador.isOpen) {
                 portControlador.close();
                 (<any>process).send(parseFloat(control.toString()));
-             }
-            },1000)
-        
-        
+            }
+        }, 1000)
+
+
     };
 });
