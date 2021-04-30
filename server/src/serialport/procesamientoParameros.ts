@@ -13,6 +13,7 @@ let estadoScript: number = 1;
 
 
 process.on('message', async (m) => {
+    console.log('INICIANDO PROCESAMIENTO DE PARAMETROS');
     if (typeof (m) == "string") {
         if (m === 'PAUSA') {
             console.log('PAUSANDO EN PARAMETRO');

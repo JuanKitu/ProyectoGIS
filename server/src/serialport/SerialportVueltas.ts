@@ -132,6 +132,7 @@ process.on('message', async (m) => {
                     data: datos
                 }
                 let jsonContent = JSON.stringify(jsonObj);
+                console.log('CONTENIDO ANTES DE GRABAR: ',jsonContent);
                 fs.writeFile('vueltas.json', jsonContent, 'utf8', function (err: any) {
                     if (err) {
                         console.log("An error occured while writing JSON Object to File.");
