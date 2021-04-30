@@ -221,16 +221,19 @@ export default class EnsayoController {
                                         server.setearArray(arreglosDM);
                                         distanciaActual = parseFloat(punto.distancia);
                                         if (M.tiempoActual != undefined) {
-                                            console.log('DISTANCIA ANTERIOR: ',distanciaAnterior);
-                                            console.log('TIEMPO ANTERIOR: ',tiempoAnterior);
-                                            console.log('TIEMPO ACTUAL: ',M.tiempoActual);
+                                            console.log('DISTANCIA ANTERIOR 1: ',distanciaAnterior);
+                                            console.log('TIEMPO ANTERIOR 1: ',tiempoAnterior);
+                                            console.log('TIEMPO ACTUAL 1: ',M.tiempoActual);
                                             velocidadActual = (distanciaActual - distanciaAnterior) / (M.tiempoActual - tiempoAnterior);
                                             distanciaAnterior = distanciaActual;
                                             tiempoAnterior = M.tiempoActual;
                                         }
                                         server.io.emit('parametros', punto);
                                     } else {
-                                        console.log('AMBIENTE A MANDAR: ',M)
+                                        console.log('DISTANCIA ANTERIOR 2: ',distanciaAnterior);
+                                        console.log('TIEMPO ANTERIOR 2: ',tiempoAnterior);
+                                        console.log('TIEMPO ACTUAL 2: ',M.tiempoActual);
+                                        console.log('AMBIENTE A MANDAR: ',M);
                                         M.horaInicio = horaDeInicio;
                                         M.horaFin = (moment().format('HH:mm:ss'));
                                         M.velocidad = velocidadActual;
