@@ -234,6 +234,7 @@ process.on('message', async (m) => {
         }
         if (m === "CANCELAR") {
             while(fin!=true){
+                console.log('Esta abierto? ',portControlador.isOpen)
                 portControlador.write('<STOP>\n');
                 console.log('Enviando cancelar');
             }
