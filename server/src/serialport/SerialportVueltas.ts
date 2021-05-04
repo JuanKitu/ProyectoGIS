@@ -243,7 +243,7 @@ process.on('message', async (m) => {
                 const arreglo3: any = data.toString().match(/\-/);
 
                 //ACA TENGO QUE ESPERAR UN -. ACORDATE QUE EL -1 VIENE CORTADO
-                if (arreglo3 === null) {
+                if (arreglo3 != null) {
                     fin = true;
                     console.log('CANCELADO EN VUELTAS');
                     //portControlador.close();
