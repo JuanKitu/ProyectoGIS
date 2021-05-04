@@ -233,11 +233,20 @@ process.on('message', async (m) => {
             (<any>process).send('PAUSADO');
         }
         if (m === "CANCELAR") {
-            portControlador.write('<STOP>\n');
-            fin = true;
-            console.log('CANCELADO EN VUELTAS');
-            //portControlador.close();
-            (<any>process).send('CANCELADO');
+            while(fin!=true){
+                portControlador.write('<STOP>\n');
+                console.log('Enviando cancelar');
+            }
+            parser.on('readable', () => {
+                let data = parser.read().toString();
+                if (data = '-1') {
+                    fin = true;
+                    console.log('CANCELADO EN VUELTAS');
+                    //portControlador.close();
+                    (<any>process).send('CANCELADO');
+                }
+            });
+
         }
         if (m === "TEST") {
             portControlador.write('<TEST>\n');
