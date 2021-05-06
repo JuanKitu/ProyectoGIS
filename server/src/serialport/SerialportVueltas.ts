@@ -233,7 +233,10 @@ process.on('message', async (m) => {
             (<any>process).send('PAUSADO');
         }
         if (m === "CANCELAR") {
-            while (fin != true) {
+            fin = true;
+            console.log('CANCELADO EN VUELTAS');
+            (<any>process).send('CANCELADO');
+            /* if (fin != true) {
                 console.log('Esta abierto? ', portControlador.isOpen)
                 portControlador.write('<STOP>\n');
                 console.log('Enviando cancelar');
@@ -241,15 +244,13 @@ process.on('message', async (m) => {
             parser.on('readable', () => {
                 let data = parser.read().toString();
                 const arreglo3: any = data.toString().match(/\-/);
-
-                //ACA TENGO QUE ESPERAR UN -. ACORDATE QUE EL -1 VIENE CORTADO
                 if (arreglo3 != null) {
                     fin = true;
                     console.log('CANCELADO EN VUELTAS');
                     //portControlador.close();
                     (<any>process).send('CANCELADO');
                 }
-            });
+            }); */
 
         }
         if (m === "TEST") {
