@@ -71,7 +71,7 @@ process.on('message', async (m) => {
                         console.log('Data de serialport vuelta1: ', data.toString());
                         console.log('VALOR PARADA2: ', parada);
                         const arreglo2: any = data.toString().match(/\-/);
-                        if (arreglo2 != null) {
+                        if (arreglo2 != null && fin!=true) {
                             console.log('INTERPRETANDO -1');
                             estadoScript = 0;
                             /* i++
