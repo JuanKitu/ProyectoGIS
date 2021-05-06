@@ -113,7 +113,6 @@ async function comenzarExperimeto(puerto: SerialPort, ensayo: Ensayo) {
                                 childParametros.send("PAUSA");
                             }
                             if (me === "CANCELAR") {
-                                portControlador.write('<STOP>\n');
                                 if(estadoScript===1) {childVuelta.send("CANCELAR");}
                                 childParametros.kill();
                             }

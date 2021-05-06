@@ -234,6 +234,7 @@ process.on('message', async (m) => {
         }
         if (m === "CANCELAR") {
             fin = true;
+            portControlador.write('<STOP>\n');
             console.log('CANCELADO EN VUELTAS');
             (<any>process).send('CANCELADO');
             /* if (fin != true) {
