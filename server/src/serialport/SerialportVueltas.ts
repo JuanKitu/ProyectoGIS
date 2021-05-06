@@ -230,7 +230,9 @@ process.on('message', async (m) => {
             fin = true;
             portControlador.write('<STOP>\n');
             console.log('CANCELADO EN VUELTAS');
-            (<any>process).send('CANCELADO');
+            setTimeout(()=>{
+                (<any>process).send('CANCELADO');
+            },500);
             parser.on('readable',()=>{console.log('Data al cancelar: ',parser.read().toString())})
             /* if (fin != true) {
                 console.log('Esta abierto? ', portControlador.isOpen)
