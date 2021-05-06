@@ -226,17 +226,12 @@ process.on('message', async (m) => {
 
     }
     if (typeof (m) == "string") {
-        if (m === "PAUSA") {
-            estadoScript = 0;
-            console.log('PAUSANDO EN VUELTA');
-            portControlador.write('<PAUS>\n');
-            (<any>process).send('PAUSADO');
-        }
         if (m === "CANCELAR") {
             fin = true;
             portControlador.write('<STOP>\n');
             console.log('CANCELADO EN VUELTAS');
             (<any>process).send('CANCELADO');
+            parser.on('readable',()=>{console.log('Data al cancelar: ',parser.read().toString())})
             /* if (fin != true) {
                 console.log('Esta abierto? ', portControlador.isOpen)
                 portControlador.write('<STOP>\n');
