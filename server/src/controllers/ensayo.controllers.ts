@@ -216,6 +216,7 @@ export default class EnsayoController {
                                             mu: M.coeficienteRozamiento
                                         };
                                         console.log('DISTANCIA RECORRIDA ', punto.distancia);
+                                        console.log('VUELTAS RECORRIDA ', M.vueltas);
                                         arreglosDM.arregloDistancias.push(punto.distancia);
                                         arreglosDM.arregloMu.push(punto.mu);
                                         server.setearArray(arreglosDM);
