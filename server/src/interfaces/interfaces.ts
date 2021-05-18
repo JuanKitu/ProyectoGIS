@@ -66,7 +66,7 @@ export interface arregloDM{
 export interface objetoDatos{
     horaInicio?:any,
     horaFin?:any,
-    velocidad?:number,
+    //velocidad?:number,
     temperatura?:number,
     humedad?:number
 }
