@@ -21,12 +21,12 @@ export class InformacionEnsayoComponent implements OnInit {
       this.ambiente=data;
     })
 
-    this.webSocket.listen('velocidad').subscribe(data=>{
+    /* this.webSocket.listen('velocidad').subscribe(data=>{
       console.log('LA VELOCIDAD 1: ',data);
       console.log('EL TIPO DE LA VELOCIDAD: ',typeof(data));
       if(typeof(data)=='number')
       this.ambiente.velocidad=data;
-    })
+    }) */
   }
 
 }

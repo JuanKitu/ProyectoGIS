@@ -175,7 +175,7 @@ process.on('message', async (m) => {
                 }
             };
             setTimeout(ciclo2, tiempoRespuesta.tiempoMS + 2523);
-            const intervalo2 = setInterval(ciclo2, tiempoRespuesta.tiempoMS + 59713);
+            const intervalo2 = setInterval(ciclo2, tiempoRespuesta.tiempoMS + 299713);
             const intervalo3 = setInterval(ciclo3, tiempoRespuesta.tiempoMS + 600);
             portControlador.on('readable', () => {
                 setTimeout(() => {

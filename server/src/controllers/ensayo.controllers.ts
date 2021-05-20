@@ -199,6 +199,7 @@ export default class EnsayoController {
                         arregloDistancias: [],
                         arregloMu: []
                     };
+                    let velocidadAnterior: number = 0;
                     let distanciaAnterior: number = 0;
                     let tiempoAnterior: number = 0;
                     let distanciaActual: number = 0;
@@ -226,7 +227,12 @@ export default class EnsayoController {
                                             console.log('TIEMPO ANTERIOR 1: ',tiempoAnterior);
                                             console.log('TIEMPO ACTUAL 1: ',M.tiempoActual);
                                             velocidadActual = (distanciaActual - distanciaAnterior) / (M.tiempoActual - tiempoAnterior);
-                                            server.io.emit('velocidad',velocidadActual);
+                                            //server.io.emit('velocidad',velocidadActual);
+                                            if(velocidadActual>100){
+                                                velocidadActual=velocidadAnterior;
+                                            }else{
+                                                velocidadAnterior= velocidadActual;
+                                            }
                                             distanciaAnterior = distanciaActual;
                                             tiempoAnterior = M.tiempoActual;
                                         }
@@ -238,7 +244,7 @@ export default class EnsayoController {
                                         console.log('AMBIENTE A MANDAR: ',M);
                                         M.horaInicio = horaDeInicio;
                                         M.horaFin = (moment().format('HH:mm:ss'));
-                                        //M.velocidad = velocidadActual;
+                                        M.velocidad = velocidadActual;
                                         console.log('Ambiente: ', M);
                                         server.io.emit('ambiente', M);
                                     }
