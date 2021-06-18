@@ -157,6 +157,8 @@ process.on('message', async (m) => {
 
 
         const obserbableAmbiente = new Observable(subscriberA => {
+            let contadorBien:number=0;
+            let constadorMal:number=0;
             const horaActual: any = moment().format('HH:mm:ss');
             let viejoAmbiente: AmbienteInterface = {
                 temperatura: 0,
@@ -198,12 +200,16 @@ process.on('message', async (m) => {
                             let cadena: string = data.toString();
                             //caso normal de deteccion de cadena con '.'
                             if(cadena.indexOf('.')===2){
+                                contadorBien++;
                                 const nuevoAmbiente = crearAmbiente(parseFloat(cadena.substring(0, cadena.indexOf('\r\n'))), parseFloat(cadena.substring(cadena.indexOf('\r\n'))), ensayo);
                                 viejoAmbiente = nuevoAmbiente;
+                                console.log('OCURRENCIAS CORRECTAS: ', contadorBien);
                                 subscriberA.next(nuevoAmbiente);
                             }else{ //caso en que se meta una vuelta en la cadena de ambiente
+                                constadorMal++;
                                 const cadenaModificada = cadena.substring(cadena.indexOf('.')-2);
                                 console.log('CADENA MODIFICADA: ',cadenaModificada);
+                                console.log('OCURRENCIAS INCORRECTAS: ', constadorMal);
                                 //const nuevoAmbiente = crearAmbiente(parseFloat(cadenaModificada.substring(0, cadenaModificada.indexOf('\r\n'))), parseFloat(cadenaModificada.substring(cadenaModificada.indexOf('\r\n'))), ensayo);
                                 subscriberA.next(viejoAmbiente);
                             }
