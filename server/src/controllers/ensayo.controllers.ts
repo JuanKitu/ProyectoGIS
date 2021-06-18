@@ -185,8 +185,9 @@ export default class EnsayoController {
         const { idEnsayo } = req.params;
         try {
             console.log('Iniciando consulta de creacion de parametros');
-            if (server.consultarConectado() && server.enUso()===-1) {
+            if (server.consultarConectado() && server.consultarProcesando()===false) {
                 console.log('SERVER: ', server.consultarConectado());
+                server.setearProcesando(true);
                 const elEnsayo = await Ensayo.findOne({
                     where: {
                         idEnsayo
@@ -194,7 +195,6 @@ export default class EnsayoController {
                     raw: true
                 });
                 if (elEnsayo) {
-                    console.log('Ensayo a usar: ', elEnsayo);
                     let arreglosDM: arregloDM = {
                         arregloDistancias: [],
                         arregloMu: []
@@ -256,6 +256,7 @@ export default class EnsayoController {
                                         hijoPFV.kill();
                                         console.log('FIN PETICION 2');
                                         server.setearEnsayo(-1);
+                                        server.setearProcesando(false);
                                         res.json({
                                             data: 'Parametros agregados'
                                         });
@@ -267,6 +268,7 @@ export default class EnsayoController {
                             hijoPFV.send('CANCELAR');
                             FIN = false;
                             server.setearEnsayo(-1);
+                            server.setearProcesando(false);
                             setTimeout(() => {
                                 hijoPFV.kill();
                                 console.log('FIN PETICION');
