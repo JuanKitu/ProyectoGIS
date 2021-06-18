@@ -185,7 +185,7 @@ export default class EnsayoController {
         const { idEnsayo } = req.params;
         try {
             console.log('Iniciando consulta de creacion de parametros');
-            if (server.consultarConectado()) {
+            if (server.consultarConectado() && server.enUso()===-1) {
                 console.log('SERVER: ', server.consultarConectado());
                 const elEnsayo = await Ensayo.findOne({
                     where: {
@@ -280,6 +280,11 @@ export default class EnsayoController {
 
                     })
                 }
+            } else {
+                res.json({
+                    data: 'En uso',
+                    err: true
+                });
             }
 
         } catch (error) {

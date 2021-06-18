@@ -188,8 +188,17 @@ process.on('message', async (m) => {
                         if (arreglo != null) {
                             console.log('DATA AMBIENTE: ', data.toString());
                             let cadena: string = data.toString();
-                            const nuevoAmbiente = crearAmbiente(parseFloat(cadena.substring(0, cadena.indexOf('\r\n'))), parseFloat(cadena.substring(cadena.indexOf('\r\n'))), ensayo);
-                            subscriberA.next(nuevoAmbiente);
+                            //caso normal de deteccion de cadena con '.'
+                            if(cadena.indexOf('.')===2){
+                                const nuevoAmbiente = crearAmbiente(parseFloat(cadena.substring(0, cadena.indexOf('\r\n'))), parseFloat(cadena.substring(cadena.indexOf('\r\n'))), ensayo);
+                                subscriberA.next(nuevoAmbiente);
+                            }else{ //caso en que se meta una vuelta en la cadena de ambiente
+                                const cadenaModificada = cadena.substring(cadena.indexOf('.')-2);
+                                console.log('CADENA MODIFICADA: ',cadenaModificada);
+                                const nuevoAmbiente = crearAmbiente(parseFloat(cadenaModificada.substring(0, cadenaModificada.indexOf('\r\n'))), parseFloat(cadenaModificada.substring(cadenaModificada.indexOf('\r\n'))), ensayo);
+                                subscriberA.next(nuevoAmbiente);
+                            }
+                            
                         }
                     }
                 }, 500)
