@@ -204,11 +204,13 @@ process.on('message', async (m) => {
                                 const nuevoAmbiente = crearAmbiente(parseFloat(cadena.substring(0, cadena.indexOf('\r\n'))), parseFloat(cadena.substring(cadena.indexOf('\r\n'))), ensayo);
                                 viejoAmbiente = nuevoAmbiente;
                                 console.log('OCURRENCIAS CORRECTAS: ', contadorBien);
+                                console.log('OCURRENCIAS INCORRECTAS: ', constadorMal);
                                 subscriberA.next(nuevoAmbiente);
                             }else{ //caso en que se meta una vuelta en la cadena de ambiente
                                 constadorMal++;
                                 const cadenaModificada = cadena.substring(cadena.indexOf('.')-2);
                                 console.log('CADENA MODIFICADA: ',cadenaModificada);
+                                console.log('OCURRENCIAS CORRECTAS: ', contadorBien);
                                 console.log('OCURRENCIAS INCORRECTAS: ', constadorMal);
                                 //const nuevoAmbiente = crearAmbiente(parseFloat(cadenaModificada.substring(0, cadenaModificada.indexOf('\r\n'))), parseFloat(cadenaModificada.substring(cadenaModificada.indexOf('\r\n'))), ensayo);
                                 subscriberA.next(viejoAmbiente);

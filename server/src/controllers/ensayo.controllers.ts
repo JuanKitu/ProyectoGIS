@@ -46,6 +46,7 @@ export default class EnsayoController {
                 });
                 if (newEnsayo) {
                     server.setearEnsayo(newEnsayo.idEnsayo);
+                    server.io.emit('respuestaUso', newEnsayo.idEnsayo);
                     return res.json({
                         message: 'The Ensayo has been created',
                         data: newEnsayo
@@ -216,7 +217,7 @@ export default class EnsayoController {
                                         mu: M.coeficienteRozamiento
                                     };
                                     console.log('DISTANCIA RECORRIDA EN mm ', punto.distancia);
-                                    console.log('DISTANCIA RECORRIDA EN m ', parseFloat(punto.distancia) * 1000);
+                                    console.log('DISTANCIA RECORRIDA EN m ', parseFloat(punto.distancia) / 1000);
                                     console.log('VUELTAS RECORRIDA ', M.vueltas);
                                     arreglosDM.arregloDistancias.push(punto.distancia);
                                     arreglosDM.arregloMu.push(punto.mu);
@@ -256,6 +257,7 @@ export default class EnsayoController {
                                         hijoPFV.kill();
                                         console.log('FIN PETICION 2');
                                         server.setearEnsayo(-1);
+                                        server.io.emit('respuestaUso', -1);
                                         server.setearProcesando(false);
                                         res.json({
                                             data: 'Parametros agregados'
@@ -268,6 +270,7 @@ export default class EnsayoController {
                             hijoPFV.send('CANCELAR');
                             FIN = false;
                             server.setearEnsayo(-1);
+                            server.io.emit('respuestaUso', -1);
                             server.setearProcesando(false);
                             setTimeout(() => {
                                 hijoPFV.kill();
