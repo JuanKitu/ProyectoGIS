@@ -69,9 +69,6 @@ async function comenzarExperimeto(puerto: SerialPort, ensayo: Ensayo) {
                             (<any>process).send('PARAMETROS AGREGADOS');
                             
                         }
-                        if (MV === "PAUSADO") {
-                            console.log('PAUSADO EN SERIALPORT');
-                        }
                         if (MV === "CANCELADO") {
                             if(portControlador.isOpen){
                                 portControlador.close();

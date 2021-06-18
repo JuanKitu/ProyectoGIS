@@ -141,7 +141,7 @@ process.on('message', async (m) => {
                 unParametro: data,
                 arreglo: arregloParametros
             }; */
-            console.log(data);
+            //console.log(data);
             (<any>process).send(data);
             i++;
         },
