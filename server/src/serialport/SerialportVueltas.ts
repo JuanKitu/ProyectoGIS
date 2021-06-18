@@ -186,7 +186,7 @@ process.on('message', async (m) => {
                         //const arreglo: any = data.toString().match(/\n.*\n/);
                         const arreglo: any = data.toString().match(/\./);
                         if (arreglo != null) {
-                            console.log('DATA AMBIENTE: ', data);
+                            console.log('DATA AMBIENTE: ', data.toString());
                             let cadena: string = data.toString();
                             const nuevoAmbiente = crearAmbiente(parseFloat(cadena.substring(0, cadena.indexOf('\r\n'))), parseFloat(cadena.substring(cadena.indexOf('\r\n'))), ensayo);
                             subscriberA.next(nuevoAmbiente);
@@ -201,7 +201,7 @@ process.on('message', async (m) => {
         })
 
         const arregloAmbientes: any[] = [];
-        const youtube2: Subscription = obserbableAmbiente.subscribe(data2 => {
+        const obsAmbiente: Subscription = obserbableAmbiente.subscribe(data2 => {
             let pasaje: any = data2;
             console.log(data2);
             if (pasaje.humedad !== undefined && pasaje.temperatura !== undefined) {
