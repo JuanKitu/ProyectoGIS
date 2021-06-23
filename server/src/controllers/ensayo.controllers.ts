@@ -590,7 +590,6 @@ export default class EnsayoController {
                 },
                 raw: true
             });
-            console.log('antes del if ensayo');
             if (elEnsayo) {
                 const parametro = await Parametros.findAll({
                     where: {
@@ -609,15 +608,14 @@ export default class EnsayoController {
                 };
                 const TAB = '\t';
                 const LJ = "\n";
-                console.log('antes de asignar');
                 let timer = 150; //Numero de iteraciones para que se cambie al siguiente ambiente 
                 //ya que como los ambientes se toman cada 60s y los parametros cada 0.4s
                 //entonces a cada ambiente le corresponden 150 parametros
-                let numeroDeAmbiente = 1;
+                let numeroDeAmbiente = 0;
                 let txtCompleto = '';
                 let renglonDatosConPuntos = '';
                 let renglonDatosConComa = '';
-                const renglonesEstandar = 'Fecha' + TAB + elEnsayo.fecha + TAB + ambiente[1].horaActual + LJ +
+                const renglonesEstandar = 'Fecha' + TAB + elEnsayo.fecha + TAB + ambiente[0].horaActual + LJ +
                     'Operador' + TAB + elEnsayo.operador + LJ +
                     'Probeta' + TAB + elEnsayo.codigoProbeta + LJ +
                     'Material' + TAB + elEnsayo.materialProbeta + LJ +
@@ -630,7 +628,6 @@ export default class EnsayoController {
                     'Diametro' + TAB + elEnsayo.diametroBola + LJ +
                     'fuerza[kg]' + TAB + 'distancia[m]' + TAB + 'tiempo[s]' + TAB + 'temperatura[°C]' + TAB + 'humedad[%]' + LJ;
                 txtCompleto = renglonesEstandar;
-                console.log(renglonesEstandar);
                 const asignar = (unParametro: ParametroInterface) => {
                     if (unParametro.fuerzaRozamiento && unParametro.vueltas && unParametro.tiempoActual) {
                         let fuerza = unParametro.fuerzaRozamiento;
@@ -649,9 +646,7 @@ export default class EnsayoController {
                     }
                 }
                 parametro.forEach(elemento => asignar(elemento));
-                const titulo = 'Ensayo - ' + elEnsayo.fecha + '.txt';
-                console.log(titulo + LJ);
-                console.log(txtCompleto);
+                const titulo = 'Ensayo - ' + elEnsayo.fecha + ' - ' + ambiente[0].horaActual + '.txt';
                 fs.writeFile(titulo, txtCompleto, 'utf8', function (err: any) {
                     if (err) {
                         console.log("An error occured while writing JSON Object to File.");
