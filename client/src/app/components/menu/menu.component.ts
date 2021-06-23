@@ -5,6 +5,7 @@ import { Componente } from 'src/app/interfaces/interfaces';
 import { WebSocketService } from '../../services/web-socket.service';
 import { MenuController } from '@ionic/angular';
 import { UsuarioService } from '../../services/usuario.service';
+import { ActivatedRoute } from '@angular/router';
 
 
 @Component({
@@ -24,10 +25,9 @@ export class MenuComponent implements OnInit {
   ngOnInit() {
     
     this.appPages = this.dataService.getMenuOpciones();
-    this.webSocket.emit('consultarUso');
-    this.webSocket.listen('respuestaUso').subscribe(async data=>{
-         this.idEnsayo = await data; 
-        console.log(this.idEnsayo)
+    this.webSocket.listen('respuestaUso').subscribe( data=>{
+      console.log('se recibio la peticion de idEnsayo: ', data);
+      this.idEnsayo = data;
     });
   }
   darkModeChange(){

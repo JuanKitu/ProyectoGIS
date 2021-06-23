@@ -26,7 +26,11 @@ export class GraficoEnsayoComponent implements OnInit {
       xAxes: [{
         scaleLabel: {
           display: true,
-          labelString: 'Distancia'
+          labelString: 'Distancia',
+        },
+        ticks:{
+          min:0,
+          max:1
         }
       }],
       yAxes: [
@@ -34,6 +38,10 @@ export class GraficoEnsayoComponent implements OnInit {
           scaleLabel: {
             display: true,
             labelString: 'Coeficiente'
+          },
+          ticks:{
+            min:0,
+            max:1
           },
           id: 'y-axis-0',
           position: 'left',

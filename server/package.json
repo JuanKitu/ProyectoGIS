@@ -50,6 +50,7 @@
         "@types/socket.io": "^2.1.9",
         "@types/socket.io-redis": "^1.0.26",
         "@types/validator": "^13.1.0",
-        "nodemon": "^2.0.4"
+        "nodemon": "^2.0.4",
+        "typescript": "^4.3.4"
     }
 }

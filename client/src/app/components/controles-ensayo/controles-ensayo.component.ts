@@ -10,16 +10,9 @@ import { EnsayoService } from '../../services/ensayo.service';
 })
 export class ControlesEnsayoComponent implements OnInit {
   pausa: boolean = false;
-  idEnsayo: number | unknown;
   constructor(private alertController: AlertController, private webSocket: WebSocketService, private ensayoService: EnsayoService) { }
 
-  ngOnInit() {
-    this.webSocket.emit('consultarUso');
-    this.webSocket.listen('respuestaUso').subscribe(data => {
-      this.idEnsayo = data;
-      console.log(this.idEnsayo)
-    });
-  }
+  ngOnInit() { }
   pausarEnsayo() {
     //this.webSocket.emit('PAUSAR');
     this.ensayoService.pausarEnsayo().subscribe();

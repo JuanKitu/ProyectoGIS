@@ -24,7 +24,6 @@ export class GraficoPage implements OnInit {
     if(this.router.getCurrentNavigation().extras.state.idEnsayo != undefined){
       this.idEnsayo = this.router.getCurrentNavigation().extras.state.idEnsayo;
     }else{
-      this.webSocket.emit('consultarUso');
       this.webSocket.listen('respuestaUso').subscribe(data=>{
           this.idEnsayo = data;   
       })

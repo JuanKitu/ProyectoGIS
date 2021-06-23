@@ -8,6 +8,7 @@ import { Componente } from './interfaces/interfaces';
 import { DataService } from './services/data.service';
 import { WebSocketService } from './services/web-socket.service';
 import { UsuarioService } from './services/usuario.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -25,7 +26,7 @@ export class AppComponent {
     private statusBar: StatusBar,
     private dataService:DataService,
     private webSocket:WebSocketService,
-    private usuarioService:UsuarioService
+    private usuarioService:UsuarioService,
   ) {
     this.initializeApp();
   }
@@ -35,10 +36,11 @@ export class AppComponent {
       this.statusBar.styleDefault();
       this.splashScreen.hide();
       this.appPages = this.dataService.getMenuOpciones();
-      this.webSocket.emit('consultarUso');
+      
       this.webSocket.listen('respuestaUso').subscribe( data=>{
+        console.log('se recibio la peticion de idEnsayo: ', data);
         this.idEnsayo = data;
-    });
+      });
 
     });
   }
