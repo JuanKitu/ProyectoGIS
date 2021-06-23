@@ -186,7 +186,7 @@ export default class EnsayoController {
         const { idEnsayo } = req.params;
         try {
             console.log('Iniciando consulta de creacion de parametros');
-            if (server.consultarConectado() && server.consultarProcesando()===false) {
+            if (server.consultarConectado() && server.consultarProcesando() === false) {
                 console.log('SERVER: ', server.consultarConectado());
                 server.setearProcesando(true);
                 const elEnsayo = await Ensayo.findOne({
@@ -653,17 +653,19 @@ export default class EnsayoController {
                         return console.log(err);
                     }
                     let txt: any = '';
-                    fs.readFile(titulo, 'utf8', function (err, data) {
-                        if (err) {
-                            console.log(err);
-                            process.exit(1);
-                        }
-                        txt = util.format(data);
-                    });
-                    console.log(txt);
-                    res.header('Content-Type', 'text/txt');
-                    res.attachment(titulo);
-                    return res.send(txt);
+                    setTimeout(() => {
+                        fs.readFile(titulo, 'utf8', function (err, data) {
+                            if (err) {
+                                console.log(err);
+                                process.exit(1);
+                            }
+                            txt = util.format(data);
+                        });
+                        console.log(txt);
+                        res.header('Content-Type', 'text/txt');
+                        res.attachment(titulo);
+                        return res.send(txt);
+                    }, 1000)
                 });
 
             }
