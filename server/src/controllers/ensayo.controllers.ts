@@ -661,7 +661,7 @@ export default class EnsayoController {
                         txt = util.format(data);
                     });
                     console.log(txt);
-                    res.header('Content-Type', 'text/csv');
+                    res.header('Content-Type', 'text/txt');
                     res.attachment(titulo);
                     return res.send(txt);
                 });
