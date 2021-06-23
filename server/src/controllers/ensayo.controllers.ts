@@ -647,6 +647,8 @@ export default class EnsayoController {
                 }
                 parametro.forEach(elemento => asignar(elemento));
                 const titulo = 'Ensayo - ' + elEnsayo.fecha + '.txt';
+                console.log(titulo + LJ);
+                console.log(txtCompleto);
                 fs.writeFile(titulo, txtCompleto, 'utf8', function (err: any) {
                     if (err) {
                         console.log("An error occured while writing JSON Object to File.");
