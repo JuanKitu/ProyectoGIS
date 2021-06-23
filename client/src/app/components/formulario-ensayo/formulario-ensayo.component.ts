@@ -123,13 +123,13 @@ export class FormularioEnsayoComponent implements OnInit {
   }
 //Debo añadirle un parametro mas a la funcion que se llame "name" para darle un nombre significativo al archivo
   downLoadFile(data:ArrayBuffer) {
-    const blob = new Blob( [data], { type: "text/csv;charset=utf8;"} );
+    const blob = new Blob( [data], { type: "text/txt;charset=utf8;"} );
     if ( navigator.msSaveOrOpenBlob ) {
-        navigator.msSaveOrOpenBlob( blob, "export.csv" );
+        navigator.msSaveOrOpenBlob( blob, "export.txt" );
     } else  {
         const link = document.createElement('a');
         link.href = URL.createObjectURL(blob);
-        link.setAttribute('download', 'export.csv');
+        link.setAttribute('download', 'export.txt');
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);

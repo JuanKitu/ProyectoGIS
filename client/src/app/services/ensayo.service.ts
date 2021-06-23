@@ -39,10 +39,10 @@ export class EnsayoService {
   }
   getPuntosCsv(key$:number){
     const headers = new HttpHeaders({
-      'Content-Type':'text/csv'
+      'Content-Type':'text/txt'
   });
   const options = { headers};
-    return this.httpClient.get(this.ensayoURL+ `/${key$}/csv`,{responseType: 'arraybuffer'});
+    return this.httpClient.get(this.ensayoURL+ `/${key$}/txt`,{responseType: 'arraybuffer'});
   }
   /*################################ Parametro Service ################################*/
   getAllParametro(key$:number){

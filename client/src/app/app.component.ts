@@ -38,7 +38,6 @@ export class AppComponent {
       this.appPages = this.dataService.getMenuOpciones();
       
       this.webSocket.listen('respuestaUso').subscribe( data=>{
-        console.log('se recibio la peticion de idEnsayo: ', data);
         this.idEnsayo = data;
       });
 
