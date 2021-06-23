@@ -659,14 +659,14 @@ export default class EnsayoController {
                                 console.log(err);
                                 process.exit(1);
                             }
-                            console.log('DATA: ',data)
+                            console.log('DATA: ', data)
                             txt = util.format(data);
+                            console.log('TXT: ', txt);
+                            res.header('Content-Type', 'text/txt');
+                            res.attachment(titulo);
+                            return res.send(txt);
                         });
-                        console.log('TXT: ',txt);
-                        res.header('Content-Type', 'text/txt');
-                        res.attachment(titulo);
-                        return res.send(txt);
-                    }, 1000)
+                    }, 2000)
                 });
 
             }
