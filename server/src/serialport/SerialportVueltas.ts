@@ -6,6 +6,7 @@ import Ambiente from '../models/Ambiente';
 const fs = require('fs');
 import moment from 'moment'
 import { parse } from 'json2csv';
+import { any } from 'bluebird';
 const Readline = require('@serialport/parser-readline');
 const parser = new Readline()
 const colaDato = new Queue();
@@ -113,7 +114,7 @@ process.on('message', async (m) => {
         })
 
         let i: number = 0
-        const youtube: Subscription = obserbableVueltas.subscribe(data => {
+        const obsVueltas: Subscription = obserbableVueltas.subscribe(data => {
             if (data != 0 && fin != true) {
                 i++
                 let unDato: colaDatos = {
@@ -156,6 +157,15 @@ process.on('message', async (m) => {
 
 
         const obserbableAmbiente = new Observable(subscriberA => {
+            let contadorBien:number=0;
+            let constadorMal:number=0;
+            const horaActual: any = moment().format('HH:mm:ss');
+            let viejoAmbiente: AmbienteInterface = {
+                temperatura: 0,
+                humedad: 0,
+                horaActual,
+                idEnsayo: ensayo.idEnsayo
+            };
             const ciclo2 = () => {
                 if (!fin) {
                     //if (estadoScript === 1) {
@@ -186,10 +196,26 @@ process.on('message', async (m) => {
                         //const arreglo: any = data.toString().match(/\n.*\n/);
                         const arreglo: any = data.toString().match(/\./);
                         if (arreglo != null) {
-                            console.log('DATA AMBIENTE: ', data);
+                            console.log('DATA AMBIENTE: ', data.toString());
                             let cadena: string = data.toString();
-                            const nuevoAmbiente = crearAmbiente(parseFloat(cadena.substring(0, cadena.indexOf('\r\n'))), parseFloat(cadena.substring(cadena.indexOf('\r\n'))), ensayo);
-                            subscriberA.next(nuevoAmbiente);
+                            //caso normal de deteccion de cadena con '.'
+                            if(cadena.indexOf('.')===2){
+                                contadorBien++;
+                                const nuevoAmbiente = crearAmbiente(parseFloat(cadena.substring(0, cadena.indexOf('\r\n'))), parseFloat(cadena.substring(cadena.indexOf('\r\n'))), ensayo);
+                                viejoAmbiente = nuevoAmbiente;
+                                console.log('OCURRENCIAS CORRECTAS: ', contadorBien);
+                                console.log('OCURRENCIAS INCORRECTAS: ', constadorMal);
+                                subscriberA.next(nuevoAmbiente);
+                            }else{ //caso en que se meta una vuelta en la cadena de ambiente
+                                constadorMal++;
+                                const cadenaModificada = cadena.substring(cadena.indexOf('.')-2);
+                                console.log('CADENA MODIFICADA: ',cadenaModificada);
+                                console.log('OCURRENCIAS CORRECTAS: ', contadorBien);
+                                console.log('OCURRENCIAS INCORRECTAS: ', constadorMal);
+                                //const nuevoAmbiente = crearAmbiente(parseFloat(cadenaModificada.substring(0, cadenaModificada.indexOf('\r\n'))), parseFloat(cadenaModificada.substring(cadenaModificada.indexOf('\r\n'))), ensayo);
+                                subscriberA.next(viejoAmbiente);
+                            }
+                            
                         }
                     }
                 }, 500)
@@ -201,7 +227,7 @@ process.on('message', async (m) => {
         })
 
         const arregloAmbientes: any[] = [];
-        const youtube2: Subscription = obserbableAmbiente.subscribe(data2 => {
+        const obsAmbiente: Subscription = obserbableAmbiente.subscribe(data2 => {
             let pasaje: any = data2;
             console.log(data2);
             if (pasaje.humedad !== undefined && pasaje.temperatura !== undefined) {

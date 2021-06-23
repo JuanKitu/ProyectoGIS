@@ -18,6 +18,7 @@ export default class Server {
     private ensayoActual: number;
     private pausado: boolean;
     private conectado: boolean;
+    private procesando: boolean;
     private constructor() {
         this.app = express();
         //settings
@@ -37,6 +38,7 @@ export default class Server {
         this.ensayoActual = -1;
         this.pausado = false;
         this.conectado = false;
+        this.procesando = false;
     }
 
     public static get instance() {
@@ -67,6 +69,14 @@ export default class Server {
 
     public setearConexion(estado: boolean) {
         this.conectado = estado;
+    }
+
+    public consultarProcesando() {
+        return this.procesando;
+    }
+
+    public setearProcesando(estado: boolean) {
+        this.procesando = estado;
     }
 
     public conectar() {

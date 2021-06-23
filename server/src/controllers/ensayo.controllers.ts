@@ -46,6 +46,7 @@ export default class EnsayoController {
                 });
                 if (newEnsayo) {
                     server.setearEnsayo(newEnsayo.idEnsayo);
+                    server.io.emit('respuestaUso', newEnsayo.idEnsayo);
                     return res.json({
                         message: 'The Ensayo has been created',
                         data: newEnsayo
@@ -185,8 +186,9 @@ export default class EnsayoController {
         const { idEnsayo } = req.params;
         try {
             console.log('Iniciando consulta de creacion de parametros');
-            if (server.consultarConectado()) {
+            if (server.consultarConectado() && server.consultarProcesando()===false) {
                 console.log('SERVER: ', server.consultarConectado());
+                server.setearProcesando(true);
                 const elEnsayo = await Ensayo.findOne({
                     where: {
                         idEnsayo
@@ -194,7 +196,6 @@ export default class EnsayoController {
                     raw: true
                 });
                 if (elEnsayo) {
-                    console.log('Ensayo a usar: ', elEnsayo);
                     let arreglosDM: arregloDM = {
                         arregloDistancias: [],
                         arregloMu: []
@@ -209,87 +210,68 @@ export default class EnsayoController {
                     hijoPFV.send(elEnsayo);
                     hijoPFV.on('message', (M: any) => {
                         if (FIN != true) {
-                            if (server.consultarPausa() === false) {
-                                if (typeof (M) == "object") {
-                                    if (isParametro(M) && M.vueltas !== undefined) {
-                                        const punto = {
-                                            distancia: (((M.vueltas) * (2 * Math.PI * elEnsayo.radioTrayectoria)).toFixed(2)).toString(),
-                                            mu: M.coeficienteRozamiento
-                                        };
-                                        console.log('DISTANCIA RECORRIDA ', punto.distancia);
-                                        console.log('VUELTAS RECORRIDA ', M.vueltas);
-                                        arreglosDM.arregloDistancias.push(punto.distancia);
-                                        arreglosDM.arregloMu.push(punto.mu);
-                                        server.setearArray(arreglosDM);
-                                        distanciaActual = parseFloat(punto.distancia);
-                                        if (M.tiempoActual != undefined) {
-                                            console.log('DISTANCIA ANTERIOR 1: ',distanciaAnterior);
-                                            console.log('TIEMPO ANTERIOR 1: ',tiempoAnterior);
-                                            console.log('TIEMPO ACTUAL 1: ',M.tiempoActual);
-                                            velocidadActual = (distanciaActual - distanciaAnterior) / (M.tiempoActual - tiempoAnterior);
-                                            //server.io.emit('velocidad',velocidadActual);
-                                            if(velocidadActual>100){
-                                                velocidadActual=velocidadAnterior;
-                                            }else{
-                                                velocidadAnterior= velocidadActual;
-                                            }
-                                            distanciaAnterior = distanciaActual;
-                                            tiempoAnterior = M.tiempoActual;
+                            if (typeof (M) == "object") {
+                                if (isParametro(M) && M.vueltas !== undefined) {
+                                    const punto = {
+                                        distancia: (((M.vueltas) * (2 * Math.PI * elEnsayo.radioTrayectoria)).toFixed(2)).toString(),
+                                        mu: M.coeficienteRozamiento
+                                    };
+                                    console.log('DISTANCIA RECORRIDA EN mm ', punto.distancia);
+                                    console.log('DISTANCIA RECORRIDA EN m ', parseFloat(punto.distancia) / 1000);
+                                    console.log('VUELTAS RECORRIDA ', M.vueltas);
+                                    arreglosDM.arregloDistancias.push(punto.distancia);
+                                    arreglosDM.arregloMu.push(punto.mu);
+                                    server.setearArray(arreglosDM);
+                                    distanciaActual = parseFloat(punto.distancia);
+                                    if (M.tiempoActual != undefined) {
+                                        /* console.log('DISTANCIA ANTERIOR 1: ',distanciaAnterior);
+                                        console.log('TIEMPO ANTERIOR 1: ',tiempoAnterior);
+                                        console.log('TIEMPO ACTUAL 1: ',M.tiempoActual); */
+                                        velocidadActual = (distanciaActual - distanciaAnterior) / (M.tiempoActual - tiempoAnterior);
+                                        //server.io.emit('velocidad',velocidadActual);
+                                        if (velocidadActual > 100) {
+                                            velocidadActual = velocidadAnterior;
+                                        } else {
+                                            velocidadAnterior = velocidadActual;
                                         }
-                                        server.io.emit('parametros', punto);
-                                    } else {
-                                        console.log('DISTANCIA ANTERIOR 2: ',distanciaAnterior);
-                                        console.log('TIEMPO ANTERIOR 2: ',tiempoAnterior);
-                                        console.log('TIEMPO ACTUAL 2: ',M.tiempoActual);
-                                        console.log('AMBIENTE A MANDAR: ',M);
-                                        M.horaInicio = horaDeInicio;
-                                        M.horaFin = (moment().format('HH:mm:ss'));
-                                        M.velocidad = velocidadActual;
-                                        console.log('Ambiente: ', M);
-                                        server.io.emit('ambiente', M);
+                                        distanciaAnterior = distanciaActual;
+                                        tiempoAnterior = M.tiempoActual;
                                     }
+                                    server.io.emit('parametros', punto);
+                                } else {
+                                    /* console.log('DISTANCIA ANTERIOR 2: ',distanciaAnterior);
+                                    console.log('TIEMPO ANTERIOR 2: ',tiempoAnterior);
+                                    console.log('TIEMPO ACTUAL 2: ',M.tiempoActual); */
+                                    console.log('AMBIENTE A MANDAR: ', M);
+                                    M.horaInicio = horaDeInicio;
+                                    M.horaFin = (moment().format('HH:mm:ss'));
+                                    M.velocidad = velocidadActual;
+                                    console.log('Ambiente: ', M);
+                                    server.io.emit('ambiente', M);
                                 }
-                                if (typeof (M) == "string") {
-                                    if (M === 'PARAMETROS AGREGADOS') {
-                                        setTimeout(() => {
-                                            console.log('FIN PETICION');
-                                            hijoPFV.kill();
-                                            console.log('FIN PETICION 2');
-                                            server.setearEnsayo(-1);
-                                            res.json({
-                                                data: 'Parametros agregados'
-                                            });
-                                            server.io.emit('fin', 'FIN')
-                                        }, 1000);
-                                    }
+                            }
+                            if (typeof (M) == "string") {
+                                if (M === 'PARAMETROS AGREGADOS') {
+                                    setTimeout(() => {
+                                        console.log('FIN PETICION');
+                                        hijoPFV.kill();
+                                        console.log('FIN PETICION 2');
+                                        server.setearEnsayo(-1);
+                                        server.io.emit('respuestaUso', -1);
+                                        server.setearProcesando(false);
+                                        res.json({
+                                            data: 'Parametros agregados'
+                                        });
+                                        server.io.emit('fin', 'FIN')
+                                    }, 1000);
                                 }
-                            } else {
-                                console.log('¡¡¡RECIBIENDO PAUSA DEL CLIENTE!!!');
-                                hijoPFV.send('PAUSA');
-                                const cicloPausa = setInterval(() => {
-                                    if (server.consultarPausa() === false) {
-                                        console.log('¡¡¡RECIBIENDO REANUDAR DEL CLIENTE!!!');
-                                        hijoPFV.send('REANUDAR');
-                                        clearInterval(cicloPausa);
-                                    }
-                                    if (FIN === true) {
-                                        console.log('CANCELANDO DURANTE PAUSA');
-                                        FIN = false;
-                                        hijoPFV.send('CANCELAR');
-                                        setTimeout(() => {
-                                            server.pausar(false);
-                                            hijoPFV.kill();
-                                            clearInterval(cicloPausa);
-                                            console.log("Fin Peticion en PAUSA")
-                                            server.setearEnsayo(-1);
-                                        }, 500)
-                                    }
-                                }, 500)
                             }
                         } else {
                             hijoPFV.send('CANCELAR');
                             FIN = false;
                             server.setearEnsayo(-1);
+                            server.io.emit('respuestaUso', -1);
+                            server.setearProcesando(false);
                             setTimeout(() => {
                                 hijoPFV.kill();
                                 console.log('FIN PETICION');
@@ -301,16 +283,13 @@ export default class EnsayoController {
                         }
 
 
-                        /* pausar = (cliente: Socket,io:SocketIO.Server)=>{
-                            cliente.on('PAUSAR',()=>{
-                                console.log('¡¡¡RECIBIENDO PAUSA DEL CLIENTE!!!');
-                                hijoPFV.send('PAUSA');
-                            })
-                        } */
-
-
                     })
                 }
+            } else {
+                res.json({
+                    data: 'En uso',
+                    err: true
+                });
             }
 
         } catch (error) {
