@@ -3,6 +3,9 @@ import Queue from '../classes/queue';
 export const port = {
     "puertoControlador": "/dev/ttyACM0",
     "puertoCelda": "/dev/ttyS0"
+
+    /* "puertoControlador": "COM2",
+    "puertoCelda": "COM4" */
 }
 
 export const tiempoRespuesta = {
