@@ -36,7 +36,12 @@ export const consultaUso = (cliente: Socket,io:SocketIO.Server,enUso:number)=>{
     })
 }
 
-
+export const enviarAmbiente = (cliente: Socket,io:SocketIO.Server,ambiente:any)=>{
+    cliente.on('getAmbiente',()=>{
+        console.log('ENVIANDO DESDE SERVER');
+        io.emit('ambiente',ambiente);
+    })
+}
 
 //Pausando
 export const pausar = (cliente: Socket,io:SocketIO.Server,pausado:boolean)=>{

@@ -15,6 +15,7 @@ export default class Server {
     public io: socketIO.Server;
     private httpServer: http.Server;
     private arreglos: arregloDM;
+    private ambiente: any;
     private ensayoActual: number;
     private pausado: boolean;
     private conectado: boolean;
@@ -35,6 +36,7 @@ export default class Server {
             arregloMu: [],
             arregloDistancias: []
         };
+
         this.ensayoActual = -1;
         this.pausado = false;
         this.conectado = false;
@@ -69,6 +71,14 @@ export default class Server {
 
     public setearConexion(estado: boolean) {
         this.conectado = estado;
+    }
+
+    public consultarAmbiente() {
+        return this.ambiente;
+    }
+
+    public setearAmbiente(newAmbiente: any) {
+        this.ambiente = newAmbiente;
     }
 
     public consultarProcesando() {
@@ -112,6 +122,9 @@ export default class Server {
 
             //En uso
             socket.consultaUso(client, this.io, this.ensayoActual)
+
+            //Ambiente
+            socket.enviarAmbiente(client,this.io,this.ambiente)
 
             //pausar(client,this.io)
             socket.pausar(client, this.io, this.pausado)

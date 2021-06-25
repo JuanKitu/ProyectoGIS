@@ -15,10 +15,10 @@ const server = Server.instance;
 server.conectar();
 let FIN: boolean = false;
 let ambienteSocket:any;
-server.io.on('getAmbiente',()=>{
+/* server.io.on('connection', client=>{
     console.log('ENVIANDO DESDE SERVER ',ambienteSocket);
     server.io.emit('ambiente', ambienteSocket);
-})
+}) */
 //const Parametros = require('../models/Parametros');
 //const Ambiente = require('../models/Ambiente');
 function isParametro(object: any): object is ParametroInterface {
@@ -248,7 +248,7 @@ export default class EnsayoController {
                                     console.log('TIEMPO ANTERIOR 2: ',tiempoAnterior);
                                     console.log('TIEMPO ACTUAL 2: ',M.tiempoActual); */
                                     console.log('AMBIENTE A MANDAR: ', M);
-                                    ambienteSocket = M;
+                                    server.setearAmbiente(M);
                                     M.horaInicio = horaDeInicio;
                                     M.horaFin = (moment().format('HH:mm:ss'));
                                     M.velocidad = velocidadActual;
