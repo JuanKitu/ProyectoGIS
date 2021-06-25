@@ -205,6 +205,11 @@ export default class EnsayoController {
                     let tiempoAnterior: number = 0;
                     let distanciaActual: number = 0;
                     let velocidadActual: number = 0;
+                    let ambienteSocket:any;
+                    server.io.on('getAmbiente',()=>{
+                        console.log('ENVIANDO DESDE SERVER ',ambienteSocket);
+                        server.io.emit('ambiente', ambienteSocket);
+                    })
                     const horaDeInicio = (moment().format('HH:mm:ss'));
                     const hijoPFV = fork('../server/dist/serialport/Serialport.js', ['normal']);
                     hijoPFV.send(elEnsayo);
@@ -243,12 +248,8 @@ export default class EnsayoController {
                                     console.log('TIEMPO ANTERIOR 2: ',tiempoAnterior);
                                     console.log('TIEMPO ACTUAL 2: ',M.tiempoActual); */
                                     console.log('AMBIENTE A MANDAR: ', M);
-                                    let ambienteSocket = M;
+                                    ambienteSocket = M;
                                     M.horaInicio = horaDeInicio;
-                                    server.io.on('getAmbiente',()=>{
-                                        console.log('ENVIANDO DESDE SERVER ',ambienteSocket);
-                                        server.io.emit('ambiente', ambienteSocket);
-                                    })
                                     M.horaFin = (moment().format('HH:mm:ss'));
                                     M.velocidad = velocidadActual;
                                     console.log('Ambiente: ', M);
