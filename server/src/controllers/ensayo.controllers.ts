@@ -243,7 +243,11 @@ export default class EnsayoController {
                                     console.log('TIEMPO ANTERIOR 2: ',tiempoAnterior);
                                     console.log('TIEMPO ACTUAL 2: ',M.tiempoActual); */
                                     console.log('AMBIENTE A MANDAR: ', M);
+                                    let ambienteSocket = M;
                                     M.horaInicio = horaDeInicio;
+                                    server.io.on('getAmbiente',()=>{
+                                        server.io.emit('ambiente', ambienteSocket);
+                                    })
                                     M.horaFin = (moment().format('HH:mm:ss'));
                                     M.velocidad = velocidadActual;
                                     console.log('Ambiente: ', M);

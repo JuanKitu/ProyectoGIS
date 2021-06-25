@@ -1,20 +1,23 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ChartDataSets, ChartOptions } from 'chart.js';
 import { Color, BaseChartDirective, Label } from 'ng2-charts';
 import * as pluginAnnotations from 'chartjs-plugin-annotation';
 import { EnsayoService } from '../../services/ensayo.service';
 import { WebSocketService } from '../../services/web-socket.service';
 import { PuntoGrafico, ArrayPuntos } from '../../interfaces/interfaces';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-grafico-ensayo',
   templateUrl: './grafico-ensayo.component.html',
   styleUrls: ['./grafico-ensayo.component.scss'],
 })
-export class GraficoEnsayoComponent implements OnInit {
+export class GraficoEnsayoComponent implements OnInit, OnDestroy {
   // @Input() idEnsayo:number;
   @Input() realTime: boolean;
   @Input() idEnsayo:number;
+  subscripcionArrayPuntos:Subscription;
+  subscripcionParametros:Subscription;
   public lineChartData: ChartDataSets[] = [
     { data: [], label: 'μ' },
   ];
@@ -92,16 +95,19 @@ export class GraficoEnsayoComponent implements OnInit {
   constructor(private webSocket: WebSocketService, private ensayoService: EnsayoService) { }
 
   ngOnInit() {
+    console.log('antes del if')
     if (this.realTime){
+      console.log('iniciando el observable1');
       this.webSocket.emit('arrayPuntos', () => { })
-      this.webSocket.listen('envioArray').subscribe(datos => {
+      this.subscripcionArrayPuntos = this.webSocket.listen('envioArray').subscribe(datos => {
         const arrayPuntos: ArrayPuntos = datos;
         const puntos: ChartDataSets[] = [{ data: arrayPuntos.arregloMu, label: 'Fuerza de rozamiento' }]
         this.lineChartData = puntos;
         const arreglosLabels: Label[] = arrayPuntos.arregloDistancias
         this.lineChartLabels = arreglosLabels;
-      })
-      this.webSocket.listen('parametros').subscribe((datos) => {
+      });
+      console.log('iniciando el observable2');
+      this.subscripcionParametros= this.webSocket.listen('parametros').subscribe((datos) => {
         const unPunto: PuntoGrafico = datos;
         this.lineChartData.forEach((x, i) => {
           const data: number[] = x.data as number[];
@@ -119,6 +125,12 @@ export class GraficoEnsayoComponent implements OnInit {
       })
     }
 
+
+  };
+  ngOnDestroy(){
+    console.log('Matando los observables');
+    this.subscripcionArrayPuntos.unsubscribe();
+    this.subscripcionParametros.unsubscribe();
 
   }
 

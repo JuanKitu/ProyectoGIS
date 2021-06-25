@@ -36,7 +36,7 @@ export class AppComponent {
       this.statusBar.styleDefault();
       this.splashScreen.hide();
       this.appPages = this.dataService.getMenuOpciones();
-      
+      this.webSocket.emit('consultarUso');
       this.webSocket.listen('respuestaUso').subscribe( data=>{
         this.idEnsayo = data;
       });

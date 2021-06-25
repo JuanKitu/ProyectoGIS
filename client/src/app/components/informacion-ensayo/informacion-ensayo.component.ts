@@ -8,15 +8,19 @@ import { DatosEnsayo } from '../../interfaces/interfaces';
   styleUrls: ['./informacion-ensayo.component.scss'],
 })
 export class InformacionEnsayoComponent implements OnInit {
-  ambiente:DatosEnsayo={
-    horaInicio:'---',
-    horaFin:'---',
-    velocidad:0,
-    temperatura:0,
-    humedad:0
-  };
+  ambiente:DatosEnsayo
   constructor(private webSocket:WebSocketService) { }
   ngOnInit() {
+    if(!this.ambiente){
+      this.ambiente={
+        horaInicio:'---',
+        horaFin:'---',
+        velocidad:0,
+        temperatura:0,
+        humedad:0
+      };
+    };
+    this.webSocket.emit('getAmbiente');
     this.webSocket.listen('ambiente').subscribe(data=>{
       this.ambiente=data;
     })
