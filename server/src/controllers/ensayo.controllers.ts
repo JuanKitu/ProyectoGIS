@@ -14,6 +14,11 @@ import util from 'util';
 const server = Server.instance;
 server.conectar();
 let FIN: boolean = false;
+let ambienteSocket:any;
+server.io.on('getAmbiente',()=>{
+    console.log('ENVIANDO DESDE SERVER ',ambienteSocket);
+    server.io.emit('ambiente', ambienteSocket);
+})
 //const Parametros = require('../models/Parametros');
 //const Ambiente = require('../models/Ambiente');
 function isParametro(object: any): object is ParametroInterface {
@@ -205,11 +210,6 @@ export default class EnsayoController {
                     let tiempoAnterior: number = 0;
                     let distanciaActual: number = 0;
                     let velocidadActual: number = 0;
-                    let ambienteSocket:any;
-                    server.io.on('getAmbiente',()=>{
-                        console.log('ENVIANDO DESDE SERVER ',ambienteSocket);
-                        server.io.emit('ambiente', ambienteSocket);
-                    })
                     const horaDeInicio = (moment().format('HH:mm:ss'));
                     const hijoPFV = fork('../server/dist/serialport/Serialport.js', ['normal']);
                     hijoPFV.send(elEnsayo);
