@@ -22,6 +22,7 @@ export class InformacionEnsayoComponent implements OnInit {
     };
     this.webSocket.emit('getAmbiente');
     this.webSocket.listen('ambiente').subscribe(data=>{
+      console.log('RECIBIENDO AMBIENTE EN CLIENTE')
       this.ambiente=data;
     })
 

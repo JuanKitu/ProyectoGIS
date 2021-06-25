@@ -246,6 +246,7 @@ export default class EnsayoController {
                                     let ambienteSocket = M;
                                     M.horaInicio = horaDeInicio;
                                     server.io.on('getAmbiente',()=>{
+                                        console.log('ENVIANDO DESDE SERVER ',ambienteSocket);
                                         server.io.emit('ambiente', ambienteSocket);
                                     })
                                     M.horaFin = (moment().format('HH:mm:ss'));
