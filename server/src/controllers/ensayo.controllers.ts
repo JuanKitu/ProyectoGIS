@@ -259,6 +259,8 @@ export default class EnsayoController {
                             if (typeof (M) == "string") {
                                 if (M === 'PARAMETROS AGREGADOS') {
                                     setTimeout(() => {
+                                        arreglosDM.arregloDistancias = [];
+                                        arreglosDM.arregloMu = [];
                                         console.log('FIN PETICION');
                                         hijoPFV.kill();
                                         console.log('FIN PETICION 2');

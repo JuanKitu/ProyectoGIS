@@ -131,6 +131,7 @@ export class GraficoEnsayoComponent implements OnInit, OnDestroy {
     console.log('Matando los observables');
     this.subscripcionArrayPuntos.unsubscribe();
     this.subscripcionParametros.unsubscribe();
+    this.lineChartLabels= undefined;
 
   }
 
