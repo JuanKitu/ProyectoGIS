@@ -196,22 +196,22 @@ process.on('message', async (m) => {
                         //const arreglo: any = data.toString().match(/\n.*\n/);
                         const arreglo: any = data.toString().match(/\./);
                         if (arreglo != null) {
-                            console.log('DATA AMBIENTE: ', data.toString());
+                            //console.log('DATA AMBIENTE: ', data.toString());
                             let cadena: string = data.toString();
                             //caso normal de deteccion de cadena con '.'
                             if(cadena.indexOf('.')===2){
                                 contadorBien++;
                                 const nuevoAmbiente = crearAmbiente(parseFloat(cadena.substring(0, cadena.indexOf('\r\n'))), parseFloat(cadena.substring(cadena.indexOf('\r\n'))), ensayo);
                                 viejoAmbiente = nuevoAmbiente;
-                                console.log('OCURRENCIAS CORRECTAS: ', contadorBien);
-                                console.log('OCURRENCIAS INCORRECTAS: ', constadorMal);
+                                //console.log('OCURRENCIAS CORRECTAS: ', contadorBien);
+                                //console.log('OCURRENCIAS INCORRECTAS: ', constadorMal);
                                 subscriberA.next(nuevoAmbiente);
                             }else{ //caso en que se meta una vuelta en la cadena de ambiente
                                 constadorMal++;
                                 const cadenaModificada = cadena.substring(cadena.indexOf('.')-2);
-                                console.log('CADENA MODIFICADA: ',cadenaModificada);
-                                console.log('OCURRENCIAS CORRECTAS: ', contadorBien);
-                                console.log('OCURRENCIAS INCORRECTAS: ', constadorMal);
+                                //console.log('CADENA MODIFICADA: ',cadenaModificada);
+                                //console.log('OCURRENCIAS CORRECTAS: ', contadorBien);
+                                //console.log('OCURRENCIAS INCORRECTAS: ', constadorMal);
                                 //const nuevoAmbiente = crearAmbiente(parseFloat(cadenaModificada.substring(0, cadenaModificada.indexOf('\r\n'))), parseFloat(cadenaModificada.substring(cadenaModificada.indexOf('\r\n'))), ensayo);
                                 subscriberA.next(viejoAmbiente);
                             }
@@ -229,7 +229,7 @@ process.on('message', async (m) => {
         const arregloAmbientes: any[] = [];
         const obsAmbiente: Subscription = obserbableAmbiente.subscribe(data2 => {
             let pasaje: any = data2;
-            console.log(data2);
+            //console.log(data2);
             if (pasaje.humedad !== undefined && pasaje.temperatura !== undefined) {
                 const objeto: objetoDatos = {
                     humedad: pasaje.humedad,

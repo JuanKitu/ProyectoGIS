@@ -21,6 +21,7 @@ export const decirHola = (client: Socket,io:SocketIO.Server)=>{
 export const mensaje = ( cliente: Socket, io:SocketIO.Server, arreglos:arregloDM ) => {
 
     cliente.on('arrayPuntos', () => {
+        console.log('PIDIEDO PUNTOS',arreglos);
         if(arreglos.arregloDistancias.length !=0 && arreglos.arregloMu.length != 0){
             io.emit('envioArray',arreglos);
         }

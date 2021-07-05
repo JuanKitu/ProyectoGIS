@@ -91,13 +91,13 @@ export default class Server {
 
     public conectar() {
         const childConn = fork('../server/dist/serialport/conectar.js', ['normal']);
-            childConn.on('message', (MP: number) => {
-                this.setearConexion(true);
-                console.log(this.consultarConectado());
-                if (this.consultarConectado()) {
-                    childConn.kill();
-                }
-            })
+        childConn.on('message', (MP: number) => {
+            this.setearConexion(true);
+            console.log(this.consultarConectado());
+            if (this.consultarConectado()) {
+                childConn.kill();
+            }
+        })
     }
 
     private escucharSockets() {
@@ -118,13 +118,29 @@ export default class Server {
             socket.decirHola(client, this.io);
 
             //mensaje
-            socket.mensaje(client, this.io, this.arreglos);
+            //socket.mensaje(client, this.io, this.arreglos);
+            client.on('arrayPuntos', () => {
+                if(this.arreglos.arregloDistancias.length !=0 && this.arreglos.arregloMu.length != 0){
+                    this.io.emit('envioArray',this.arreglos);
+                }
+            });
+            
 
             //En uso
-            socket.consultaUso(client, this.io, this.ensayoActual)
+            //socket.consultaUso(client, this.io, this.ensayoActual)
+            client.on('consultarUso',()=>{
+                console.log('CONSULTANDO DESDE EL CLIENTE');
+                this.io.emit('respuestaUso',this.ensayoActual);
+            })
+
 
             //Ambiente
-            socket.enviarAmbiente(client,this.io,this.ambiente)
+            //socket.enviarAmbiente(client, this.io, this.ambiente)
+            client.on('getAmbiente',()=>{
+                console.log('ENVIANDO DESDE SERVER');
+                this.io.emit('ambiente',this.ambiente);
+            })
+
 
             //pausar(client,this.io)
             socket.pausar(client, this.io, this.pausado)
