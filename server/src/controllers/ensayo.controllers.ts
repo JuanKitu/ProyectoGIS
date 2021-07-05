@@ -642,8 +642,8 @@ export default class EnsayoController {
                     'fuerza[kg]' + TAB + 'distancia[m]' + TAB + 'tiempo[s]' + TAB + 'temperatura[°C]' + TAB + 'humedad[%]' + LJ;
                 txtCompleto = renglonesEstandar;
                 const asignar = (unParametro: ParametroInterface) => {
-                    if (unParametro.fuerzaRozamiento && unParametro.vueltas && unParametro.tiempoActual) {
-                        let fuerza = unParametro.fuerzaRozamiento;
+                    if (unParametro.coeficienteRozamiento && unParametro.vueltas && unParametro.tiempoActual) {
+                        let fuerza = unParametro.coeficienteRozamiento;
                         let distancia = ((((unParametro.vueltas) * (2 * Math.PI * elEnsayo.radioTrayectoria)).toFixed(2)));
                         let tiempo = unParametro.tiempoActual;
                         let temperatura = ambiente[numeroDeAmbiente].temperatura;
