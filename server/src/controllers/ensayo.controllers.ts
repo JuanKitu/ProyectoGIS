@@ -14,7 +14,7 @@ import util from 'util';
 const server = Server.instance;
 server.conectar();
 let FIN: boolean = false;
-let ambienteSocket:any;
+let ambienteSocket: any;
 let arreglosDM: arregloDM = {
     arregloDistancias: [],
     arregloMu: []
@@ -644,7 +644,7 @@ export default class EnsayoController {
                 const asignar = (unParametro: ParametroInterface) => {
                     if (unParametro.coeficienteRozamiento && unParametro.vueltas && unParametro.tiempoActual) {
                         let fuerza = unParametro.coeficienteRozamiento;
-                        let distancia = ((((unParametro.vueltas) * (2 * Math.PI * elEnsayo.radioTrayectoria)).toFixed(2)));
+                        let distancia = (((((unParametro.vueltas) * (2 * Math.PI * elEnsayo.radioTrayectoria)) / 1000)).toFixed(2));
                         let tiempo = unParametro.tiempoActual;
                         let temperatura = ambiente[numeroDeAmbiente].temperatura;
                         let humedad = ambiente[numeroDeAmbiente].humedad;
