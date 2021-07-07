@@ -14,7 +14,11 @@ import util from 'util';
 const server = Server.instance;
 server.conectar();
 let FIN: boolean = false;
-let ambienteSocket:any;
+let ambienteSocket: any;
+let arreglosDM: arregloDM = {
+    arregloDistancias: [],
+    arregloMu: []
+};
 /* server.io.on('connection', client=>{
     console.log('ENVIANDO DESDE SERVER ',ambienteSocket);
     server.io.emit('ambiente', ambienteSocket);
@@ -201,10 +205,6 @@ export default class EnsayoController {
                     raw: true
                 });
                 if (elEnsayo) {
-                    let arreglosDM: arregloDM = {
-                        arregloDistancias: [],
-                        arregloMu: []
-                    };
                     let velocidadAnterior: number = 0;
                     let distanciaAnterior: number = 0;
                     let tiempoAnterior: number = 0;
@@ -226,6 +226,7 @@ export default class EnsayoController {
                                     console.log('VUELTAS RECORRIDA ', M.vueltas);
                                     arreglosDM.arregloDistancias.push(punto.distancia);
                                     arreglosDM.arregloMu.push(punto.mu);
+                                    //console.log('EL ESTADO DE ARREGLOS DM: ',arreglosDM);
                                     server.setearArray(arreglosDM);
                                     distanciaActual = parseFloat(punto.distancia);
                                     if (M.tiempoActual != undefined) {
@@ -261,6 +262,7 @@ export default class EnsayoController {
                                     setTimeout(() => {
                                         arreglosDM.arregloDistancias = [];
                                         arreglosDM.arregloMu = [];
+                                        server.setearAmbiente(arreglosDM);
                                         console.log('FIN PETICION');
                                         hijoPFV.kill();
                                         console.log('FIN PETICION 2');
@@ -277,6 +279,9 @@ export default class EnsayoController {
                         } else {
                             hijoPFV.send('CANCELAR');
                             FIN = false;
+                            arreglosDM.arregloDistancias = [];
+                            arreglosDM.arregloMu = [];
+                            server.setearArray(arreglosDM);
                             server.setearEnsayo(-1);
                             server.io.emit('respuestaUso', -1);
                             server.setearProcesando(false);
@@ -637,9 +642,9 @@ export default class EnsayoController {
                     'fuerza[kg]' + TAB + 'distancia[m]' + TAB + 'tiempo[s]' + TAB + 'temperatura[°C]' + TAB + 'humedad[%]' + LJ;
                 txtCompleto = renglonesEstandar;
                 const asignar = (unParametro: ParametroInterface) => {
-                    if (unParametro.fuerzaRozamiento && unParametro.vueltas && unParametro.tiempoActual) {
-                        let fuerza = unParametro.fuerzaRozamiento;
-                        let distancia = ((((unParametro.vueltas) * (2 * Math.PI * elEnsayo.radioTrayectoria)).toFixed(2)));
+                    if (unParametro.coeficienteRozamiento && unParametro.vueltas && unParametro.tiempoActual) {
+                        let fuerza = unParametro.coeficienteRozamiento;
+                        let distancia = (((((unParametro.vueltas) * (2 * Math.PI * elEnsayo.radioTrayectoria)) / 1000)).toFixed(2));
                         let tiempo = unParametro.tiempoActual;
                         let temperatura = ambiente[numeroDeAmbiente].temperatura;
                         let humedad = ambiente[numeroDeAmbiente].humedad;
