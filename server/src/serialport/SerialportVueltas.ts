@@ -184,7 +184,7 @@ process.on('message', async (m) => {
                     subscriberA.complete();
                 }
             };
-            setTimeout(ciclo2, tiempoRespuesta.tiempoMS + 2523);
+            setTimeout(ciclo2, tiempoRespuesta.tiempoMS + 523);
             const intervalo2 = setInterval(ciclo2, tiempoRespuesta.tiempoMS + 29713);
             const intervalo3 = setInterval(ciclo3, tiempoRespuesta.tiempoMS + 600);
             portControlador.on('readable', () => {

@@ -126,7 +126,7 @@ async function comenzarExperimeto(puerto: SerialPort, ensayo: Ensayo) {
                             }
                         }
                     });
-                }, 2000);
+                }, 1000);
 
             })
 
