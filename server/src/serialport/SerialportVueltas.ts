@@ -61,8 +61,8 @@ process.on('message', async (m) => {
                 }
             };
             const intervalo = setInterval(ciclo, tiempoRespuesta.tiempoMS);
-            console.log('VALOR PARADA1: ', parada);
-            console.log('ESTA ABIERTO EL PUERTO EN VUELTAS? 2: ', portControlador.isOpen);
+            //console.log('VALOR PARADA1: ', parada);
+            //console.log('ESTA ABIERTO EL PUERTO EN VUELTAS? 2: ', portControlador.isOpen);
             parser.on('readable', () => {
                 //setTimeout(() => {
                 const data = parser.read();
@@ -73,7 +73,7 @@ process.on('message', async (m) => {
                         console.log('VALOR PARADA2: ', parada);
                         const arreglo2: any = data.toString().match(/\-/);
                         if (arreglo2 != null && fin!=true) {
-                            console.log('INTERPRETANDO -1');
+                            console.log(' -------------------------------------------------------------------- INTERPRETANDO -1-------------------------------------------------------------------------------',data.toString());
                             estadoScript = 0;
                             /* i++
                             let unDato: colaDatos = {
@@ -94,8 +94,8 @@ process.on('message', async (m) => {
                             }); */
                             /* clearInterval(intervalo);
                             subscriberV.complete(); */
-                            subscriberV.next(-1);
                             parada = true;
+                            subscriberV.next(-1);
                         } else {
                             //const arreglo: any = data.toString().match(/\n.*\n/);
                             subscriberV.next(parseFloat(data.toString()));
