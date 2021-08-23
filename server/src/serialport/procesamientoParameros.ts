@@ -77,6 +77,7 @@ process.on('message', async (m) => {
                     //condicion de parada
                     if (unaVuelta.dato == -1) {
                         clearInterval(intervalo);
+                        console.log('FIN EN PROCESAMIENTO PARAMETROS');
                         subscriber.complete();
                     }
 
@@ -141,7 +142,7 @@ process.on('message', async (m) => {
                 unParametro: data,
                 arreglo: arregloParametros
             }; */
-            //console.log(data);
+            console.log(data);
             (<any>process).send(data);
             i++;
         },
