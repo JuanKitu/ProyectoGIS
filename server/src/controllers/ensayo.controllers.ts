@@ -232,7 +232,7 @@ export default class EnsayoController {
                                     if (M.tiempoActual != undefined) {
                                         velocidadActual = (distanciaActual - distanciaAnterior) / (M.tiempoActual - tiempoAnterior);
                                         //server.io.emit('velocidad',velocidadActual);
-                                        if (velocidadActual > 100) {
+                                        if (velocidadActual > 12) {
                                             velocidadActual = velocidadAnterior;
                                         } else {
                                             velocidadAnterior = velocidadActual;
