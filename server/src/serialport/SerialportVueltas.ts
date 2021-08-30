@@ -72,8 +72,8 @@ process.on('message', async (m) => {
                         console.log('Data de serialport vuelta1: ', data.toString());
                         console.log('VALOR PARADA2: ', parada);
                         const arreglo2: any = data.toString().match(/\-/);
-                        if (arreglo2 != null && fin!=true) {
-                            console.log(' -------------------------------------------------------------------- INTERPRETANDO -1-------------------------------------------------------------------------------',data.toString());
+                        if (arreglo2 != null && fin != true) {
+                            console.log(' -------------------------------------------------------------------- INTERPRETANDO -1-------------------------------------------------------------------------------', data.toString());
                             estadoScript = 0;
                             /* i++
                             let unDato: colaDatos = {
@@ -157,8 +157,8 @@ process.on('message', async (m) => {
 
 
         const obserbableAmbiente = new Observable(subscriberA => {
-            let contadorBien:number=0;
-            let constadorMal:number=0;
+            let contadorBien: number = 0;
+            let constadorMal: number = 0;
             const horaActual: any = moment().format('HH:mm:ss');
             let viejoAmbiente: AmbienteInterface = {
                 temperatura: 0,
@@ -195,27 +195,39 @@ process.on('message', async (m) => {
                         //console.log('Data de serialport vuelta2 sin toString: ', data);
                         //const arreglo: any = data.toString().match(/\n.*\n/);
                         const arreglo: any = data.toString().match(/\./);
+                        const arreglo2: any = data.toString().match(/NaN/);
                         if (arreglo != null) {
                             //console.log('DATA AMBIENTE: ', data.toString());
                             let cadena: string = data.toString();
                             //caso normal de deteccion de cadena con '.'
-                            if(cadena.indexOf('.')===2){
-                                contadorBien++;
-                                const nuevoAmbiente = crearAmbiente(parseFloat(cadena.substring(0, cadena.indexOf('\r\n'))), parseFloat(cadena.substring(cadena.indexOf('\r\n'))), ensayo);
-                                viejoAmbiente = nuevoAmbiente;
-                                //console.log('OCURRENCIAS CORRECTAS: ', contadorBien);
-                                //console.log('OCURRENCIAS INCORRECTAS: ', constadorMal);
-                                subscriberA.next(nuevoAmbiente);
-                            }else{ //caso en que se meta una vuelta en la cadena de ambiente
+                            if (cadena.indexOf('.') === 2) {
+                                if (arreglo2 === null) {
+                                    contadorBien++;
+                                    const nuevoAmbiente = crearAmbiente(parseFloat(cadena.substring(0, cadena.indexOf('\r\n'))), parseFloat(cadena.substring(cadena.indexOf('\r\n'))), ensayo);
+                                    viejoAmbiente = nuevoAmbiente;
+                                    //console.log('OCURRENCIAS CORRECTAS: ', contadorBien);
+                                    //console.log('OCURRENCIAS INCORRECTAS: ', constadorMal);
+                                    subscriberA.next(nuevoAmbiente);
+                                } else {
+                                    constadorMal++;
+                                    const cadenaModificada = cadena.substring(cadena.indexOf('.') - 2);
+                                    //console.log('CADENA MODIFICADA: ',cadenaModificada);
+                                    //console.log('OCURRENCIAS CORRECTAS: ', contadorBien);
+                                    //console.log('OCURRENCIAS INCORRECTAS: ', constadorMal);
+                                    //const nuevoAmbiente = crearAmbiente(parseFloat(cadenaModificada.substring(0, cadenaModificada.indexOf('\r\n'))), parseFloat(cadenaModificada.substring(cadenaModificada.indexOf('\r\n'))), ensayo);
+                                    subscriberA.next(viejoAmbiente);
+                                }
+
+                            } else { //caso en que se meta una vuelta en la cadena de ambiente
                                 constadorMal++;
-                                const cadenaModificada = cadena.substring(cadena.indexOf('.')-2);
+                                const cadenaModificada = cadena.substring(cadena.indexOf('.') - 2);
                                 //console.log('CADENA MODIFICADA: ',cadenaModificada);
                                 //console.log('OCURRENCIAS CORRECTAS: ', contadorBien);
                                 //console.log('OCURRENCIAS INCORRECTAS: ', constadorMal);
                                 //const nuevoAmbiente = crearAmbiente(parseFloat(cadenaModificada.substring(0, cadenaModificada.indexOf('\r\n'))), parseFloat(cadenaModificada.substring(cadenaModificada.indexOf('\r\n'))), ensayo);
                                 subscriberA.next(viejoAmbiente);
                             }
-                            
+
                         }
                     }
                 }, 500)
@@ -256,9 +268,9 @@ process.on('message', async (m) => {
             fin = true;
             portControlador.write('<STOP>\n');
             console.log('CANCELADO EN VUELTAS');
-            setTimeout(()=>{
+            setTimeout(() => {
                 (<any>process).send('CANCELADO');
-            },100);
+            }, 100);
             //parser.on('readable',()=>{console.log('Data al cancelar: ',parser.read().toString())})
             /* if (fin != true) {
                 console.log('Esta abierto? ', portControlador.isOpen)
