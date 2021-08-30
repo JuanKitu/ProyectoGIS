@@ -75,6 +75,7 @@ process.on('message', async (m) => {
                     let unaFuerza = colaFuerzas.peek();
                     let unaVuelta = colaVueltas.peek();
                     //condicion de parada
+                    console.log(unaVuelta);
                     if (unaVuelta.dato == -1) {
                         clearInterval(intervalo);
                         console.log('FIN EN PROCESAMIENTO PARAMETROS');
@@ -96,6 +97,10 @@ process.on('message', async (m) => {
                         //controlamos que no sea un resultado vacio
                         if (colaFuerzas.isEmpty()) {
                             colaFuerzas.copy(leerJson('fuerzas.json'));
+                            //PUEDE OCURRIR QUE POR MAS QUE SE COPIE LA COLAFUERZAS AUN NO ALCANZE EL PUNTO DONDE
+                            //ESTA LA COLA VUELTAS (POR LO CUAL HABRIA QUE COPIAR DE NUEVO HASTA QUE LLLEGUE A ESE PUNTO)
+                            //Y ESTO NO ESTA CONTEMPLADO EN ESTE CODIGO
+                            //IGUALMENTE NUNCA OCURRIO ESTO, PARA PENSAR...
                             for (let i = unaFuerza.id; i == unaVuelta.id; i++) {
                                 unaFuerza = colaFuerzas.dequeue();
                             };
