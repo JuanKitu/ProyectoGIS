@@ -17,10 +17,6 @@ export class EnsayoService {
   getAll(){
     return this.httpClient.get(this.ensayoURL)
   };
-  getSiniestro(){
-      return this.httpClient.get("http://localhost:3000/api/siniestros");
-
-  }
   getOne(key$:number){
     return this.httpClient.get(this.ensayoURL+`/${key$}`);
   };

@@ -98,8 +98,12 @@ export class GraficoEnsayoComponent implements OnInit, OnDestroy {
     console.log('antes del if')
     if (this.realTime){
       console.log('iniciando el observable1');
-      this.webSocket.emit('arrayPuntos', () => { })
+      this.webSocket.emit('arrayPuntos', () => {
+
+        console.log("dentro del emit arrayPuntos");
+       })
       this.subscripcionArrayPuntos = this.webSocket.listen('envioArray').subscribe(datos => {
+        console.log("valores del array de puntos: ", datos);
         const arrayPuntos: ArrayPuntos = datos;
         const puntos: ChartDataSets[] = [{ data: arrayPuntos.arregloMu, label: 'Fuerza de rozamiento' }]
         this.lineChartData = puntos;
