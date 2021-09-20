@@ -4,12 +4,12 @@ import Parametros from '../models/Parametros';
 import Ambiente from '../models/Ambiente';
 import { fork } from 'child_process';
 import Server from '../classes/server';
-import { AmbienteInterface, arregloDM, ParametroInterface } from '../interfaces/interfaces';
+import { arregloDM, ParametroInterface } from '../interfaces/interfaces';
 import moment from 'moment';
-import { parse } from 'json2csv';
-import { TableHints } from 'sequelize/types';
 import fs from "fs";
 import util from 'util';
+import Ensayo_Archivados from '../models/Ensayo_Archivados';
+import Parametros_Archivados from '../models/Parametros_archivados';
 
 const server = Server.instance;
 server.conectar();
@@ -580,6 +580,33 @@ export default class EnsayoController {
                 return res.json({
                     data: arreglosDM
                 });
+            } else {
+                const elEnsayoArchivado = await Ensayo_Archivados.findOne({
+                    where: {
+                        idEnsayo
+                    },
+                    raw: true
+                });
+                if (elEnsayoArchivado != null) {
+                    const parametro = await Parametros_Archivados.findAll({
+                        where: {
+                            idEnsayo
+                        }
+                    });
+    
+                    let arreglosDM: arregloDM = {
+                        arregloDistancias: [],
+                        arregloMu: []
+                    };
+                    const asignar = (unParametro: any) => {
+                        arreglosDM.arregloDistancias.push((((unParametro.vueltas) * (2 * Math.PI * elEnsayoArchivado.radioTrayectoria)).toFixed(2)).toString()),
+                            arreglosDM.arregloMu.push(unParametro.coeficienteRozamiento)
+                    }
+                    parametro.forEach(elemento => asignar(elemento));
+                    return res.json({
+                        data: arreglosDM
+                    });
+                }
             }
         } catch (error) {
             console.log(error);

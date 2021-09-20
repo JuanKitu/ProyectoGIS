@@ -12,7 +12,7 @@
     "license": "ISC",
     "dependencies": {
         "@types/filesystem": "0.0.29",
-        "bcrypt": "^5.0.0",
+        "bcrypt": "^5.0.1",
         "body-parser": "^1.19.0",
         "cli-color": "^2.0.0",
         "cookie-parser": "^1.4.4",
@@ -30,7 +30,7 @@
         "rxjs": "^6.6.2",
         "sequelize": "^6.4.0",
         "serialport": "^8.0.8",
-        "socket.io": "^2.3.0",
+        "socket.io": "^2.4.1",
         "socket.io-adapter": "^1.1.2",
         "socket.io-emitter": "^3.1.1",
         "socket.io-redis": "^5.3.0"
@@ -45,12 +45,12 @@
         "@types/json2csv": "^5.0.1",
         "@types/jsonwebtoken": "^8.5.0",
         "@types/morgan": "^1.9.1",
-        "@types/node": "^14.0.26",
+        "@types/node": "^14.17.17",
         "@types/serialport": "^8.0.1",
         "@types/socket.io": "^2.1.9",
         "@types/socket.io-redis": "^1.0.26",
         "@types/validator": "^13.1.0",
         "nodemon": "^2.0.4",
-        "typescript": "^4.3.4"
+        "typescript": "^4.4.3"
     }
 }

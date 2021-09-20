@@ -70,6 +70,6 @@ export interface UsuarioRegister{
     repassword?:string
     nombreUsuario?:string
 }
-const domIP= "192.168.0.69";
+const domIP= "192.168.1.100";
 export const urlSocket= `http://${domIP}:3000`;
 export const urlServices= `${urlSocket}/api/`;

@@ -4,7 +4,7 @@ import Ensayo from '../models/Ensayo'
 import { port } from '../interfaces/interfaces';
 import Server from '../classes/server';
 import { json } from 'express';
-const fs = require('fs');
+import fs from 'fs';
 
 
 let servidor: Server = Server.instance;
