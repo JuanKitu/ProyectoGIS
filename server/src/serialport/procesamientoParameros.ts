@@ -74,6 +74,10 @@ process.on('message', async (m) => {
                         subscriber.complete();
                     }
 
+                    if (unaVuelta.dato == -1 && !auxParada) {
+                        console.log('+++++++++++++++++++++++++++   BUG INTERPRETACION PREMATURA  +++++++++++++++');
+                    }
+
                     else if (unaFuerza.id == unaVuelta.id) {
                         unaFuerza = colaFuerzas.dequeue();
                         unaVuelta = colaVueltas.dequeue();
