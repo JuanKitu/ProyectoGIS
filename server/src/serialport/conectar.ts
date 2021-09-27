@@ -7,10 +7,10 @@ let portControlador = new SerialPort(port.puertoControlador, {
 
 portControlador.open();
 portControlador.write('<CONN>\n');
-portControlador.on('readable', () => {
+portControlador.on('data', (data) => {
 
-    const control = portControlador.read();
-    console.log('portControlador.read()',portControlador.read());
+    const control = data;
+    console.log('data conectar.ts',control.toString());
     if (control) {
         if(control === '0' || control === '1'){
             setTimeout(() => {
@@ -22,4 +22,12 @@ portControlador.on('readable', () => {
         }
 
     };
+});
+
+portControlador.on('data', (data) => {
+    const control = data;
+    if (control) {
+        portControlador.close();
+    }
+    else return -2;
 });
