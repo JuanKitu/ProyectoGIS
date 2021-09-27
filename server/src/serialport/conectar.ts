@@ -11,16 +11,14 @@ portControlador.on('readable', () => {
 
     const control = portControlador.read();
     if (control) {
-        console.log(parseFloat(control.toString()));
-
-        setTimeout(() => {
-            console.log("Puerto abierto: ", portControlador.isOpen);
-            if (portControlador.isOpen) {
-                portControlador.close();
-                (<any>process).send(parseFloat(control.toString()));
-            }
-        }, 1000)
-
+        if(control.toString() === '0' || control.toString() === '1'){
+            setTimeout(() => {
+                if (portControlador.isOpen) {
+                    portControlador.close();
+                    (<any>process).send(parseFloat(control.toString()));
+                }
+            }, 1000)
+        }
 
     };
 });

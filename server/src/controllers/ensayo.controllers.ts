@@ -266,10 +266,10 @@ export default class EnsayoController {
                                         server.setearEnsayo(-1);
                                         server.io.emit('respuestaUso', -1);
                                         server.setearProcesando(false);
-                                        res.json({
+                                        server.io.emit('fin', 'FIN');
+                                        return res.json({
                                             data: 'Parametros agregados'
                                         });
-                                        server.io.emit('fin', 'FIN')
                                     }, 1000);
                                 }
                             }
@@ -285,7 +285,7 @@ export default class EnsayoController {
                             setTimeout(() => {
                                 hijoPFV.kill();
                                 console.log('FIN PETICION');
-                                res.json({
+                                return res.json({
                                     data: 'Cancelado'
                                 });
                             }, 1000)
