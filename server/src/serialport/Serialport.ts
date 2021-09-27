@@ -1,7 +1,7 @@
 import SerialPort from 'serialport';
 const { fork } = require('child_process');
 import Ensayo from '../models/Ensayo'
-import { port } from '../interfaces/interfaces';
+import { EnsayoInterface, port } from '../interfaces/interfaces';
 import Server from '../classes/server';
 import { json } from 'express';
 import fs from 'fs';
@@ -38,7 +38,7 @@ async function iniciar(radio: number, vueltas: number, puerto: SerialPort) {
 
 
 
-async function comenzarExperimeto(puerto: SerialPort, ensayo: Ensayo) {
+async function comenzarExperimeto(puerto: SerialPort, ensayo: EnsayoInterface) {
     if (ensayo.distanciaTotal && ensayo.radioTrayectoria) {
         const distancia: number = ensayo.distanciaTotal;
         const unRadio: number = ensayo.radioTrayectoria;
@@ -137,7 +137,7 @@ async function comenzarExperimeto(puerto: SerialPort, ensayo: Ensayo) {
 }
 
 process.on('message', async (m) => {
-    if (typeof (m) == "object") {
+    if (typeof (m) == "object" && m!=null) {
         await comenzarExperimeto(portControlador, m);
     }
 });

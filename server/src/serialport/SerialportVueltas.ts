@@ -44,7 +44,7 @@ function crearAmbiente(unaHumedad: number, unaTemperatura: number, unEnsayo: Ens
 let ensayo: EnsayoInterface;
 let parada: boolean = false;
 process.on('message', async (m) => {
-    if (typeof (m) == "object") {
+    if (typeof (m) == "object" && m!=null) {
         portControlador.open();
         ensayo = await m;
         console.log('RECIBIENDO ENSAYO');

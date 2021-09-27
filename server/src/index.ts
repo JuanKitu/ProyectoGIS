@@ -1,11 +1,10 @@
 import Server from './classes/server';
-import {json} from 'express';
+import {json, urlencoded} from 'express';
 import clc from 'cli-color';
 import morgan from 'morgan';
 import path from 'path';
 import cookieparser from 'cookie-parser';
 import cors from 'cors'
-import bodyParser from 'body-parser';
 
 //const morgan = require('morgan');
 //const path = require('path');
@@ -23,7 +22,8 @@ import parametrosRoutes  from './routes/parametros';
 import parametros_archivadosRoutes  from './routes/parametros_archivados';
 import usuariosRoutes  from './routes/usuarios';
 import ensayo_archivadosRoutes from './routes/ensayos_archivados';
-import socket from './routes/socket'
+import socket from './routes/socket';
+
 /* middleware */
 server.app.use(morgan('dev'));
 server.app.use(json());
@@ -33,8 +33,8 @@ server.app.use(json());
 //const io = require('socket.io')(3001);
 
 //body-parser
-server.app.use( bodyParser.urlencoded({ extended: true }) );
-server.app.use( bodyParser.json() );
+server.app.use( urlencoded({ extended: true }) );
+server.app.use( json() );
 // Configurar cabeceras y cors
 const corsOptions = { // se debe configurar mas adelante
     origin: 'http://localhost:8100',

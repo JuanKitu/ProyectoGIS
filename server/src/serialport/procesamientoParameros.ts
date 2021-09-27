@@ -14,16 +14,7 @@ let estadoScript: number = 1;
 
 process.on('message', async (m) => {
     console.log('INICIANDO PROCESAMIENTO DE PARAMETROS');
-    if (typeof (m) == "string") {
-        if (m === 'PAUSA') {
-            console.log('PAUSANDO EN PARAMETRO');
-            estadoScript = 0;
-        }
-        if (m === 'REANUDAR') {
-            console.log('REANUDANDO EN PARAMETRO');
-            estadoScript = 1;
-        }
-    } else {
+    if (typeof (m) == "object" && m!=null) {
         ensayo = await m;
 
         function crearParametro(unDato: number, unaVuelta: number, unTiempo: number, unEnsayo: EnsayoInterface): ParametroInterface {
