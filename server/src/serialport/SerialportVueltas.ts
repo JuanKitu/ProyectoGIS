@@ -75,27 +75,13 @@ process.on('message', async (m) => {
                         if (arreglo2 != null && fin != true) {
                             console.log(' -------------------------------------------------------------------- INTERPRETANDO -1-------------------------------------------------------------------------------', data.toString());
                             estadoScript = 0;
-                            /* i++
-                            let unDato: colaDatos = {
-                                id: i,
-                                dato: -1
-                            };
-                            colaDato.enqueue(unDato);
-                            let datos = colaDato.print();
-                            let jsonObj = {
-                                data: datos
-                            }
-                            let jsonContent = JSON.stringify(jsonObj);
-                            fs.writeFile('vueltas.json', jsonContent, 'utf8', function (err: any) {
-                                if (err) {
-                                    console.log("An error occured while writing JSON Object to File.");
-                                    return console.log(err);
-                                }
-                            }); */
-                            /* clearInterval(intervalo);
-                            subscriberV.complete(); */
                             parada = true;
                             subscriberV.next(-1);
+
+
+                            //SE AGREGA ESTO PARA QUE EN PROCESAMIENTO PARAMETRO SE VERIFIQUE QUE PARADA ES TRUE ANTES DE FINALIZAR EL SCRIPT
+                            //DE ESTA FORMA SE EVITA EL BUG DONDE SE INTERPRETA DE FORMA PREMATURA EL -1 EN PROCESAMIENTO PARAMETROS
+                            (<any>process).send('PARADA = TRUE');
                         } else {
                             //const arreglo: any = data.toString().match(/\n.*\n/);
                             subscriberV.next(parseFloat(data.toString()));

@@ -10,6 +10,7 @@ import { col } from 'sequelize/types';
 import { isObject } from 'util';
 let ensayo: EnsayoInterface;
 let estadoScript: number = 1;
+let auxParada: boolean = false;
 
 
 process.on('message', async (m) => {
@@ -67,7 +68,7 @@ process.on('message', async (m) => {
                     let unaVuelta = colaVueltas.peek();
                     //condicion de parada
                     console.log(unaVuelta);
-                    if (unaVuelta.dato == -1) {
+                    if (unaVuelta.dato == -1 && auxParada) {
                         clearInterval(intervalo);
                         console.log('FIN EN PROCESAMIENTO PARAMETROS');
                         subscriber.complete();
@@ -134,10 +135,6 @@ process.on('message', async (m) => {
         const arregloParametros: any[] = [];
         obserbableDatos.subscribe(data => {
             arregloParametros.push(data);
-            /* const datos = {
-                unParametro: data,
-                arreglo: arregloParametros
-            }; */
             console.log(data);
             (<any>process).send(data);
             i++;
@@ -152,6 +149,10 @@ process.on('message', async (m) => {
             })
 
 
+    } else if (typeof (m) == "string") {
+        if (m === 'PARADA = TRUE') {
+            auxParada = true;
+        }
     }
 
 

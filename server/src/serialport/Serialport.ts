@@ -78,7 +78,6 @@ async function comenzarExperimeto(puerto: SerialPort, ensayo: EnsayoInterface) {
                             childVuelta.kill();
                             //(<any>process).send('CANCELADO');
                         }
-
                     }
                 })
 
@@ -101,7 +100,7 @@ async function comenzarExperimeto(puerto: SerialPort, ensayo: EnsayoInterface) {
                             
                         }
 
-                    })
+                    });
                     process.on('message', async (me) => {
                         if (typeof (me) == "string") {
                             if (me === "PAUSA") {
@@ -126,6 +125,13 @@ async function comenzarExperimeto(puerto: SerialPort, ensayo: EnsayoInterface) {
                             }
                         }
                     });
+
+                    childVuelta.on('message', (MV2: any) => {
+                        if (MV2 === 'PARADA = TRUE') {
+                            childParametros.send("PARADA = TRUE");
+                        }
+                    });
+
                 }, 1000);
 
             })
