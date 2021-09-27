@@ -10,6 +10,7 @@ portControlador.write('<CONN>\n');
 portControlador.on('readable', () => {
 
     const control = portControlador.read();
+    console.log('portControlador.read()',portControlador.read()?.toString());
     if (control) {
         if(control.toString() === '0' || control.toString() === '1'){
             setTimeout(() => {
