@@ -12,7 +12,6 @@ import Ensayo_Archivados from '../models/Ensayo_Archivados';
 import Parametros_Archivados from '../models/Parametros_archivados';
 
 const server = Server.instance;
-server.conectar();
 let FIN: boolean = false;
 let ambienteSocket: any;
 let arreglosDM: arregloDM = {

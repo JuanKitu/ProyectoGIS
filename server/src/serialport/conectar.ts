@@ -10,9 +10,9 @@ portControlador.write('<CONN>\n');
 portControlador.on('readable', () => {
 
     const control = portControlador.read();
-    console.log('portControlador.read()',portControlador.read()?.toString());
+    console.log('portControlador.read()',portControlador.read());
     if (control) {
-        if(control.toString() === '0' || control.toString() === '1'){
+        if(control === '0' || control === '1'){
             setTimeout(() => {
                 if (portControlador.isOpen) {
                     portControlador.close();
