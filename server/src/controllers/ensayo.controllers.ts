@@ -494,6 +494,7 @@ export default class EnsayoController {
 
     conectar = async (req: Request, res: Response) => {
         try {
+            console.log('PETICION CONECTAR');
             const childConn = fork('../server/dist/serialport/conectar.js', ['normal']);
             childConn.on('message', (MP: number) => {
                 server.setearConexion(true);

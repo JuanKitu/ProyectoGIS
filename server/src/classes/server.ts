@@ -90,6 +90,7 @@ export default class Server {
     }
 
     public conectar() {
+        console.log('CONECTAR DEL SERVER');
         const childConn = fork('../server/dist/serialport/conectar.js', ['normal']);
         childConn.on('message', (MP: number) => {
             this.setearConexion(true);

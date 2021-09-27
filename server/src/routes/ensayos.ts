@@ -7,7 +7,7 @@ router.get('/:idEnsayo/txt',controller.saveAsTxt);
 router.get('/:idEnsayo/puntos', controller.consultaPuntos);
 router.get('/consulta', controller.consulta);
 router.get('/desconectar', controller.desconectar);
-router.get('/conectar', controller.conectar);
+//router.get('/conectar', controller.conectar);
 router.get('/test', controller.realizarTest);
 router.get('/pausar', controller.pausar);
 router.get('/reanudar', controller.reanudar);
