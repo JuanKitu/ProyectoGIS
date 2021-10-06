@@ -18,11 +18,3 @@ portControlador.on('data', (data) => {
 
     };
 });
-
-portControlador.on('data', (data) => {
-    const control = data;
-    if (control) {
-        portControlador.close();
-    }
-    else return -2;
-});
