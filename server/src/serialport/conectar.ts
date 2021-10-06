@@ -12,7 +12,7 @@ portControlador.on('data', (data) => {
     const control = data;
     console.log('data conectar.ts',control.toString());
     if (control) {
-        if(control === 0 || control === 1){
+        if(control == 0 || control == 1){
             setTimeout(() => {
                 if (portControlador.isOpen) {
                     portControlador.close();
