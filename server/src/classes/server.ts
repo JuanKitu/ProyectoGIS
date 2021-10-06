@@ -99,7 +99,7 @@ export default class Server {
         console.log('CONECTAR DEL SERVER');
         const childConn = fork('../server/dist/serialport/conectar.js', ['normal']);
         childConn.on('message', (MP: number) => {
-            portControlador.close();
+            //portControlador.close();
             this.setearConexion(true);
             console.log(this.consultarConectado());
             if (this.consultarConectado()) {

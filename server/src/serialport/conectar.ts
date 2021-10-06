@@ -15,6 +15,5 @@ portControlador.on('data', (data) => {
         if (control == 0 || control == 1) {
             (<any>process).send(parseFloat(control.toString()));
         }
-
     };
 });
