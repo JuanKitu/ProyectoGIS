@@ -13,10 +13,7 @@ portControlador.on('data', (data) => {
     console.log('data conectar.ts', control.toString());
     if (control) {
         if (control == 0 || control == 1) {
-            if (portControlador.isOpen) {
-                portControlador.close();
-                (<any>process).send(parseFloat(control.toString()));
-            }
+            (<any>process).send(parseFloat(control.toString()));
         }
 
     };

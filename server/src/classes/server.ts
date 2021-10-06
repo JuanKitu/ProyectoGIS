@@ -3,11 +3,17 @@ import socketIO from 'socket.io';
 import http from 'http';
 import * as socket from '../socket/socket';
 //import {pausar} from '../controllers/ensayo.controllers'
-import { arregloDM, EnsayoInterface } from '../interfaces/interfaces';
+import { arregloDM, EnsayoInterface, port } from '../interfaces/interfaces';
 import { any } from 'bluebird';
 import { fork } from 'child_process';
+import SerialPort from 'serialport';
 
 //Aca habria que importar el archivos de sockets personalizado
+
+let portControlador = new SerialPort(port.puertoControlador, {
+    autoOpen: false,
+    baudRate: 9600,
+});
 
 export default class Server {
     private static _instance: Server;
@@ -93,6 +99,7 @@ export default class Server {
         console.log('CONECTAR DEL SERVER');
         const childConn = fork('../server/dist/serialport/conectar.js', ['normal']);
         childConn.on('message', (MP: number) => {
+            portControlador.close();
             this.setearConexion(true);
             console.log(this.consultarConectado());
             if (this.consultarConectado()) {
