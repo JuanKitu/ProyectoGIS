@@ -115,7 +115,7 @@ export default class Server {
         this.io.on('connection', client => {
 
             console.log('Cliente conectado');
-            if(this.consultarConectado()){
+            if(!this.consultarConectado()){
                 this.conectar();
             }
             
