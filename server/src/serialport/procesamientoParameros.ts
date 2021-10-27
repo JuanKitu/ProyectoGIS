@@ -3,7 +3,7 @@ import Ensayo from '../models/Ensayo';
 import { EnsayoInterface, ParametroInterface, colaDatos, colaDual, tiempoRespuesta } from '../interfaces/interfaces';
 import { Json } from 'sequelize/types/lib/utils';
 import Queue from '../classes/queue';
-import { reject, resolve } from 'bluebird';
+import { any, reject, resolve } from 'bluebird';
 const fs = require('fs');
 import { Observable, Subscription, async } from 'rxjs';
 import { col } from 'sequelize/types';
@@ -15,7 +15,7 @@ let auxParada: boolean = false;
 
 process.on('message', async (m) => {
     console.log('INICIANDO PROCESAMIENTO DE PARAMETROS');
-    if (typeof (m) == "object" && m!=null) {
+    if (typeof (m) == "object" && m != null) {
         ensayo = await m;
 
         function crearParametro(unDato: number, unaVuelta: number, unTiempo: number, unEnsayo: EnsayoInterface): ParametroInterface {
@@ -41,10 +41,16 @@ process.on('message', async (m) => {
             return newParametro;
         };
 
-        function leerJson(ruta: string): colaDatos[] {
-            let datos = fs.readFileSync(ruta, 'utf8');
-            datos = JSON.parse(datos)["data"];
-            return datos;
+        function leerJson(ruta: string): any {
+            try {
+                let datos = fs.readFileSync(ruta, 'utf8');
+                datos = JSON.parse(datos.trim())["data"];
+                return datos;
+            } catch (err){
+                console.log(err);
+                return -2;
+            }
+
         };
 
         const obserbableDatos = new Observable(subscriber => {
@@ -56,14 +62,28 @@ process.on('message', async (m) => {
             colaFuerzas.copy(leerJson('fuerzas.json'));
             const ciclo = () => {
                 if (estadoScript === 1) {
-                    //console.log('COLA DE VUELTAS: ',colaVueltas.print());
-                    //console.log('COLA DE FUERZAS: ',colaFuerzas.print());
-                    if (colaFuerzas.size()==0) {
-                        colaFuerzas.copy(leerJson('fuerzas.json').filter(fuerza => fuerza.id >= contador));
+                    if (colaFuerzas.size() == 0) {
+                        let jsonF = leerJson('fuerzas.json');
+                        if(jsonF != -2 && typeof(jsonF)=='object'){
+                            colaFuerzas.copy(jsonF.filter((fuerza: { id: number; }) => fuerza.id >= contador));
+                        }else{
+                            console.log('ERROR DEL LEERJSON F');
+                            let jsonF = leerJson('fuerzas.json');
+                            colaFuerzas.copy(jsonF.filter((fuerza: { id: number; }) => fuerza.id >= contador));
+                        }
+                        
                     };
-                    if (colaVueltas.size()==0) {
-                        colaVueltas.copy(leerJson('vueltas.json').filter(vuelta => vuelta.id >= contador));
-                    }
+                    if (colaVueltas.size() == 0) {
+                        let jsonV = leerJson('vueltas.json');
+                        if(jsonV != -2 && typeof(jsonV)=='object'){
+                            colaVueltas.copy(jsonV.filter((vuelta: { id: number; }) => vuelta.id >= contador));
+                        }else{
+                            console.log('ERROR DEL LEERJSON V');
+                            let jsonV = leerJson('vueltas.json');
+                            colaVueltas.copy(jsonV.filter((vuelta: { id: number; }) => vuelta.id >= contador));
+                        }
+                        
+                    };
                     let unaFuerza = colaFuerzas.peek();
                     let unaVuelta = colaVueltas.peek();
                     //condicion de parada
@@ -125,11 +145,17 @@ process.on('message', async (m) => {
                         contador++;
                         subscriber.next(newParametro);
 
+                    } else if (typeof (unaFuerza) != 'object' || typeof (unaVuelta) != 'object') {
+                        console.log('+++++++++++++++++++DATO DISTINTO DE OBJECT+++++++++++++++++++');
+                        console.log('FUERZA: ', unaFuerza);
+                        console.log('VUELTA: ', unaVuelta);
+                        console.log('COLA FUERZA', colaFuerzas);
+                        console.log('COLA VUELTAS', colaVueltas);
                     }
                 }
             }
 
-            const intervalo = setInterval(ciclo, tiempoRespuesta.tiempoMS  + 20);
+            const intervalo = setInterval(ciclo, tiempoRespuesta.tiempoMS + 20);
 
 
 
