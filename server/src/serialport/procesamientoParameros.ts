@@ -96,6 +96,7 @@ process.on('message', async (m) => {
 
                     if (unaVuelta.dato == -1 && !auxParada) {
                         console.log('+++++++++++++++++++++++++++   BUG INTERPRETACION PREMATURA  +++++++++++++++');
+                        let unaVuelta = colaVueltas.peek();
                     }
 
                     else if (unaFuerza.id == unaVuelta.id) {
