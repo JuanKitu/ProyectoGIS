@@ -96,6 +96,7 @@ process.on('message', async (m) => {
 
                     if (unaVuelta.dato == -1 && !auxParada) {
                         console.log('+++++++++++++++++++++++++++   BUG INTERPRETACION PREMATURA  +++++++++++++++');
+                        console.log('VALOR AUX PARADA', auxParada);
                         let jsonV = leerJson('vueltas.json');
                         colaVueltas.copy(jsonV.filter((vuelta: { id: number; }) => vuelta.id >= contador));
                         console.log('COLA EN ERROR: ', colaVueltas);
@@ -190,6 +191,7 @@ process.on('message', async (m) => {
 
     } else if (typeof (m) == "string") {
         if (m === 'PARADA = TRUE') {
+            console.log('RECIBIDO PARADA = TRUE');
             auxParada = true;
         }
     }
