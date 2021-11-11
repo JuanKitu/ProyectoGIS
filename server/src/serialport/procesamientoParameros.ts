@@ -46,7 +46,7 @@ process.on('message', async (m) => {
                 let datos = fs.readFileSync(ruta, 'utf8');
                 datos = JSON.parse(datos.trim())["data"];
                 return datos;
-            } catch (err){
+            } catch (err) {
                 console.log(err);
                 return -2;
             }
@@ -64,25 +64,25 @@ process.on('message', async (m) => {
                 if (estadoScript === 1) {
                     if (colaFuerzas.size() == 0) {
                         let jsonF = leerJson('fuerzas.json');
-                        if(jsonF != -2 && typeof(jsonF)=='object'){
+                        if (jsonF != -2 && typeof (jsonF) == 'object') {
                             colaFuerzas.copy(jsonF.filter((fuerza: { id: number; }) => fuerza.id >= contador));
-                        }else{
+                        } else {
                             console.log('ERROR DEL LEERJSON F');
                             let jsonF = leerJson('fuerzas.json');
                             colaFuerzas.copy(jsonF.filter((fuerza: { id: number; }) => fuerza.id >= contador));
                         }
-                        
+
                     };
                     if (colaVueltas.size() == 0) {
                         let jsonV = leerJson('vueltas.json');
-                        if(jsonV != -2 && typeof(jsonV)=='object'){
+                        if (jsonV != -2 && typeof (jsonV) == 'object') {
                             colaVueltas.copy(jsonV.filter((vuelta: { id: number; }) => vuelta.id >= contador));
-                        }else{
+                        } else {
                             console.log('ERROR DEL LEERJSON V');
                             let jsonV = leerJson('vueltas.json');
                             colaVueltas.copy(jsonV.filter((vuelta: { id: number; }) => vuelta.id >= contador));
                         }
-                        
+
                     };
                     let unaFuerza = colaFuerzas.peek();
                     let unaVuelta = colaVueltas.peek();
@@ -96,7 +96,15 @@ process.on('message', async (m) => {
 
                     if (unaVuelta.dato == -1 && !auxParada) {
                         console.log('+++++++++++++++++++++++++++   BUG INTERPRETACION PREMATURA  +++++++++++++++');
+                        let jsonV = leerJson('vueltas.json');
+                        colaVueltas.copy(jsonV.filter((vuelta: { id: number; }) => vuelta.id >= contador));
+                        console.log('COLA EN ERROR: ', colaVueltas);
                         let unaVuelta = colaVueltas.peek();
+                        if (unaVuelta.dato == -1) {
+                            //si incluso despues de volver a copiar la cola, el dato de la vuelta sigue
+                            //siendo -1, entonces que utilice la informacion de la siguiente posicion.
+                            let unaVuelta = colaVueltas.peek(1);
+                        }
                     }
 
                     else if (unaFuerza.id == unaVuelta.id) {

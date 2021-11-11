@@ -23,8 +23,8 @@ export default class Queue {
       }
     }
   
-    peek() {
-      return this.queue[0];
+    peek(index:number = 0) {
+      return this.queue[index];
     }
   
     size() {
