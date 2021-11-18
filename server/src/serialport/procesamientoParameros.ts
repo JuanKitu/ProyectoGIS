@@ -1,13 +1,8 @@
 import Parametro from '../models/Parametros';
-import Ensayo from '../models/Ensayo';
-import { EnsayoInterface, ParametroInterface, colaDatos, colaDual, tiempoRespuesta } from '../interfaces/interfaces';
-import { Json } from 'sequelize/types/lib/utils';
+import { EnsayoInterface, ParametroInterface, tiempoRespuesta } from '../interfaces/interfaces';
 import Queue from '../classes/queue';
-import { any, reject, resolve } from 'bluebird';
 const fs = require('fs');
 import { Observable, Subscription, async } from 'rxjs';
-import { col } from 'sequelize/types';
-import { isObject } from 'util';
 let ensayo: EnsayoInterface;
 let estadoScript: number = 1;
 let auxParada: boolean = false;
