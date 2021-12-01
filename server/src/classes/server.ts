@@ -125,21 +125,13 @@ export default class Server {
 
             // Desconectar
             socket.desconectar(client, this.io);
-
-            //hola
-            socket.decirHola(client, this.io);
-
-            //mensaje
-            //socket.mensaje(client, this.io, this.arreglos);
+            
             client.on('arrayPuntos', () => {
                 if(this.arreglos.arregloDistancias.length !=0 && this.arreglos.arregloMu.length != 0){
                     this.io.emit('envioArray',this.arreglos);
                 }
             });
             
-
-            //En uso
-            //socket.consultaUso(client, this.io, this.ensayoActual)
             client.on('consultarUso',()=>{
                 console.log('CONSULTANDO DESDE EL CLIENTE');
                 this.io.emit('respuestaUso',this.ensayoActual);
@@ -152,13 +144,6 @@ export default class Server {
                 console.log('ENVIANDO DESDE SERVER');
                 this.io.emit('ambiente',this.ambiente);
             })
-
-
-            //pausar(client,this.io)
-            socket.pausar(client, this.io, this.pausado)
-
-
-
 
         });
 

@@ -61,8 +61,6 @@ process.on('message', async (m) => {
                 }
             };
             const intervalo = setInterval(ciclo, tiempoRespuesta.tiempoMS);
-            //console.log('VALOR PARADA1: ', parada);
-            //console.log('ESTA ABIERTO EL PUERTO EN VUELTAS? 2: ', portControlador.isOpen);
             parser.on('readable', () => {
                 //setTimeout(() => {
                 const data = parser.read();

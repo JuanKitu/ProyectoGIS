@@ -29,6 +29,7 @@ process.on('message', async (m) => {
                     tiempoActual,
                     vueltas
                 };
+                console.log('Data crearParametro', newParametro);
                 return newParametro;
             }
             /*En caso de que el ensayo no cumpla el if, el parametro es NULL */
@@ -48,6 +49,15 @@ process.on('message', async (m) => {
 
         };
 
+
+        let colaPruebasVueltas: Queue = new Queue();
+        let colaPruebasFuerzas: Queue = new Queue();
+        colaPruebasVueltas.copy(leerJson('vueltas.json'));
+        colaPruebasFuerzas.copy(leerJson('fuerzas.json'));
+        console.log('COLAS PRUEBAS:');
+        console.log('vueltas ',colaPruebasVueltas.copy(leerJson('vueltas.json')));
+        console.log('fuerzas ',colaPruebasFuerzas.copy(leerJson('fuerzas.json')));
+        console.log('---------------------------------------------------------------');
         const obserbableDatos = new Observable(subscriber => {
             let contador = 1;
             let tiempo: number = 0;
@@ -82,7 +92,7 @@ process.on('message', async (m) => {
                     let unaFuerza = colaFuerzas.peek();
                     let unaVuelta = colaVueltas.peek();
                     //condicion de parada
-                    console.log(unaVuelta);
+                    console.log('UNA vuelta', unaVuelta);
                     if (unaVuelta.dato == -1 && auxParada) {
                         clearInterval(intervalo);
                         console.log('FIN EN PROCESAMIENTO PARAMETROS');
@@ -170,7 +180,7 @@ process.on('message', async (m) => {
         const arregloParametros: any[] = [];
         obserbableDatos.subscribe(data => {
             arregloParametros.push(data);
-            console.log(data);
+            console.log('Data arregloParametros', data);
             (<any>process).send(data);
             i++;
         },
