@@ -1,5 +1,5 @@
 import Parametro from '../models/Parametros';
-import { arregloDM, EnsayoInterface, ParametroInterface, tiempoRespuesta } from '../interfaces/interfaces';
+import { EnsayoInterface, ParametroInterface, tiempoRespuesta } from '../interfaces/interfaces';
 import Queue from '../classes/queue';
 const fs = require('fs');
 import { Observable, Subscription, async } from 'rxjs';
@@ -39,15 +39,9 @@ process.on('message', async (m) => {
 
         function leerJson(ruta: string): any {
             try {
-                let fileDatos = fs.readFileSync(ruta, 'utf8');
-                let datos = {
-                    data: []
-                };
-                datos = fileDatos;
-                console.log('FILE DATOS',fileDatos);
-                console.log('FILE DATOS TYPE',typeof(fileDatos));
-                //datos = JSON.parse(fileDatos.trim())["data"];
-                return datos.data;
+                let datos = fs.readFileSync(ruta, 'utf8');
+                let fileDatos = JSON.parse(datos);
+                return fileDatos.data;
             } catch (err) {
                 console.log(err);
                 return -2;
@@ -61,14 +55,16 @@ process.on('message', async (m) => {
         colaPruebasVueltas.copy(leerJson('vueltas.json'));
         colaPruebasFuerzas.copy(leerJson('fuerzas.json'));
         console.log('COLAS PRUEBAS:');
-        console.log('vueltas ',colaPruebasVueltas.copy(leerJson('vueltas.json')));
-        console.log('fuerzas ',colaPruebasFuerzas.copy(leerJson('fuerzas.json')));
+        console.log('vueltas ', colaPruebasVueltas.copy(leerJson('vueltas.json')));
+        console.log('fuerzas ', colaPruebasFuerzas.copy(leerJson('fuerzas.json')));
         console.log('---------------------------------------------------------------');
         const obserbableDatos = new Observable(subscriber => {
             let contador = 1;
             let tiempo: number = 0;
             let colaVueltas: Queue = new Queue();
             let colaFuerzas: Queue = new Queue();
+            let colaVueltasAnterior: Queue = new Queue();
+            let colaFuerzasAnterior: Queue = new Queue();
             colaVueltas.copy(leerJson('vueltas.json'));
             colaFuerzas.copy(leerJson('fuerzas.json'));
             const ciclo = () => {
@@ -77,23 +73,22 @@ process.on('message', async (m) => {
                         let jsonF = leerJson('fuerzas.json');
                         if (jsonF != -2 && typeof (jsonF) == 'object') {
                             colaFuerzas.copy(jsonF.filter((fuerza: { id: number; }) => fuerza.id >= contador));
+                            colaFuerzasAnterior = colaFuerzas;
+
                         } else {
                             console.log('ERROR DEL LEERJSON F');
-                            let jsonF = leerJson('fuerzas.json');
-                            colaFuerzas.copy(jsonF.filter((fuerza: { id: number; }) => fuerza.id >= contador));
+                            colaFuerzas = colaFuerzasAnterior;
                         }
-
                     };
                     if (colaVueltas.size() == 0) {
                         let jsonV = leerJson('vueltas.json');
                         if (jsonV != -2 && typeof (jsonV) == 'object') {
                             colaVueltas.copy(jsonV.filter((vuelta: { id: number; }) => vuelta.id >= contador));
+                            colaVueltasAnterior = colaVueltas;
                         } else {
-                            console.log('ERROR DEL LEERJSON V');
-                            let jsonV = leerJson('vueltas.json');
-                            colaVueltas.copy(jsonV.filter((vuelta: { id: number; }) => vuelta.id >= contador));
+                            console.log('ERROR DEL LEERJSON V', colaVueltasAnterior);
+                            colaVueltas = colaVueltasAnterior;
                         }
-
                     };
                     let unaFuerza = colaFuerzas.peek();
                     let unaVuelta = colaVueltas.peek();
