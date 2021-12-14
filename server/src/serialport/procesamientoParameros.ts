@@ -1,5 +1,5 @@
 import Parametro from '../models/Parametros';
-import { EnsayoInterface, ParametroInterface, tiempoRespuesta } from '../interfaces/interfaces';
+import { arregloDM, EnsayoInterface, ParametroInterface, tiempoRespuesta } from '../interfaces/interfaces';
 import Queue from '../classes/queue';
 const fs = require('fs');
 import { Observable, Subscription, async } from 'rxjs';
@@ -39,9 +39,15 @@ process.on('message', async (m) => {
 
         function leerJson(ruta: string): any {
             try {
-                let datos = fs.readFileSync(ruta, 'utf8');
-                datos = JSON.parse(datos.trim())["data"];
-                return datos;
+                let fileDatos = fs.readFileSync(ruta, 'utf8');
+                let datos = {
+                    data: []
+                };
+                datos = fileDatos;
+                console.log('FILE DATOS',fileDatos);
+                console.log('FILE DATOS TYPE',typeof(fileDatos));
+                //datos = JSON.parse(fileDatos.trim())["data"];
+                return datos.data;
             } catch (err) {
                 console.log(err);
                 return -2;
