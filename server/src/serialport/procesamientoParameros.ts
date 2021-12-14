@@ -58,13 +58,13 @@ process.on('message', async (m) => {
         console.log('vueltas ', colaPruebasVueltas.copy(leerJson('vueltas.json')));
         console.log('fuerzas ', colaPruebasFuerzas.copy(leerJson('fuerzas.json')));
         console.log('---------------------------------------------------------------');
+        let colaVueltasAnterior: Queue = new Queue();
+        let colaFuerzasAnterior: Queue = new Queue();
         const obserbableDatos = new Observable(subscriber => {
             let contador = 1;
             let tiempo: number = 0;
             let colaVueltas: Queue = new Queue();
             let colaFuerzas: Queue = new Queue();
-            let colaVueltasAnterior: Queue = new Queue();
-            let colaFuerzasAnterior: Queue = new Queue();
             colaVueltas.copy(leerJson('vueltas.json'));
             colaFuerzas.copy(leerJson('fuerzas.json'));
             const ciclo = () => {
@@ -73,8 +73,8 @@ process.on('message', async (m) => {
                         let jsonF = leerJson('fuerzas.json');
                         if (jsonF != -2 && typeof (jsonF) == 'object') {
                             colaFuerzas.copy(jsonF.filter((fuerza: { id: number; }) => fuerza.id >= contador));
-                            colaFuerzasAnterior = colaFuerzas;
-
+                            colaFuerzasAnterior.clear();
+                            colaFuerzasAnterior.enqueue(colaFuerzas.peek());
                         } else {
                             console.log('ERROR DEL LEERJSON F');
                             colaFuerzas = colaFuerzasAnterior;
@@ -84,7 +84,8 @@ process.on('message', async (m) => {
                         let jsonV = leerJson('vueltas.json');
                         if (jsonV != -2 && typeof (jsonV) == 'object') {
                             colaVueltas.copy(jsonV.filter((vuelta: { id: number; }) => vuelta.id >= contador));
-                            colaVueltasAnterior = colaVueltas;
+                            colaVueltasAnterior.clear();
+                            colaVueltasAnterior.enqueue(colaVueltas.peek());
                         } else {
                             console.log('ERROR DEL LEERJSON V', colaVueltasAnterior);
                             colaVueltas = colaVueltasAnterior;
@@ -95,7 +96,7 @@ process.on('message', async (m) => {
                     //condicion de parada
                     console.log('UNA vuelta', unaVuelta);
                     if (unaVuelta.dato == -1 && auxParada) {
-                        clearInterval(intervalo);
+                        //clearInterval(intervalo);
                         console.log('FIN EN PROCESAMIENTO PARAMETROS');
                         subscriber.complete();
                     }
@@ -171,7 +172,7 @@ process.on('message', async (m) => {
                 }
             }
 
-            const intervalo = setInterval(ciclo, tiempoRespuesta.tiempoMS + 20);
+            const intervalo = setTimeout(ciclo, tiempoRespuesta.tiempoMS + 20);
 
 
 

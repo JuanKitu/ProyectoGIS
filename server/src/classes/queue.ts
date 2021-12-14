@@ -19,7 +19,7 @@ export default class Queue {
         return aux
       }else{
         this.queue= []
-      return this.queue[0] ;
+      return this.queue[0];
       }
     }
   
@@ -40,5 +40,10 @@ export default class Queue {
     }
     copy(unaCola:colaDatos[]){
       this.queue=unaCola;
+    }
+
+    clear() {
+      this.queue=[];
+      return this.queue[0];
     }
   };
