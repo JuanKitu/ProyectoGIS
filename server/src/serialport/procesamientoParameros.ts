@@ -96,7 +96,7 @@ process.on('message', async (m) => {
                     //condicion de parada
                     console.log('UNA vuelta', unaVuelta);
                     if (unaVuelta.dato == -1 && auxParada) {
-                        //clearInterval(intervalo);
+                        clearInterval(intervalo);
                         console.log('FIN EN PROCESAMIENTO PARAMETROS');
                         subscriber.complete();
                     }
@@ -172,7 +172,7 @@ process.on('message', async (m) => {
                 }
             }
 
-            const intervalo = setTimeout(ciclo, tiempoRespuesta.tiempoMS + 20);
+            const intervalo = setInterval(ciclo, tiempoRespuesta.tiempoMS + 20);
 
 
 
