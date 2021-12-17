@@ -10,7 +10,7 @@ portControlador.write('<CONN>\n');
 portControlador.on('data', (data) => {
 
     const control = data;
-    console.log('data conectar.ts', control.toString());
+    console.log('pasando por conectar.ts', control.toString());
     if (control) {
         if (control == 0 || control == 1) {
             (<any>process).send(parseFloat(control.toString()));

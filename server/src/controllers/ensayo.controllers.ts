@@ -467,7 +467,7 @@ export default class EnsayoController {
         }
     }
 
-    conectar = async (req: Request, res: Response) => {
+    /* conectar = async (req: Request, res: Response) => {
         try {
             console.log('PETICION CONECTAR');
             const childConn = fork('../server/dist/serialport/conectar.js', ['normal']);
@@ -487,7 +487,7 @@ export default class EnsayoController {
                 error: 'The server has an error'
             });
         }
-    }
+    } */
 
     desconectar = async (req: Request, res: Response) => {
         try {

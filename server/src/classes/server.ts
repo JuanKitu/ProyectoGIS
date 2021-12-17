@@ -112,9 +112,7 @@ export default class Server {
 
         console.log('escuchando conexiones - sockets');
 
-        console.log('HOLA');
-
-        /* this.io.on('connection', client => {
+        this.io.on('connection', client => {
 
             console.log('Cliente conectado');
             if(!this.consultarConectado()){
@@ -147,7 +145,7 @@ export default class Server {
                 this.io.emit('ambiente',this.ambiente);
             })
 
-        }); */
+        });
 
     }
 
