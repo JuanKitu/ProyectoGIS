@@ -10,6 +10,7 @@ import fs from "fs";
 import util from 'util';
 import Ensayo_Archivados from '../models/Ensayo_Archivados';
 import Parametros_Archivados from '../models/Parametros_archivados';
+import { iniciarPrueba } from '../services/pointCreation.services';
 
 const server = Server.instance;
 let FIN: boolean = false;
@@ -18,12 +19,7 @@ let arreglosDM: arregloDM = {
     arregloDistancias: [],
     arregloMu: []
 };
-/* server.io.on('connection', client=>{
-    console.log('ENVIANDO DESDE SERVER ',ambienteSocket);
-    server.io.emit('ambiente', ambienteSocket);
-}) */
-//const Parametros = require('../models/Parametros');
-//const Ambiente = require('../models/Ambiente');
+
 function isParametro(object: any): object is ParametroInterface {
     return 'fuerzaRozamiento' in object;
 }
@@ -204,7 +200,8 @@ export default class EnsayoController {
                     raw: true
                 });
                 if (elEnsayo) {
-                    let velocidadAnterior: number = 0;
+                    iniciarPrueba(elEnsayo);
+                    /* let velocidadAnterior: number = 0;
                     let distanciaAnterior: number = 0;
                     let tiempoAnterior: number = 0;
                     let distanciaActual: number = 0;
@@ -241,9 +238,6 @@ export default class EnsayoController {
                                     }
                                     server.io.emit('parametros', punto);
                                 } else {
-                                    /* console.log('DISTANCIA ANTERIOR 2: ',distanciaAnterior);
-                                    console.log('TIEMPO ANTERIOR 2: ',tiempoAnterior);
-                                    console.log('TIEMPO ACTUAL 2: ',M.tiempoActual); */
                                     console.log('AMBIENTE A MANDAR: ', M);
                                     server.setearAmbiente(M);
                                     M.horaInicio = horaDeInicio;
@@ -292,7 +286,12 @@ export default class EnsayoController {
                         }
 
 
-                    })
+                    }); */
+                }else {
+                    res.json({
+                        data: 'Ensayo no encontrado',
+                        err: true
+                    });
                 }
             } else {
                 res.json({
@@ -453,33 +452,10 @@ export default class EnsayoController {
         }
     }
 
-    pausar = async (req: Request, res: Response) => {
-        try {
-            server.pausar(true);
-
-        } catch (error) {
-            console.log(error);
-            return res.json({
-                error: 'The server has an error'
-            });
-        }
-    }
-
-    reanudar = async (req: Request, res: Response) => {
-        try {
-            server.pausar(false);
-
-        } catch (error) {
-            console.log(error);
-            return res.json({
-                error: 'The server has an error'
-            });
-        }
-    }
-
     cancelar = async (req: Request, res: Response) => {
         try {
             FIN = true;
+            server.setearProcesando(false);
             return res.json({
                 data: 'CANCELADO'
             });
