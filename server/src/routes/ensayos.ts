@@ -9,8 +9,6 @@ router.get('/consulta', controller.consulta);
 router.get('/desconectar', controller.desconectar);
 //router.get('/conectar', controller.conectar);
 router.get('/test', controller.realizarTest);
-router.get('/pausar', controller.pausar);
-router.get('/reanudar', controller.reanudar);
 router.get('/cancelar', controller.cancelar);
 router.get('/', controller.getAll);
 router.get('/:idEnsayo', controller.getById);
