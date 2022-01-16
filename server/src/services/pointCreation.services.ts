@@ -14,7 +14,7 @@ let arreglosDM: arregloDM = {
     arregloMu: []
 };
 
-export const iniciarPrueba = (elEnsayo: EnsayoInterface) => {
+export const  iniciarPrueba = async (elEnsayo: EnsayoInterface) => {
 
     let velocidadAnterior: number = 0;
     let distanciaAnterior: number = 0;
@@ -23,8 +23,8 @@ export const iniciarPrueba = (elEnsayo: EnsayoInterface) => {
     let velocidadActual: number = 0;
 
     const horaDeInicio = (moment().format('HH:mm:ss'));
-    const hijoPFV = fork('../server/dist/serialport/Serialport.js', ['normal']);
-
+    //const hijoPFV = fork('../server/dist/serialport/Serialport.js', ['normal']);
+    const hijoPFV = fork('../server/dist/serialport/inicioPrueba.js', ['normal']);
     hijoPFV.send(elEnsayo);
     hijoPFV.on('message', (M: any) => {
         if (server.consultarProcesando() === true) {

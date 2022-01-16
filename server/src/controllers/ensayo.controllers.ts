@@ -200,7 +200,11 @@ export default class EnsayoController {
                     raw: true
                 });
                 if (elEnsayo) {
-                    iniciarPrueba(elEnsayo);
+                    let prueba = await iniciarPrueba(elEnsayo);
+                    return res.json({
+                        data: prueba,
+                        err: false
+                    });
                     /* let velocidadAnterior: number = 0;
                     let distanciaAnterior: number = 0;
                     let tiempoAnterior: number = 0;
