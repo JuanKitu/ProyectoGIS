@@ -10,7 +10,9 @@ let auxParada: boolean = false;
 
 process.on('message', async (m) => {
     console.log('INICIANDO PROCESAMIENTO DE PARAMETROS');
-    if (typeof (m) == "object" && m != null) {
+    let colaVueltas: Queue = new Queue();
+    let colaFuerzas: Queue = new Queue();
+    if (typeof (m) == "object" && m != null && m.radioTrayectoria != undefined) {
         ensayo = await m;
 
         function crearParametro(unDato: number, unaVuelta: number, unTiempo: number, unEnsayo: EnsayoInterface): ParametroInterface {
@@ -49,48 +51,13 @@ process.on('message', async (m) => {
 
         };
 
-
-        let colaPruebasVueltas: Queue = new Queue();
-        let colaPruebasFuerzas: Queue = new Queue();
-        colaPruebasVueltas.copy(leerJson('vueltas.json'));
-        colaPruebasFuerzas.copy(leerJson('fuerzas.json'));
         console.log('COLAS PRUEBAS:');
-        console.log('vueltas ', colaPruebasVueltas.copy(leerJson('vueltas.json')));
-        console.log('fuerzas ', colaPruebasFuerzas.copy(leerJson('fuerzas.json')));
         console.log('---------------------------------------------------------------');
-        let colaVueltasAnterior: Queue = new Queue();
-        let colaFuerzasAnterior: Queue = new Queue();
         const obserbableDatos = new Observable(subscriber => {
             let contador = 1;
             let tiempo: number = 0;
-            let colaVueltas: Queue = new Queue();
-            let colaFuerzas: Queue = new Queue();
-            colaVueltas.copy(leerJson('vueltas.json'));
-            colaFuerzas.copy(leerJson('fuerzas.json'));
             const ciclo = () => {
                 if (estadoScript === 1) {
-                    if (colaFuerzas.size() == 0) {
-                        let jsonF = leerJson('fuerzas.json');
-                        if (jsonF != -2 && typeof (jsonF) == 'object') {
-                            colaFuerzas.copy(jsonF.filter((fuerza: { id: number; }) => fuerza.id >= contador));
-                            colaFuerzasAnterior.clear();
-                            colaFuerzasAnterior.enqueue(colaFuerzas.peek());
-                        } else {
-                            console.log('ERROR DEL LEERJSON F');
-                            colaFuerzas = colaFuerzasAnterior;
-                        }
-                    };
-                    if (colaVueltas.size() == 0) {
-                        let jsonV = leerJson('vueltas.json');
-                        if (jsonV != -2 && typeof (jsonV) == 'object') {
-                            colaVueltas.copy(jsonV.filter((vuelta: { id: number; }) => vuelta.id >= contador));
-                            colaVueltasAnterior.clear();
-                            colaVueltasAnterior.enqueue(colaVueltas.peek());
-                        } else {
-                            console.log('ERROR DEL LEERJSON V', colaVueltasAnterior);
-                            colaVueltas = colaVueltasAnterior;
-                        }
-                    };
                     let unaFuerza = colaFuerzas.peek();
                     let unaVuelta = colaVueltas.peek();
                     //condicion de parada
@@ -104,8 +71,6 @@ process.on('message', async (m) => {
                     if (unaVuelta.dato == -1 && !auxParada) {
                         console.log('+++++++++++++++++++++++++++   BUG INTERPRETACION PREMATURA  +++++++++++++++');
                         console.log('VALOR AUX PARADA', auxParada);
-                        let jsonV = leerJson('vueltas.json');
-                        colaVueltas.copy(jsonV.filter((vuelta: { id: number; }) => vuelta.id >= contador));
                         console.log('COLA EN ERROR: ', colaVueltas);
                         let unaVuelta = colaVueltas.peek();
                         if (unaVuelta.dato == -1) {
@@ -172,7 +137,7 @@ process.on('message', async (m) => {
                 }
             }
 
-            const intervalo = setInterval(ciclo, tiempoRespuesta.tiempoMS + 20);
+            const intervalo = setInterval(ciclo, tiempoRespuesta.tiempoMS+25);
 
 
 
@@ -196,6 +161,10 @@ process.on('message', async (m) => {
             })
 
 
+    } else if (typeof (m) == "object" && m != null && (m.dato.toString().match(/\./)) ){
+        colaFuerzas.enqueue(m);
+    } else if (typeof (m) == "object" && m != null && !(m.dato.toString().match(/\./)) ){
+        colaVueltas.enqueue(m);
     } else if (typeof (m) == "string") {
         if (m === 'PARADA = TRUE') {
             console.log('RECIBIDO PARADA = TRUE');

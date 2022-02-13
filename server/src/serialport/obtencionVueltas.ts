@@ -104,18 +104,6 @@ process.on('message', async (m) => {
                 } else {
                     (<any>process).send(unDato);
                 };
-                /* let datos = colaDato.print();
-                let jsonObj = {
-                    data: datos
-                }
-                let jsonContent = JSON.stringify(jsonObj);
-                //console.log('CONTENIDO ANTES DE GRABAR: ', jsonContent);
-                fs.writeFile('vueltas.json', jsonContent, 'utf8', function (err: any) {
-                    if (err) {
-                        console.log("An error occured while writing JSON Object to File.");
-                        return console.log(err);
-                    }
-                }); */
             }
         },
             (error) => {

@@ -47,12 +47,9 @@ async function comenzarExperimeto(puerto: SerialPort, ensayo: EnsayoInterface) {
                 estadoScript = 1;
                 console.log('---------------------------------------------------------------VUELTAS: ', vueltas);
                 const childFuerza = fork('dist/serialport/obtencionFuerzas.js');
-                const childVuelta = fork('dist/serialport/SerialportVueltas.js');
+                const childVuelta = fork('dist/serialport/obtencionVueltas.js');
                 childVuelta.send(ensayo);
                 childVuelta.on('message', (MV: any) => {
-                    if (typeof (MV) == "object") {
-                        (<any>process).send(MV);
-                    }
                     if (typeof (MV) == "string") {
                         if (MV === "FIN") {
                             console.log('Recibiendo fin de child vuelta')
@@ -124,8 +121,21 @@ async function comenzarExperimeto(puerto: SerialPort, ensayo: EnsayoInterface) {
                     });
 
                     childVuelta.on('message', (MV2: any) => {
+                        if (typeof (MV2) == "object") {
+                            if(MV2.dato != undefined){
+                                childParametros.send(MV2)
+                            }
+                        }
                         if (MV2 === 'PARADA = TRUE') {
                             childParametros.send("PARADA = TRUE");
+                        }
+                    });
+
+                    childFuerza.on('message', (MV3: any) => {
+                        if (typeof (MV3) == "object") {
+                            if(MV3.dato != undefined){
+                                childParametros.send(MV3)
+                            }
                         }
                     });
 

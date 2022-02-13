@@ -30,7 +30,7 @@ let i: number = 0
 obserbableFuerza.subscribe(data => {
     if (estadoScript === 1) {
         i++
-        let unDato/* : colaDatos */ = {
+        let unDato: colaDatos = {
             id: i,
             dato: data
         };
