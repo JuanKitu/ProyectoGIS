@@ -10,6 +10,7 @@ import { Router } from '@angular/router';
 export class PlantillaListaParametroComponent implements OnInit {
   @Input() parametros: Parametro[];
   @Input() archivado: boolean;
+  selectedIndex:number
   titulo:string="Lista de Parametros";
   constructor(private router:Router) { }
 

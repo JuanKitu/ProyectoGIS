@@ -2,6 +2,8 @@ export interface Componente{
     icon:string;
     name:string;
     redirectTo:string;
+    title:string;
+    url:string;
 };
 export interface Ensayo{
     operador:string,
@@ -70,6 +72,6 @@ export interface UsuarioRegister{
     repassword?:string
     nombreUsuario?:string
 }
-const domIP= "192.168.1.100";
+const domIP= "localhost";
 export const urlSocket= `http://${domIP}:3000`;
 export const urlServices= `${urlSocket}/api/`;

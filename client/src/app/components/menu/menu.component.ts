@@ -16,7 +16,9 @@ import { ActivatedRoute } from '@angular/router';
 export class MenuComponent implements OnInit {
   appPages: Observable<Componente[]>;
   darkMode:boolean = false;
-  idEnsayo:number|unknown = -1;
+  //idEnsayo:number|unknown = -1;
+  idEnsayo:any = -1;
+  selectedIndex:number
   
   constructor(private dataService:DataService, private webSocket:WebSocketService, private usuarioService:UsuarioService) {
       

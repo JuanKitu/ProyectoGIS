@@ -10,7 +10,7 @@ import { Ensayo } from '../../interfaces/interfaces';
 export class PlantillaListaEnsayoComponent implements OnInit {
   @Input() ensayos: Ensayo[];
   titulo:string="Lista de Ensayos";
-
+  selectedIndex:number
   constructor(private ensayoService:EnsayoService) {
     
     

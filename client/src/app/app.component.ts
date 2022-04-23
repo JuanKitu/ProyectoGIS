@@ -18,8 +18,10 @@ import { ActivatedRoute } from '@angular/router';
 export class AppComponent {
   appPages: Observable<Componente[]>;
   darkMode:boolean = false;
-  idEnsayo:number|unknown = -1;
+  //idEnsayo:number|unknown = -1;
+  idEnsayo:any = -1;
   enUso:boolean;
+  selectedIndex:number
   constructor(
     private platform: Platform,
     private splashScreen: SplashScreen,

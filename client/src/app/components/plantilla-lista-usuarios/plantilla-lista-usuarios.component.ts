@@ -9,6 +9,7 @@ import { UsuarioLocal } from '../../interfaces/interfaces';
 })
 export class PlantillaListaUsuariosComponent implements OnInit {
   @Input() usuarios: UsuarioLocal[];
+  selectedIndex:number
   titulo:string="Lista de Ensayos";
   constructor(private usuarioService:UsuarioService) { }
 
